@@ -11,6 +11,7 @@ import RegistroExitoso from './components/registro/RegistroExitoso';
 import ErrorAlRegistrar from './components/registro/ErrorAlRegistrar';
 import reportWebVitals from './reportWebVitals';
 import Menu from './components/Menu';
+// import RefreshToken from './components/RefreshToken';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -26,6 +27,7 @@ root.render(
           render={(props) => <ErrorAlRegistrar {...props} errorMessages={[]} />}
         />
         <Route path="/menu" component={Menu} />
+        {/* <Route path="/refresh-token" component={RefreshToken} /> */}
         {/* Otras rutas de tu aplicación */}
       </Switch>
     </Router>

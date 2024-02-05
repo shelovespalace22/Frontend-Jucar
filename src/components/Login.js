@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
-import { Redirect } from 'react-router-dom';
+import { Redirect, Link } from 'react-router-dom';
 
 const Login = () => {
   const [userData, setUserData] = useState({
@@ -85,6 +85,8 @@ const Login = () => {
           <Button variant="primary" type="submit" className="card-button">
             Acceder
           </Button>
+
+          {/* <Link to="/refresh-token" className="ml-2">Refrescar Token</Link> */}
 
           {loginError && <Alert variant="danger" className="mt-3">{loginError}</Alert>}
         </Form>

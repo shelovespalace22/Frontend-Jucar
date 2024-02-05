@@ -29,6 +29,8 @@ const Login = () => {
       console.log('Acceso éxitoso:', response.data);
 
       setRedirectMenu(true);
+      setAccessToken(response.data.accessToken);
+      setRefreshToken(response.data.refreshToken);
 
     } catch (error) {
       console.error('Error durante el acceso:', error);
@@ -39,6 +41,15 @@ const Login = () => {
         setLoginError('Hubo un error al intentar iniciar sesión. Por favor, inténtalo de nuevo.');
       }
     }
+  };
+
+  // Funciones para establecer tokens en el estado local o localStorage
+  const setAccessToken = (token) => {
+    localStorage.setItem('accessToken', token);
+  };
+
+  const setRefreshToken = (token) => {
+    localStorage.setItem('refreshToken', token);
   };
 
   if (redirectMenu) {

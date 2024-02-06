@@ -32,6 +32,11 @@ const MenuNavegacion = () => (
           <FontAwesomeIcon icon={faCog} /> Categorias
         </Link>
       </li>
+      <li>
+        <Link to="/menu-subcategories">
+          <FontAwesomeIcon icon={faCog} /> Menu Subcategorías
+        </Link>
+      </li>
     </ul>
   </nav>
 );

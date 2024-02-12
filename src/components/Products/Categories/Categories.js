@@ -37,8 +37,10 @@ const Categories = () => {
         name: newCategoryName,
       });
 
-      setCategories([...categories, response.data]);
+      setCategories([response.data, ...categories]);
+      
       setNewCategoryName('');
+      
       setShowCreateModal(false);
     } catch (error) {
       console.error('Error creating category:', error);
@@ -58,20 +60,27 @@ const Categories = () => {
 
   const handleUpdateCategory = async (categoryId, newName) => {
     try {
-      const response = await axios.put(`https://localhost:7028/api/categories/${categoryId}`, {
-        name: newName,
-      });
+        await axios.put(
+            `https://localhost:7028/api/categories/${categoryId}`, {name: newName });
 
-      const updatedCategories = categories.map((category) =>
-        category.categoryId === categoryId ? response.data : category
-      );
+        // Realiza una nueva solicitud para obtener la lista actualizada
+        const response = await axios.get('https://localhost:7028/api/categories');
 
-      setCategories(updatedCategories);
-      setShowUpdateModal(false);
+        const updatedCategories = response.data;
+
+        // Actualiza el estado con la nueva lista
+        setCategories(updatedCategories);
+
+        setNewCategoryName({
+            Name: '',
+        });
+
+        setShowUpdateModal(false);
+
     } catch (error) {
-      console.error('Error updating category:', error);
+        console.error('Error updating rawMaterial:', error);
     }
-  };
+};
 
   // Lógica para calcular las categorías a mostrar en la página actual
   const indexOfLastCategory = currentPage * categoriesPerPage;

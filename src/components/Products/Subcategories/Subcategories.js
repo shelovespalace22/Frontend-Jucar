@@ -38,7 +38,7 @@ const Subcategories = ({ categoryId }) => {
         name: newSubcategoryName,
       });
 
-      setSubcategories([...subcategories, response.data]);
+      setSubcategories([ response.data, ...subcategories]);
       setNewSubcategoryName('');
       handleCloseModal();
     } catch (error) {

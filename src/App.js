@@ -3,10 +3,8 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './Routes';
 import { Container, Row, Col } from 'react-bootstrap';
 import MenuNavegacion from './components/shared/MenuNavegacion';
-import './App.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
-
+import './App.css';
 
 function App() {
   return (

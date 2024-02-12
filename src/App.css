@@ -27,5 +27,6 @@ main {
 .content {
   height: 100%; /* Ocupa toda la altura del contenedor principal */
   overflow: auto; /* Agrega scroll si el contenido es demasiado grande */
+  background-color: darkgray;
 }
 

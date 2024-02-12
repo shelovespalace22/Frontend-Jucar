@@ -8,10 +8,35 @@ const MenuNavegacion = () => (
   <nav>
     <ul>
       <li>
-        <Link to="/menu">
+        <Link to="/menu-inicial">
           <FontAwesomeIcon icon={faHome} /> Inicio
         </Link>
       </li>
+      <hr/>
+
+      <li>
+        <Link to="/menu-productos">
+          <FontAwesomeIcon icon={faHome} /> Productos
+        </Link>
+      </li>
+      <hr/>
+
+      <li>
+        <Link to="/menu-ventas">
+          <FontAwesomeIcon icon={faHome} /> Ventas
+        </Link>
+      </li>
+      <hr/>
+
+      <li>
+        <Link to="/menu-proveedores">
+          <FontAwesomeIcon icon={faHome} /> Proveedores
+        </Link>
+      </li>
+      <hr/>
+
+      <br/>
+
       <li>
         <Link to="/login">
           <FontAwesomeIcon icon={faAddressCard} /> Log In
@@ -35,6 +60,16 @@ const MenuNavegacion = () => (
       <li>
         <Link to="/menu-subcategories">
           <FontAwesomeIcon icon={faCog} /> Menu Subcategorías
+        </Link>
+      </li>
+      <li>
+        <Link to="/menu-autoparts">
+          <FontAwesomeIcon icon={faCog} /> Menu Autopartes
+        </Link>
+      </li>
+      <li>
+        <Link to="/rawMaterials">
+          <FontAwesomeIcon icon={faCog} /> Materias Primas
         </Link>
       </li>
     </ul>

@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useHistory } from 'react-router-dom';
 
 const Subcategories = ({ categoryId }) => {
   const [subcategories, setSubcategories] = useState([]);
@@ -13,6 +14,7 @@ const Subcategories = ({ categoryId }) => {
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5); // Define cuántos elementos quieres mostrar por página
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -100,6 +102,10 @@ const Subcategories = ({ categoryId }) => {
   // Cambia la página actual
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleGoBack = () => {
+    history.goBack();
+};
+
   return (
     <div className="subcategories-container">
 
@@ -111,6 +117,10 @@ const Subcategories = ({ categoryId }) => {
 
       <Button variant="primary" onClick={handleShowCreateModal}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Subcategoría
+      </Button>
+
+      <Button variant="danger" onClick={handleGoBack}>
+        Volver
       </Button>
 
       <hr/>

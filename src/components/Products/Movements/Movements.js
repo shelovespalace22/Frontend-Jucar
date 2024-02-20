@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useHistory } from 'react-router-dom';
 
 const Movements = ({ rawMaterialId }) => {
 
@@ -23,6 +24,7 @@ const Movements = ({ rawMaterialId }) => {
     const [selectedMovementId, setSelectedMovementId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const history = useHistory();
 
     useEffect(() => {
 
@@ -173,6 +175,10 @@ const Movements = ({ rawMaterialId }) => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const handleGoBack = () => {
+        history.goBack();
+    };
+
     return (
         <div className='movements-container'>
             
@@ -182,6 +188,10 @@ const Movements = ({ rawMaterialId }) => {
 
             <Button variant='primary' onClick={handleShowCreateModal}>
                 <FontAwesomeIcon icon={faPlus} /> Nuevo Movimiento
+            </Button>
+
+            <Button variant="danger" onClick={handleGoBack}>
+                Volver a Materiales
             </Button>
             <hr />
 

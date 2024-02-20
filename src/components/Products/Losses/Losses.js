@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { useHistory } from 'react-router-dom';
 
 const Losses = ({ autopartId }) => {
     
@@ -27,7 +28,7 @@ const Losses = ({ autopartId }) => {
     const [selectedLossId, setSelectedLossId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
-
+    const history = useHistory();
 
     useEffect(() => {
         const fetchLosses = async () => {
@@ -175,6 +176,10 @@ const Losses = ({ autopartId }) => {
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const handleGoBack = () => {
+        history.goBack();
+    };
+
     return (
         <div className="losses-container">
             <br />
@@ -182,6 +187,9 @@ const Losses = ({ autopartId }) => {
             <br />
             <Button variant="primary" onClick={handleShowCreateModal}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Pérdida
+            </Button>
+            <Button variant="danger" onClick={handleGoBack}>
+                Volver a Autopartes
             </Button>
             <hr />
             <Table striped bordered hover>

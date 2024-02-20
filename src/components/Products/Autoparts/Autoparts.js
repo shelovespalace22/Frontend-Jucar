@@ -4,11 +4,11 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
-
 import { useHistory } from 'react-router-dom';
 
 const Autoparts = ({ subcategoryId }) => {
 
+  /* VARIABLES */
   const [autoparts, setAutoparts] = useState([]);
   const [newAutopart, setNewAutopart] = useState({
     Name: '',
@@ -22,6 +22,10 @@ const Autoparts = ({ subcategoryId }) => {
   const [selectedAutopartId, setSelectedAutopartId] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(10);
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentAutoparts = autoparts.slice(indexOfFirstItem, indexOfLastItem);
+  const history = useHistory();
 
   useEffect(() => {
     const fetchAutoparts = async () => {
@@ -35,12 +39,6 @@ const Autoparts = ({ subcategoryId }) => {
 
     fetchAutoparts();
   }, [subcategoryId]);
-
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentAutoparts = autoparts.slice(indexOfFirstItem, indexOfLastItem);
-
-  const history = useHistory();
 
   const handleCreateAutopart = async () => {
     try {
@@ -166,6 +164,10 @@ const Autoparts = ({ subcategoryId }) => {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+  const handleGoBack = () => {
+    history.goBack();
+};
+
   return (
     <div className="autoparts-container">
       <br />
@@ -173,6 +175,9 @@ const Autoparts = ({ subcategoryId }) => {
       <br />
       <Button variant="primary" onClick={handleShowCreateModal}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
+      </Button>
+      <Button variant="danger" onClick={handleGoBack}>
+        Volver
       </Button>
       <hr />
       <Table striped bordered hover>

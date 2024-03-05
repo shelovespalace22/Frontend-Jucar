@@ -30,7 +30,7 @@ const MenuSubcategories = () => {
 
   return (
     <Container className='mt-5 container-box'>
-      <h1 className='text-center'>Categorías</h1>
+      <h1 className='text-center'> subCategorías</h1>
       
       {categories.map((category) => (
           <Card key={category.categoryId} style={{ width: '250px'}}>

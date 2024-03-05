@@ -6,7 +6,7 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-const AddressProviders = ({providerId}) => {
+const ProviderAddresses = ({providerId}) => {
     const [addressProviders, setAddressProviders] = useState ([]);
     const [newAddressProvider, setNewAddressProvider] = useState({
         Address: '',
@@ -283,4 +283,4 @@ const AddressProviders = ({providerId}) => {
     )
 };
 
-export default AddressProviders;
+export default ProviderAddresses;

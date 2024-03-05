@@ -29,31 +29,30 @@ const MenuSubcategories = () => {
   };
 
   return (
-    <Container className='mt-5 container-box'>
-      <h1 className='text-center'> subCategorías</h1>
-      
-      {categories.map((category) => (
-          <Card key={category.categoryId} style={{ width: '250px'}}>
-            <Card.Body>
-              <Card.Title>Ver Subcategorías de: </Card.Title>
-              <br />
-              <Card.Text>
-                <strong>{category.name}</strong>
-              </Card.Text>
-              <br />
-              <Button variant='success' onClick={() => handleCategoryClick(category.categoryId)}>
-                Ver
-              </Button>
-            </Card.Body>
-          </Card>
-        ))}
-    </Container>
-  );
+    <div>
+      <Container className='mt-5 container-box'>
+        <h1 className='text-center'>Categorías</h1>
+      </Container>
 
+      <Container className='mt-5 container-box'>
+        {categories.map((category) => (
+            <Card key={category.categoryId} style={{ width: '250px'}}>
+              <Card.Body>
+                <Card.Title>Ver Subcategorías de: </Card.Title>
+                <br />
+                <Card.Text>
+                  <strong>{category.name}</strong>
+                </Card.Text>
+                <br />
+                <Button variant='success' onClick={() => handleCategoryClick(category.categoryId)}>
+                  Ver
+                </Button>
+              </Card.Body>
+            </Card>
+          ))}
+      </Container>
+    </div>
+  );
 };
 
 export default MenuSubcategories;
-
-
-
-

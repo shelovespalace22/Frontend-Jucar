@@ -92,7 +92,9 @@ const Autoparts = ({ subcategoryId }) => {
       await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
 
       const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
+
       setAutoparts(updatedAutoparts);
+
     } catch (error) {
       console.error('Error deleting autopart:', error);
     }
@@ -166,20 +168,24 @@ const Autoparts = ({ subcategoryId }) => {
 
   const handleGoBack = () => {
     history.goBack();
-};
+  };
 
   return (
     <div className="autoparts-container">
+
       <br />
       <h2>Modulo Autopartes</h2>
       <br />
+
       <Button variant="primary" onClick={handleShowCreateModal}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
       </Button>
       <Button variant="danger" onClick={handleGoBack}>
         Volver
       </Button>
+
       <hr />
+
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -227,6 +233,7 @@ const Autoparts = ({ subcategoryId }) => {
       </Pagination>
       
       <Modal show={showModal} onHide={handleCloseModal}>
+      
         <Modal.Header closeButton>
           <Modal.Title>
             {modalAction === 'create'
@@ -236,6 +243,7 @@ const Autoparts = ({ subcategoryId }) => {
               : 'Detalle de Autoparte'}
           </Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           {modalAction !== 'detail' && (
             <Form>
@@ -303,6 +311,7 @@ const Autoparts = ({ subcategoryId }) => {
             </div>
           )}
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
             Cancelar
@@ -316,7 +325,9 @@ const Autoparts = ({ subcategoryId }) => {
             </Button>
           )}
         </Modal.Footer>
+
       </Modal>
+
     </div>
   );
 };

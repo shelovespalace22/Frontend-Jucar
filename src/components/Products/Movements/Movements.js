@@ -100,7 +100,7 @@ const Movements = ({ rawMaterialId }) => {
     const handleDeleteMovement = async (movementId) => {
         try {
 
-            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`);
+            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
 
             const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
 

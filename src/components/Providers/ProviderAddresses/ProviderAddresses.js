@@ -6,7 +6,7 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-const AddressProviders = ({providerId}) => {
+const ProviderAddresses = ({providerId}) => {
     const [addressProviders, setAddressProviders] = useState ([]);
     const [newAddressProvider, setNewAddressProvider] = useState({
         Address: '',
@@ -14,17 +14,17 @@ const AddressProviders = ({providerId}) => {
         NeighborhoodId: '' 
     });
 
-  const [showModal, setShowModal] = useState(false);
-  const [modalAction, setModalAction] = useState('create');
-  const [selectedAddressProviderId, setSelectedAddressProviderId] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentAddressProviders = addressProviders.slice(indexOfFirstItem, indexOfLastItem);
-  const history = useHistory();
+    const [showModal, setShowModal] = useState(false);
+    const [modalAction, setModalAction] = useState('create');
+    const [selectedAddressProviderId, setSelectedAddressProviderId] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentAddressProviders = addressProviders.slice(indexOfFirstItem, indexOfLastItem);
+    const history = useHistory();
 
-  useEffect(()=> {
+    useEffect(()=> {
     const fetchAddressProviders = async () => {
         try{
             const response = await axios.get (`https://localhost:7028/api/providers/${providerId}/addresses`);
@@ -36,9 +36,9 @@ const AddressProviders = ({providerId}) => {
     };
     fetchAddressProviders();
 
-  }, [providerId]);
+    }, [providerId]);
 
-  const handleCreateAddressProvider = async () =>{
+    const handleCreateAddressProvider = async () =>{
     try{
         const response = await axios.post (`https://localhost:7028/api/providers/${providerId}/addresses`);
         setAddressProviders([response.data, ...addressProviders]);
@@ -54,9 +54,9 @@ const AddressProviders = ({providerId}) => {
     }catch(error){
         console.error('Error creating Address')
     }
-  };
+    };
 
-  const handleUpdateAddressProvider = async () =>{
+    const handleUpdateAddressProvider = async () =>{
     try{
         await axios.put(
             `https://localhost:7028/api/providers/${providerId}/addresses/${selectedAddressProviderId}`,
@@ -81,9 +81,9 @@ const AddressProviders = ({providerId}) => {
     }catch (error) {
         console.error('Error updating Address')
     }
-  };
+    };
 
-  const handleDeleteAddressProvider = async (addressProviderId) => {
+    const handleDeleteAddressProvider = async (addressProviderId) => {
     try{
         await axios.delete (`https://localhost:7028/api/providers/${providerId}/addresses/${addressProviderId}`);
 
@@ -92,14 +92,14 @@ const AddressProviders = ({providerId}) => {
     }catch (error){
         console.error('Error deleting Address', error);
     }
-  };
+    };
 
-  const handleShowCreateModal = () => {
+    const handleShowCreateModal = () => {
     setModalAction('create');
     setShowModal(true);
-  };
+    };
 
-  const handleShowEditModal = (addressProviderId) => {
+    const handleShowEditModal = (addressProviderId) => {
     setModalAction ('edit')
     setSelectedAddressProviderId(addressProviderId);
 
@@ -120,18 +120,18 @@ const AddressProviders = ({providerId}) => {
     const handleShowDetailModal = (addressProviderId) => {
         setModalAction ('detail')
         setSelectedAddressProviderId(addressProviderId);
-    
+
         const selectedAddressProvider = addressProviders.find((addressProvider)=> addressProvider.addressProviderId === addressProviderId);
-    
+
         if(selectedAddressProvider){
             setNewAddressProvider({
                 Address: selectedAddressProvider.Address || '', 
                 AddressType: selectedAddressProvider.AddressType || '',
                 NeighborhoodId: selectedAddressProvider.NeighborhoodId || ''
-    
+
             });
             }
-    
+
             setShowModal(true);
     };
 
@@ -152,9 +152,9 @@ const AddressProviders = ({providerId}) => {
 
     const handleGoBack = () => {
     history.goBack();
-   };
+    };
 
-   return(
+    return(
     <div className='ContainerAddressP'>
         <header>
             <div>
@@ -162,9 +162,9 @@ const AddressProviders = ({providerId}) => {
                 <h1>Autupartes JUCAR</h1>
             </div>
         </header>
-        <br>
+        <br/>
         <h2>Direcciones Provedores</h2>
-        </br> 
+        <br/> 
 
         <Button variant="primary" onClick={handleShowCreateModal}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Direccion
@@ -187,12 +187,12 @@ const AddressProviders = ({providerId}) => {
             <tbody>
                 {currentAddressProviders.map((addressProvider)=>(
                     <tr key={addressProvider.addressProviderId}>
-                      <td>{addressProvider.Address}</td>
-                      <td>{addressProvider.AddressType}</td>
-                      <td>{addressProvider.NeighborhoodId}</td>
-                      <td>
+                        <td>{addressProvider.Address}</td>
+                        <td>{addressProvider.AddressType}</td>
+                        <td>{addressProvider.NeighborhoodId}</td>
+                        <td>
                         <Button variant='info' onClick={()=> handleShowEditModal(addressProvider.addressProviderId)}>
-                          <FontAwesomeIcon icon ={faEdit}/> Actualizar    
+                            <FontAwesomeIcon icon ={faEdit}/> Actualizar    
                         </Button>
 
                         <Button variant = "danger" onClick={()=>handleDeleteAddressProvider(addressProvider.addressProviderId)}>
@@ -203,7 +203,7 @@ const AddressProviders = ({providerId}) => {
                             <FontAwesomeIcon icon={faEye}/> Ver detalle 
                         </Button>
 
-                      </td>     
+                        </td>     
                     </tr>
                     
                 ))}
@@ -212,20 +212,20 @@ const AddressProviders = ({providerId}) => {
 
         <Pagination>
         {Array.from({ length: Math.ceil(addressProviders.length / itemsPerPage) }, (_, index) => (
-          <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+            <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
             {index + 1}
-          </Pagination.Item>
+            </Pagination.Item>
         ))}
-      </Pagination>
+        </Pagination>
 
     <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
             <Modal.Title>
             {modalAction === 'create'
-              ? 'Nueva direccion'
-              : modalAction === 'edit'
-              ? 'Actualizar direccion'
-              : 'Detalle de direccion'}
+                ? 'Nueva direccion'
+                : modalAction === 'edit'
+                ? 'Actualizar direccion'
+                : 'Detalle de direccion'}
             </Modal.Title>
         </Modal.Header>
 
@@ -233,36 +233,36 @@ const AddressProviders = ({providerId}) => {
             {modalAction !== 'detail' &&(
                 <Form>
                 <Form.Group controlId='formAddresP'>
-                  <Form.Label>Direccion</Form.Label>
-                  <Form.Control
-                     type="text"
-                     placeholder="Ingrese la direccion"
-                     value={newAddressProvider.Address}
-                     onChange={(e) => setNewAddressProvider({ ...newAddressProvider, Address: e.target.value })}
-                   />
+                    <Form.Label>Direccion</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Ingrese la direccion"
+                        value={newAddressProvider.Address}
+                        onChange={(e) => setNewAddressProvider({ ...newAddressProvider, Address: e.target.value })}
+                    />
                 </Form.Group> 
-   
+
                 <Form.Group controlId='formAddressType'>
-                  <Form.Label>Tipo de direccion</Form.Label>
-                  <Form.Control
-                     type="text"
-                     placeholder="Ingrese el tipo de direccion"
-                     value={newAddressProvider.AddressType}
-                     onChange={(e) => setNewAddressProvider({ ...newAddressProvider, AddressType: e.target.value })}
-                   />
+                    <Form.Label>Tipo de direccion</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Ingrese el tipo de direccion"
+                        value={newAddressProvider.AddressType}
+                        onChange={(e) => setNewAddressProvider({ ...newAddressProvider, AddressType: e.target.value })}
+                    />
                 </Form.Group>
-   
+
                 <Form.Group controlId='formNeighborhoodId'>
-                  <Form.Label>Tipo de Telefono</Form.Label>
-                  <Form.Control
-                     type="text"
-                     placeholder="Ingrese el Id de barrio"
-                     value={newAddressProvider.NeighborhoodId}
-                     onChange={(e) => setNewAddressProvider({ ...newAddressProvider, NeighborhoodId: e.target.value })}
-                   />
+                    <Form.Label>Tipo de Telefono</Form.Label>
+                    <Form.Control
+                        type="text"
+                        placeholder="Ingrese el Id de barrio"
+                        value={newAddressProvider.NeighborhoodId}
+                        onChange={(e) => setNewAddressProvider({ ...newAddressProvider, NeighborhoodId: e.target.value })}
+                    />
                 </Form.Group>
-               </Form>
-             )}
+                </Form>
+                )}
             </Modal.Body>
 
             <Modal.Footer>
@@ -279,8 +279,8 @@ const AddressProviders = ({providerId}) => {
                 )}
             </Modal.Footer>
     </Modal>
- </div>
-    )
+    </div>
+    );
 };
 
-export default AddressProviders;
+export default ProviderAddresses;

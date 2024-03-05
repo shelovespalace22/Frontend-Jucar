@@ -6,7 +6,7 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-const ProvidersPhone = ({providerId})  => {
+const ProviderPhones = ({providerId})  => {
     const [ProvidersPhone, setProvidersPhone] = useState ([]);
     const [newProviderPhone, setNewProviderPhone] =  useState({
         PhoneType:'',
@@ -264,4 +264,4 @@ const ProvidersPhone = ({providerId})  => {
   )
 };
 
-export default ProvidersPhone;
+export default ProviderPhones;

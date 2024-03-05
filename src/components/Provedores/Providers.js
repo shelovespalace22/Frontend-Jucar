@@ -116,11 +116,11 @@ const Providers = () => {
         }
    }
 
-   const handleDeleteProvider = async(providerId) =>{
+   const handleDeleteProvider = async (providerId) =>{
         try{
           await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
 
-          const updatedProviders = providers.filter((provider) => provider.providerId !== providerId);
+          const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
           setProviders(updatedProviders);
         }catch(error){
          console.error ('error deleting provider')
@@ -167,18 +167,18 @@ const Providers = () => {
 
         if(selectedProvider){
             setNewProvider({
-                IdentifierType: selectedProvider.IdentifierType || '',
-                IdentifierNumber:selectedProvider.IdentifierNumber || '',
-                EmailAddress: selectedProvider.EmailAddress || '',
-                ProductType: selectedProvider.ProductType || '',
+                IdentifierType: selectedProvider.identifierType || '',
+                IdentifierNumber: selectedProvider.identifierNumber || '',
+                EmailAddress: selectedProvider.emailAddress || '',
+                ProductType: selectedProvider.productType || '',
                 ProviderAddresses: [{
-                    Address:selectedProvider.Address ||'',
-                    AddressType: selectedProvider.AddressType || '',
-                    NeighborhoodId: selectedProvider.NeighborhoodId || ''
+                    Address:selectedProvider.address ||'',
+                    AddressType: selectedProvider.addressType || '',
+                    NeighborhoodId: selectedProvider.neighborhoodId || ''
                 }],
                 ProviderPhone:[{
-                    PhoneType:selectedProvider.PhoneType ||'',
-                    PhoneNumber:selectedProvider.PhoneNumber ||''
+                    PhoneType:selectedProvider.phoneType ||'',
+                    PhoneNumber:selectedProvider.phoneNumber ||''
                 }]
             });
 
@@ -245,20 +245,20 @@ const Providers = () => {
                 </thead>
                 <tbody>
                     {currentProviders.map((provider)=>(
-                        <tr key={provider.providerId}>
-                            <td>{provider.IdentifierType}</td>
-                            <td>{provider.IdentifierNumber}</td>
-                            <td>{provider.Name}</td>
-                            <td>{provider.EmailAddress}</td>
-                            <td>{provider.ProductType}</td>
+                        <tr key={provider.providerID}>
+                            <td>{provider.identifierType}</td>
+                            <td>{provider.identifierNumber}</td>
+                            <td>{provider.name}</td>
+                            <td>{provider.emailAddress}</td>
+                            <td>{provider.productType}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(provider.providerId)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(provider.providerID)}>
                                     <FontAwesomeIcon icon = {faEdit}/> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={()=> handleDeleteProvider(provider.providerId)}>
+                                <Button variant='danger' onClick={()=> handleDeleteProvider(provider.providerID)}>
                                     <FontAwesomeIcon icon = {faTrash}/> Eliminar 
                                 </Button>
-                                <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerId)}>
+                                <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerID)}>
                                     <FontAwesomeIcon icon={faEye}/> Ver detalle
                                 </Button>
                             </td>

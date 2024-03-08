@@ -180,6 +180,7 @@ const Autoparts = ({ subcategoryId }) => {
       <Button variant="primary" onClick={handleShowCreateModal}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
       </Button>
+      
       <Button variant="danger" onClick={handleGoBack}>
         Volver
       </Button>

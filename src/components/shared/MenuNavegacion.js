@@ -87,6 +87,11 @@ const MenuNavegacion = () => (
           <FontAwesomeIcon icon={faCog} /> Telefonos de Proveedor
         </Link>
       </li>
+      <li>
+        <Link to="/menu-providers">
+          <FontAwesomeIcon icon={faCog} /> Menú Proveedores
+        </Link>
+      </li>
     </ul>
   </nav>
 );

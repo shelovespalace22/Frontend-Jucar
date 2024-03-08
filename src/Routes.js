@@ -9,6 +9,7 @@ import ErrorAlRegistrar from './components/registro/ErrorAlRegistrar';
 import Menu from './components/Menu';
 import MenuSubcategories from './components/Menus/MenuSubcategories';
 import MenuAutoparts from './components/Menus/MenuAutoparts';
+import MenuProviders from './components/Menus/MenuProviders';
 
 import Categories from './components/Products/Categories/Categories';
 import Subcategories from './components/Products/Subcategories/Subcategories';
@@ -44,6 +45,7 @@ const Routes = () => {
             <Route path="/menu-inicial" component={Menu} />
             <Route path="/menu-subcategories" component={MenuSubcategories} />
             <Route path="/menu-autoparts" component={MenuAutoparts} />
+            <Route path="/menu-providers" component={MenuProviders} />
 
 
             {/* CRUDS: Products */}

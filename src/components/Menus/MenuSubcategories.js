@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { Button, Card, Container } from 'react-bootstrap';
 
-import './styles/MenuSubcategories.css';
+import './styles/MenusStyles.css';
 
 const MenuSubcategories = () => {
   const [categories, setCategories] = useState([]);

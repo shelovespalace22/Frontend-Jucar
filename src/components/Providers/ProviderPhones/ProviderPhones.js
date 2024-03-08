@@ -6,70 +6,73 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-const ProviderPhones = ({providerId})  => {
-    const [ProvidersPhone, setProvidersPhone] = useState ([]);
-    const [newProviderPhone, setNewProviderPhone] =  useState({
-        PhoneType:'',
-        PhoneNumber:''
-    })
-
-  const [showModal, setShowModal] = useState(false);
-  const [modalAction, setModalAction] = useState('create');
-  const [selectedProviderPhoneId, setSelectedProviderPhoneId] = useState('');
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(10);
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentProvidersPhone = ProvidersPhone.slice(indexOfFirstItem, indexOfLastItem);
-  const history = useHistory();
+const ProviderPhones = ({ providerId })  => {
+    const [providerPhones, setProviderPhones] = useState ([]);
+    const [newProviderPhone, setNewProviderPhone] = useState({
+        PhoneType: '',
+        PhoneNumber: '',
+    });
+    const [showModal, setShowModal] = useState(false);
+    const [modalAction, setModalAction] = useState('create');
+    const [selectedProviderPhoneId, setSelectedProviderPhoneId] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const [itemsPerPage] = useState(10);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentproviderPhones = providerPhones.slice(indexOfFirstItem, indexOfLastItem);
+    const history = useHistory();
   
-  useEffect (() => {
-    const fetchProvidersPhone = async () => {
-        try{
-            const response = await axios.get (`https://localhost:7028/api/providers/${providerId}/phones`)
-            setProvidersPhone (response.data)
-        }catch (error){
-            console.error('Error fetching ProvidersPhone')
-        }
-    };
+    useEffect(() => {
+        const fetchproviderPhones = async () => {
+            try{
+                const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/phones`);
 
-    fetchProvidersPhone();
-    },[providerId]);
+                setProviderPhones(response.data)
+
+            } catch(error){
+                console.error('Error fetching providerPhones', error);
+            }
+        };
+
+        fetchproviderPhones();
+    }, [providerId]);
 
     const handleCreateProviderPhone = async () => {
         try { 
-            const response = await axios.post (`https://localhost:7028/api/providers/${providerId}/phones`, newProviderPhone);
+            const response = await axios.post(`https://localhost:7028/api/providers/${providerId}/phones`, newProviderPhone);
 
-            setProvidersPhone([response.data, ...ProvidersPhone]);
+            setProviderPhones([response.data, ...providerPhones]);
 
             setNewProviderPhone({
-                PhoneType:'',
-                PhoneNumber:''
+                PhoneType: '',
+                PhoneNumber: '',
             });
+
             handleCloseModal();
-        }catch (error){
-            console.error('Error creating Phone')
+
+        } catch (error){
+            console.error('Error creating phone', error);
         }
     };
 
     const handleUpdateProviderPhone = async () => {
         try{
-            await axios.put (`https://localhost:7028/api/providers/${providerId}/phones/${selectedProviderPhoneId}`, newProviderPhone);
+            await axios.put(`https://localhost:7028/api/providers/${providerId}/phones/${selectedProviderPhoneId}`, newProviderPhone);
 
             const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/phones`);
 
-            const updateProvidersPhone = response.data;
+            const updateproviderPhones = response.data;
 
-            setProvidersPhone(updateProvidersPhone);
+            setProviderPhones(updateproviderPhones);
 
             setNewProviderPhone({
                 PhoneType:'',
-                PhoneNumber:''
+                PhoneNumber:'',
             })
 
             handleCloseModal();
-        }catch (error){
-            console.error ('error updating Phone')
+        } catch (error){
+            console.error ('Error updating phone', error);
         }
     };
 
@@ -77,10 +80,10 @@ const ProviderPhones = ({providerId})  => {
         try{
             await axios.delete(`https://localhost:7028/api/providers/${providerId}/phones/${providerPhoneId}`);
 
-            const updateProvidersPhone = ProvidersPhone.filter((providerPhone)=> providerPhone.providerPhoneId !== providerPhoneId);
-            setProvidersPhone(updateProvidersPhone);
+            const updateproviderPhones = providerPhones.filter((providerPhone)=> providerPhone.providerPhoneID !== providerPhoneId);
+            setProviderPhones(updateproviderPhones);
         }catch(error){
-            console.error('error deleting Phone')
+            console.error('error deleting phone', error);
         }
     };
 
@@ -94,28 +97,28 @@ const ProviderPhones = ({providerId})  => {
         setModalAction ('edit')
         setSelectedProviderPhoneId(providerPhoneId);
     
-        const selectedProviderPhone = ProvidersPhone.find((providerPhone)=> providerPhone.providerPhoneId !== providerPhoneId);
+        const selectedProviderPhone = providerPhones.find((providerPhone)=> providerPhone.providerPhoneID === providerPhoneId);
 
         if(selectedProviderPhone){
             setNewProviderPhone({
-                PhoneType: selectedProviderPhone.PhoneType || '',
-                PhoneNumber: selectedProviderPhone.PhoneNumber || ''
-            })
+                PhoneType: selectedProviderPhone.phoneType || '',
+                PhoneNumber: selectedProviderPhone.phoneNumber || '',
+            });
         }
 
-        setShowModal(true)
+        setShowModal(true);
     };
 
     const handleShowDetailModal = (providerPhoneId) => {
         setModalAction('detail')
         setSelectedProviderPhoneId(providerPhoneId);
 
-        const selectedProviderPhone = ProvidersPhone.find((providerPhone) => providerPhone.providerPhoneId === providerPhoneId);
+        const selectedProviderPhone = providerPhones.find((providerPhone) => providerPhone.providerPhoneID === providerPhoneId);
 
         if (selectedProviderPhone){
             setNewProviderPhone({
                 PhoneType: selectedProviderPhone.phoneType || '',
-                PhoneNumber: selectedProviderPhone.PhoneNumber || ''
+                PhoneNumber: selectedProviderPhone.phoneNumber || ''
             });
         }
         setShowModal(true);
@@ -126,142 +129,143 @@ const ProviderPhones = ({providerId})  => {
         setNewProviderPhone({
           PhoneType: '',
           PhoneNumber: '',
-         
         });
         setSelectedProviderPhoneId('');
     };
 
-      
-    
-   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-   const handleGoBack = () => {
+    const handleGoBack = () => {
         history.goBack();
     };
     
-  return(
-    <div>
-        <header>
-                <div>
-                    <img src="" alt="logo"/>
-                    <h1>Autupartes JUCAR</h1>
-                </div>
-        </header>
-        <br>
-        <h2>Telefono Provedores</h2>
-        </br> 
+    return(
+        <div>
+            <header>
+                    <div>
+                        <img src="" alt="logo"/>
+                        <h1>Autupartes JUCAR</h1>
+                    </div>
+            </header>
 
-        <Button variant="primary" onClick={handleShowCreateModal}>
-        <FontAwesomeIcon icon={faPlus} /> Nuevo Telefono
-        </Button>
-        <Button variant="danger" onClick={handleGoBack}>
-            Volver
-        </Button>
+            <br />
+            <h2>Teléfonos del Proveedor</h2>
+            <br /> 
 
-        <hr />
-      <Table>
-        <thead>
-            <tr>
-                <th>Tipo de Telefono</th>
-                <th>Numero de telefono</th>
-            </tr>
-         </thead> 
-          <tbody>
-            {currentProvidersPhone.map((providerPhone)=>(
-                <tr key ={providerPhone.providerPhoneId}>
-                    <td>{providerPhone.PhoneType}</td>
-                    <td>{providerPhone.PhoneNumber}</td>
-                    <td>
-                        <Button variant='info' onClick={()=> handleShowEditModal(providerPhone.providerPhoneId)}>
-                            <FontAwesomeIcon icon = {faEdit}/> Actualizar
-                        </Button>
-                        <Button variant='danger' onClick={()=>handleDeleteProviderPhone(providerPhone.providerPhoneId)}>
-                            <FontAwesomeIcon icon = {faTrash}/> Eliminar
-                        </Button>
-                        <Button variant='primary' onClick={()=> handleShowDetailModal (providerPhone.providerPhoneId)}>
-                            <FontAwesomeIcon icon={faEye}/> Ver Detalles
-                        </Button>
-                            
-                    </td>
-                </tr>
+            <Button variant="primary" onClick={handleShowCreateModal}>
+                <FontAwesomeIcon icon={faPlus} /> Nuevo Telefono
+            </Button>
+
+            <Button variant="danger" onClick={handleGoBack}>
+                Volver
+            </Button>
+            <hr />
+
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Tipo de Teléfono</th>
+                        <th>Número de Teléfono</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead> 
+                <tbody>
+                    {currentproviderPhones.map((providerPhone)=>(
+                        <tr key ={providerPhone.providerPhoneID}>
+                            <td>{providerPhone.phoneType}</td>
+                            <td>{providerPhone.phoneNumber}</td>
+                            <td>
+                                <Button variant='info' onClick={()=> handleShowEditModal(providerPhone.providerPhoneID)}>
+                                    <FontAwesomeIcon icon = {faEdit}/> Actualizar
+                                </Button>
+                                <Button variant='danger' onClick={()=> handleDeleteProviderPhone(providerPhone.providerPhoneID)}>
+                                    <FontAwesomeIcon icon = {faTrash}/> Eliminar
+                                </Button>
+                                <Button variant='primary' onClick={()=> handleShowDetailModal(providerPhone.providerPhoneID)}>
+                                    <FontAwesomeIcon icon={faEye}/> Ver Detalles
+                                </Button>
+                                    
+                            </td>
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
+
+            <Pagination>
+            {Array.from({ length: Math.ceil(providerPhones.length / itemsPerPage) }, (_, index) => (
+                <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+                {index + 1}
+                </Pagination.Item>
             ))}
-          </tbody>
-       </Table>
+            </Pagination>
 
-       <Pagination>
-        {Array.from({ length: Math.ceil(ProvidersPhone.length / itemsPerPage) }, (_, index) => (
-          <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
-            {index + 1}
-          </Pagination.Item>
-        ))}
-      </Pagination>
+            <Modal show={showModal} onHide={handleCloseModal}>
 
-      <Modal show ={showModal} onHide={handleCloseModal}>
-      <Modal.Header closeButton>
-          <Modal.Title>
-            {modalAction === 'create'
-              ? 'Nuevo Telefono'
-              : modalAction === 'edit'
-              ? 'Actualizar Telefono'
-              : 'Detalle de Telefono'}
-          </Modal.Title>
-        </Modal.Header>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                        {modalAction === 'create'
+                            ? 'Nuevo Teléfono'
+                            : modalAction === 'edit'
+                            ? 'Actualizar Teléfono'
+                            : 'Detalle de Teléfono'}
+                    </Modal.Title>
+                </Modal.Header>
 
-        <Modal.Body>
-            {modalAction !== 'detail' && (
-            <Form>
-             <Form.Group controlId='formProvioderPhoneType'>
-              <Form.Label>Tipo de Telefono</Form.Label>
-              <Form.Control
-                  type="text"
-                  placeholder="Ingrese el tipo de telefono"
-                  value={newProviderPhone.PhoneType}
-                  onChange={(e) => setNewProviderPhone({ ...newProviderPhone, phoneType: e.target.value })}
-                />
-             </Form.Group>
+                <Modal.Body>
+                    {modalAction !== 'detail' && (
+                        <Form>
+                            <Form.Group controlId='formProvioderPhoneType'>
+                                <Form.Label>Tipo de Teléfono</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese el tipo de teléfono..."
+                                    value={newProviderPhone.PhoneType}
+                                    onChange={(e) => setNewProviderPhone({ ...newProviderPhone, PhoneType: e.target.value })}
+                                />
+                            </Form.Group>
 
-              <Form.Group controlId='formProvioderPhoneNumber'>
-              <Form.Label>Numero de Telefono</Form.Label>
-              <Form.Control
-                  type="number"
-                  placeholder="Ingrese el numeor de telefono"
-                  value={newProviderPhone.PhoneNumber}
-                  onChange={(e) => setNewProviderPhone({ ...newProviderPhone, PhoneNumber: e.target.value })}
-                />
-             </Form.Group>
-            </Form>
-            )}
-            {modalAction === 'detail' &&(
-                <div>
-                    {selectedProviderPhoneId && (
+                            <Form.Group controlId='formProvioderPhoneNumber'>
+                                <Form.Label>Numero de Teléfono</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    placeholder="Ingrese el número de teléfono..."
+                                    value={newProviderPhone.PhoneNumber}
+                                    onChange={(e) => setNewProviderPhone({ ...newProviderPhone, PhoneNumber: e.target.value })}
+                                />
+                            </Form.Group>
+                        </Form>
+                    )}
+                    {modalAction === 'detail' &&(
                         <div>
-                            <h4>Detalles del telefono</h4>
-                            <p>ID: {selectedProviderPhoneId}</p>
-                            <p>Tipo de telefono: {newProviderPhone.PhoneType}</p>
-                            <p>Numero de telefono: {newProviderPhone.PhoneNumber} </p>
+                            {selectedProviderPhoneId && (
+                                <div>
+                                    <h4>Detalles del Teléfono</h4>
+                                    <p><b>ID:</b> {selectedProviderPhoneId}</p>
+                                    <p><b>Tipo de teléfono:</b> {newProviderPhone.PhoneType}</p>
+                                    <p><b>Numero de telefono:</b> {newProviderPhone.PhoneNumber} </p>
+                                </div>
+                            )}
                         </div>
                     )}
-                </div>
-            )}
 
-        </Modal.Body>
-        <Modal.Footer>
-            <Button variant='secondary' onClick={handleCloseModal}>
-                Cancelar
-            </Button>
-            {modalAction !== 'detail' && (
-                <Button
-                 variant='primary'
-                 onClick={modalAction === 'create' ? handleCreateProviderPhone: handleUpdateProviderPhone}
-                >
-                 
-                 {modalAction === 'create' ? 'Crear':'Actualizar'}
-                 </Button>
-            )}
-        </Modal.Footer>
-     </Modal>
-    </div>
-  )
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleCloseModal}>
+                        Cancelar
+                    </Button>
+                    {modalAction !== 'detail' && (
+                        <Button
+                            variant='primary'
+                            onClick={modalAction === 'create' ? handleCreateProviderPhone : handleUpdateProviderPhone}
+                        >
+                            
+                            {modalAction === 'create' ? 'Crear':'Actualizar'}
+                        </Button>
+                    )}
+                </Modal.Footer>
+            </Modal>
+        </div>
+    );
 };
 
 export default ProviderPhones;

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Button, Form, Modal, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faTrash, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
@@ -13,7 +13,10 @@ const Subcategories = ({ categoryId }) => {
   const [modalAction, setModalAction] = useState('create');
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(5); // Define cuántos elementos quieres mostrar por página
+  const [itemsPerPage] = useState(5); 
+  const indexOfLastItem = currentPage * itemsPerPage;
+  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const currentSubcategories = subcategories.slice(indexOfFirstItem, indexOfLastItem);
   const history = useHistory();
 
   useEffect(() => {
@@ -28,11 +31,6 @@ const Subcategories = ({ categoryId }) => {
 
     fetchData();
   }, [categoryId]);
-
-  // Obtiene las subcategorías actuales dependiendo de la página actual
-  const indexOfLastItem = currentPage * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const currentSubcategories = subcategories.slice(indexOfFirstItem, indexOfLastItem);
 
   const handleCreateSubcategory = async () => {
     try {
@@ -99,12 +97,16 @@ const Subcategories = ({ categoryId }) => {
     setSelectedSubcategoryId('');
   };
 
+  const handleShowAutoparts = (subcategoryId) => {
+    history.push('/subcategory-autoparts', { subcategoryId })
+  };
+
   // Cambia la página actual
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleGoBack = () => {
     history.goBack();
-};
+  };
 
   return (
     <div className="subcategories-container">
@@ -142,6 +144,9 @@ const Subcategories = ({ categoryId }) => {
                 </Button>
                 <Button variant="danger" onClick={() => handleDeleteSubcategory(subcategory.subcategoryId)}>
                   <FontAwesomeIcon icon={faTrash} /> Eliminar
+                </Button>
+                <Button variant="success" onClick={() => handleShowAutoparts(subcategory.subcategoryId)}>
+                  <FontAwesomeIcon icon={faScrewdriverWrench} /> Ver Autopartes
                 </Button>
               </td>
             </tr>

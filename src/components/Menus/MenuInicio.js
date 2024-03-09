@@ -1,7 +1,7 @@
 // Menu.js
 import React from 'react';
 
-const Menu = () => {
+const MenuInicio = () => {
   return (
     <div>
       <h2>Bienvenido al Menú</h2>
@@ -9,4 +9,4 @@ const Menu = () => {
   );
 };
 
-export default Menu;
+export default MenuInicio;

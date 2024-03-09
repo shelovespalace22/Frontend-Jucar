@@ -141,13 +141,6 @@ const ProviderPhones = ({ providerId })  => {
     
     return(
         <div>
-            <header>
-                    <div>
-                        <img src="" alt="logo"/>
-                        <h1>Autupartes JUCAR</h1>
-                    </div>
-            </header>
-
             <br />
             <h2>Teléfonos del Proveedor</h2>
             <br /> 

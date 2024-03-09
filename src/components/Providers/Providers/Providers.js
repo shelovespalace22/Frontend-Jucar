@@ -2,9 +2,9 @@ import React, { useState, useEffect } from 'react';
 import {  Button, Form, Modal, Pagination, ModalHeader, Table } from 'react-bootstrap';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
-// import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 
 
@@ -36,6 +36,7 @@ const Providers = () => {
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentProviders = providers.slice(indexOfFirstItem, indexOfLastItem);
+    const history = useHistory();
 
     useEffect (()=>{
         const fetchProviders = async () =>{
@@ -187,6 +188,13 @@ const Providers = () => {
         }
     };
 
+    const handleShowPhones = (providerId) => {
+        history.push('/provider-phones', { providerId });
+    };
+    
+    const handleShowAddresses = (providerId) => {
+        history.push('/provider-addresses', { providerId });
+    };
     const handleCloseModal = () => {
         setShowModal(false);
         setNewProvider({
@@ -217,18 +225,15 @@ const Providers = () => {
 
     return(
         <div>
-            <header>
-                <div>
-                    <img src="" alt="logo"/>
-                    <h1>Autupartes JUCAR</h1>
-                </div>
-            </header>
+            
             <br/>
             <h2>Modulo Provedores</h2>
             <br/>
+
             <Button variant="primary" onClick={handleShowCreateModal}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
             </Button>
+
             <Button variant="danger" onClick={handleGoBack}>
                 Volver
             </Button>
@@ -263,6 +268,12 @@ const Providers = () => {
                                 </Button>
                                 <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerID)}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalle
+                                </Button>
+                                <Button variant='success' onClick={() => handleShowPhones(provider.providerID)}>
+                                    <FontAwesomeIcon icon={faPhone} />
+                                </Button>
+                                <Button variant='danger' onClick={() => handleShowAddresses(provider.providerID)}>
+                                    <FontAwesomeIcon icon={faLocationDot} />
                                 </Button>
                             </td>
                         </tr>

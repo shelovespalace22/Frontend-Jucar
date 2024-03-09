@@ -1,10 +1,11 @@
 // Categories.js
 import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
 import { Table, Button, Form, Pagination, Modal } from 'react-bootstrap';
 import axios from 'axios';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash, faEdit } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faEdit, faList } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const Categories = () => {
@@ -17,6 +18,12 @@ const Categories = () => {
 
   const [currentPage, setCurrentPage] = useState(1);
   const [categoriesPerPage] = useState(10);
+
+  const indexOfLastCategory = currentPage * categoriesPerPage;
+  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
+  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
+
+  const history = useHistory();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -80,16 +87,18 @@ const Categories = () => {
     } catch (error) {
         console.error('Error updating rawMaterial:', error);
     }
-};
+  };
 
-  // Lógica para calcular las categorías a mostrar en la página actual
-  const indexOfLastCategory = currentPage * categoriesPerPage;
-  const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
-  const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
-
-  // Lógica para cambiar de página
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+  const handleShowSubcategories = (categoryId) => {
+    history.push('/category-subcategories', { categoryId });
+  };
+
+  const handleGoBack = () => {
+    history.goBack();
   };
 
 
@@ -104,6 +113,10 @@ const Categories = () => {
 
       <Button variant="primary" onClick={() => setShowCreateModal(true)}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Categoría
+      </Button>
+
+      <Button variant="danger" onClick={handleGoBack}>
+        Volver
       </Button>
 
       <hr/>
@@ -128,6 +141,9 @@ const Categories = () => {
                 </Button>{' '}
                 <Button variant="danger" onClick={() => handleDeleteCategory(category.categoryId)}>
                   <FontAwesomeIcon icon={faTrash} /> Eliminar
+                </Button>
+                <Button variant="primary" onClick={() => handleShowSubcategories(category.categoryId)}>
+                  <FontAwesomeIcon icon={faList} /> Ver Subcategorías
                 </Button>
               </td>
             </tr>

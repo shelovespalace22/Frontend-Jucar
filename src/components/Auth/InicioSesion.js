@@ -1,10 +1,8 @@
-// InicioSesion.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faUserPlus, faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 import { Container, Card, Button } from 'react-bootstrap';
-import './styles/InicioSesion.css';
 
 const InicioSesion = () => {
   return (

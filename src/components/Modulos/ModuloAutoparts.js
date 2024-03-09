@@ -2,9 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import { Button, Card, Container } from 'react-bootstrap';
 import axios from 'axios';
+import './styles/ModulosStyles.css';
 
-const MenuAutoparts = () => {
+const ModuloAutoparts = () => {
   const [subcategories, setSubcategories] = useState([]);
   const history = useHistory();
 
@@ -27,18 +29,29 @@ const MenuAutoparts = () => {
 
   return (
     <div>
-      <h3>Subcategories</h3>
-      <ul>
+      <Container>
+        <h1>Elige la Subcategoría</h1>
+      </Container>
+
+      <Container>
         {subcategories.map((subcategory) => (
-          <li key={subcategory.subcategoryId}>
-            <button onClick={() => handleSubcategoryClick(subcategory.subcategoryId)}>
-              {subcategory.name}
-            </button>
-          </li>
-        ))}
-      </ul>
+            <Card key={subcategory.subcategoryId}>
+              <Card.Body>
+                <Card.Title>Ver Autopartes de: </Card.Title>
+                <br />
+                <Card.Text>
+                  <strong>{subcategory.name}</strong>
+                </Card.Text>
+                <br />
+                <Button onClick={() => handleSubcategoryClick(subcategory.subcategoryId)}>
+                  Ver
+                </Button>
+              </Card.Body>
+            </Card>
+          ))}
+      </Container>
     </div>
   );
 };
 
-export default MenuAutoparts;
+export default ModuloAutoparts;

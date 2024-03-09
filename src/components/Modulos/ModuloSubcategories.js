@@ -1,13 +1,10 @@
-// MenuSubcategories.js
-
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import axios from 'axios';
 import { Button, Card, Container } from 'react-bootstrap';
+import axios from 'axios';
+import './styles/ModulosStyles.css';
 
-import './styles/MenusStyles.css';
-
-const MenuSubcategories = () => {
+const ModuloSubcategories = () => {
   const [categories, setCategories] = useState([]);
   const history = useHistory();
 
@@ -30,13 +27,13 @@ const MenuSubcategories = () => {
 
   return (
     <div>
-      <Container className='mt-5 container-box'>
-        <h1 className='text-center'>Categorías</h1>
+      <Container>
+        <h1>Elige la Categoría</h1>
       </Container>
 
-      <Container className='mt-5 container-box'>
+      <Container>
         {categories.map((category) => (
-            <Card key={category.categoryId} style={{ width: '250px'}}>
+            <Card key={category.categoryId}>
               <Card.Body>
                 <Card.Title>Ver Subcategorías de: </Card.Title>
                 <br />
@@ -44,7 +41,7 @@ const MenuSubcategories = () => {
                   <strong>{category.name}</strong>
                 </Card.Text>
                 <br />
-                <Button variant='success' onClick={() => handleCategoryClick(category.categoryId)}>
+                <Button onClick={() => handleCategoryClick(category.categoryId)}>
                   Ver
                 </Button>
               </Card.Body>
@@ -55,4 +52,4 @@ const MenuSubcategories = () => {
   );
 };
 
-export default MenuSubcategories;
+export default ModuloSubcategories;

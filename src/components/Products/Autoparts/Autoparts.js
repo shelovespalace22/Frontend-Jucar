@@ -328,7 +328,6 @@ const Autoparts = ({ subcategoryId }) => {
         </Modal.Footer>
 
       </Modal>
-
     </div>
   );
 };

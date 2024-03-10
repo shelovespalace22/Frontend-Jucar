@@ -129,7 +129,7 @@ const ProviderAddresses = ({ providerId }) => {
     };
 
     const handleShowEditModal = (providerAddressId) => {
-        setModalAction ('edit');
+        setModalAction('edit');
         setSelectedProviderAddressId(providerAddressId);
 
         const selectedproviderAddress = providerAddresses.find((providerAddress)=> providerAddress.providerAddressID === providerAddressId);

@@ -195,6 +195,7 @@ const Providers = () => {
     const handleShowAddresses = (providerId) => {
         history.push('/provider-addresses', { providerId });
     };
+
     const handleCloseModal = () => {
         setShowModal(false);
         setNewProvider({
@@ -217,8 +218,7 @@ const Providers = () => {
     };
 
     const handleGoBack = () => {
-        // eslint-disable-next-line no-restricted-globals, no-unused-expressions
-        history.back
+        history.goBack();
     };
 
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -231,7 +231,7 @@ const Providers = () => {
             <br/>
 
             <Button variant="primary" onClick={handleShowCreateModal}>
-                <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
+                <FontAwesomeIcon icon={faPlus} /> Nuevo Proveedor
             </Button>
 
             <Button variant="danger" onClick={handleGoBack}>

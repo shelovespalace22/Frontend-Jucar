@@ -15,6 +15,8 @@ import MenuSales from './components/Menus/MenuSales';
 import ModuloSubcategories from './components/Modulos/ModuloSubcategories';
 import ModuloAutoparts from './components/Modulos/ModuloAutoparts';
 import ModuloProveedores from './components/Modulos/ModuloProveedores';
+import ModuloCustomers from './components/Modulos/ModuloCustomers';
+import ModuloOrders from './components/Modulos/ModuloOrders';
 
 import Categories from './components/Products/Categories/Categories';
 import Subcategories from './components/Products/Subcategories/Subcategories';
@@ -28,6 +30,13 @@ import Providers from './components/Providers/Providers/Providers';
 import ProviderAddresses from './components/Providers/ProviderAddresses/ProviderAddresses';
 import ProviderPhones from './components/Providers/ProviderPhones/ProviderPhones';
 
+import Customers from './components/Sales/Customers/Customers';
+import CustomersPhones from './components/Sales/CustomerPhones/CustomersPhones';
+import CustomerAddresses from './components/Sales/CustomerAddresses/CustomerAddresses';
+import Orders from './components/Sales/Orders/Orders';
+import OrderDetails from './components/Sales/OrderDetails/OrderDetails';
+import PaymentMethods from './components/Sales/PaymentMethods/PaymentMethods';
+import Contributions from './components/Sales/Contributions/Contributions';
 
 
 
@@ -59,7 +68,8 @@ const Routes = () => {
             <Route path="/modulo-subcategories" component={ModuloSubcategories} />
             <Route path="/modulo-autoparts" component={ModuloAutoparts} />
             <Route path="/modulo-providers" component={ModuloProveedores} />
-            
+            <Route path="/modulo-customers" component={ModuloCustomers} />
+            <Route path="/modulo-orders" component={ModuloOrders} />
 
 
             {/* CRUDS: Products */}
@@ -103,8 +113,29 @@ const Routes = () => {
 
             {/* CRUDS: Sales */}
             
+            <Route path="/customers" component={Customers} />
 
+            <Route path="/customer-phones" exact>
+                <CustomersPhones customerId={state?.customerId} />
+            </Route>
+
+            <Route path="/customer-adresses" exact>
+                <CustomerAddresses customerId={state?.customerId} />
+            </Route>
             
+            <Route path="/customer-orders" exact>
+                <Orders customerId={state?.customerId} />
+            </Route>
+
+            <Route path="/order-details" exact>
+                <OrderDetails orderId={state?.orderId} />
+            </Route>
+            
+            <Route path="/paymentMethods" component={PaymentMethods} />
+
+            <Route path="/order-contributions" exact>
+                <Contributions orderId={state?.orderId} />
+            </Route>
             
         </Switch>
 )};

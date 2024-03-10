@@ -6,7 +6,7 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-const Contributions = (orderId) => {
+const Contributions = ({orderId}) => {
     
   
     const currentDate = new Date();

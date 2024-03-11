@@ -32,16 +32,6 @@ const MenuSales = () => {
                         </Card.Body>
                     </Link>
                 </Card>
-
-                <Card className="custom-card">
-                    <Link to='/modulo-customers'>
-                        <Card.Body>
-                            <FontAwesomeIcon icon={faBoxArchive} size="3x" />
-                            <Card.Title>Dirigirse a:</Card.Title>
-                            <h2>Modulo Ventas</h2>
-                        </Card.Body>
-                    </Link>
-                </Card>
             </Container>
         </Container>
     );

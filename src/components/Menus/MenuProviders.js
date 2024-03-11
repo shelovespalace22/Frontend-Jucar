@@ -12,26 +12,23 @@ const MenuProviders = () => {
                 <h1>Menú Proveedores</h1>
             </Container>
 
-            <Container>
-
-                <Card>
+            <Container className="card-container">
+                <Card className="custom-card">
                     <Link to='/providers'>
                         <Card.Body>
-                            <FontAwesomeIcon icon={faTruck} />
+                            <FontAwesomeIcon icon={faTruck} size="3x" />
                             <Card.Title>Dirigirse a:</Card.Title>
                             <h2>Ver Proveedores</h2>
-                            <br />
                         </Card.Body>
                     </Link>
                 </Card>
 
-                <Card>
+                <Card className="custom-card">
                     <Link to='/modulo-providers'>
                         <Card.Body>
-                            <FontAwesomeIcon icon={faTruckFast} />
+                            <FontAwesomeIcon icon={faTruckFast} size="3x" />
                             <Card.Title>Dirigirse a:</Card.Title>
                             <h2>Modulo Proveedores</h2>
-                            <br />
                         </Card.Body>
                     </Link>
                 </Card>

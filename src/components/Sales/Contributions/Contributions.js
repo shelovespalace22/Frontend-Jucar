@@ -90,7 +90,7 @@ const Contributions = ({orderId}) => {
     try{
         await axios.delete (`https://localhost:7028/api/orders/${orderId}/contributions/${contributionId}`);
 
-        const updatedContributions = contributions.filter((contribution)=> contribution.contributionId !== contributionId);
+        const updatedContributions = contributions.filter((contribution)=> contribution.contributionID !== contributionId);
         setContributions(updatedContributions);
     }catch (error){
         console.error ('error deleting contribution', error);
@@ -107,13 +107,13 @@ const Contributions = ({orderId}) => {
     setModalAction ('edit');
     setSelectedContributionId(contributionId);
 
-    const selectedContribution = contributions.find ((contribution)=> contribution.contributionId === contributionId);
+    const selectedContribution = contributions.find ((contribution)=> contribution.contributionID === contributionId);
 
     if (selectedContribution){
         setNewContribution({
-            PaymentMethodId: selectedContribution.PaymentMethodId ||  '',
-            AmountPaid:selectedContribution.AmountPaid || 0,
-            ContributionDate:selectedContribution.ContributionDate|| formattedDate
+            PaymentMethodId: selectedContribution.paymentMethodId ||  '',
+            AmountPaid:selectedContribution.amountPaid || 0,
+            ContributionDate:selectedContribution.contributionDate|| formattedDate
         })
     }
 
@@ -125,13 +125,13 @@ const Contributions = ({orderId}) => {
     setModalAction ('Detail');
     setSelectedContributionId(contributionId);
 
-    const selectedContribution = contributions.find ((contribution)=> contribution.contributionId === contributionId);
+    const selectedContribution = contributions.find ((contribution)=> contribution.contributionID === contributionId);
 
     if (selectedContribution){
         setNewContribution({
-            PaymentMethodId: selectedContribution.PaymentMethodId ||  '',
-            AmountPaid:selectedContribution.AmountPaid || 0,
-            ContributionDate:selectedContribution.ContributionDate|| formattedDate
+            PaymentMethodId: selectedContribution.paymentMethodId ||  '',
+            AmountPaid:selectedContribution.amountPaid || 0,
+            ContributionDate:selectedContribution.contributionDate|| formattedDate
         })
     }
 
@@ -156,12 +156,12 @@ const Contributions = ({orderId}) => {
 
 return(
     <div className='contributions-container'>
-        <header>
+        {/* <header>
             <div>
                 <img src = '' alt='logo'/>
                 <h1>AutopartesJUCAR</h1>
             </div>
-        </header>
+        </header> */}
         <br>
         <h2>Contribuciones</h2>
         </br>
@@ -184,17 +184,17 @@ return(
             <tbody>
                 {currentContributions.map ((contribution) => (
                     <tr key={contribution.contributionId}>
-                        <td>{contribution.PaymentMethodId}</td>
-                        <td>{contribution.AmountPaid}</td>
-                        <td>{contribution.ContributionDate}</td>
+                        <td>{contribution.paymentMethodId}</td>
+                        <td>{contribution.amountPaid}</td>
+                        <td>{contribution.contributionDate}</td>
                         <td>
-                        <Button variant="info" onClick={() => handleShowEditModal(contribution.contributionId)}>
+                        <Button variant="info" onClick={() => handleShowEditModal(contribution.contributionID)}>
                         <FontAwesomeIcon icon={faEdit} /> Actualizar
                         </Button>
-                        <Button variant="danger" onClick={() => handleDeleteContribution(contribution.contributionId)}>
+                        <Button variant="danger" onClick={() => handleDeleteContribution(contribution.contributionID)}>
                         <FontAwesomeIcon icon={faTrash} /> Eliminar
                         </Button>
-                        <Button variant="primary" onClick={() => handleShowDetailModal(contribution.contributionId)}>
+                        <Button variant="primary" onClick={() => handleShowDetailModal(contribution.contributionID)}>
                         <FontAwesomeIcon icon={faEye} /> Ver Detalle
                         </Button>
                         </td>

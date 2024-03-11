@@ -33,22 +33,22 @@ const ModuloAutoparts = () => {
         <h1>Elige la Subcategoría</h1>
       </Container>
 
-      <Container>
+      <Container className="card-container">
         {subcategories.map((subcategory) => (
-            <Card key={subcategory.subcategoryId}>
-              <Card.Body>
-                <Card.Title>Ver Autopartes de: </Card.Title>
-                <br />
-                <Card.Text>
-                  <strong>{subcategory.name}</strong>
-                </Card.Text>
-                <br />
-                <Button onClick={() => handleSubcategoryClick(subcategory.subcategoryId)}>
-                  Ver
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
+          <Card key={subcategory.subcategoryId} className="custom-card">
+            <Card.Body>
+              <Card.Title>Ver Autopartes de: </Card.Title>
+              <br />
+              <Card.Text>
+                <strong>{subcategory.name}</strong>
+              </Card.Text>
+              <br />
+              <Button onClick={() => handleSubcategoryClick(subcategory.subcategoryId)} className="custom-button">
+                Ver
+              </Button>
+            </Card.Body>
+          </Card>
+        ))}
       </Container>
     </div>
   );

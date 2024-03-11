@@ -5,37 +5,34 @@ import { faHome, faBox, faTag, faTruck } from '@fortawesome/free-solid-svg-icons
 import './styles/MenuNavegacion.css';
 
 const MenuNavegacion = () => (
-  <nav>
+  <nav className='menu-nav'>
     <ul>
       <li>
-        <Link to="/menu-inicial">
-          <FontAwesomeIcon icon={faHome} /> Inicio
+        <Link to="/menu-inicial" className='menu-link'>
+          <FontAwesomeIcon icon={faHome} /> <span className='menu-text'>Inicio</span>
         </Link>
       </li>
-      <hr/>
 
       <li>
-        <Link to="/menu-productos">
-          <FontAwesomeIcon icon={faBox} /> Productos
+        <Link to="/menu-productos" className='menu-link'>
+          <FontAwesomeIcon icon={faBox} /> <span className='menu-text'>Productos</span>
         </Link>
       </li>
-      <hr/>
 
       <li>
-        <Link to="/menu-ventas">
-          <FontAwesomeIcon icon={faTag} /> Ventas
+        <Link to="/menu-ventas" className='menu-link'>
+          <FontAwesomeIcon icon={faTag} /> <span className='menu-text'>Ventas</span>
         </Link>
       </li>
-      <hr/>
 
       <li>
-        <Link to="/menu-proveedores">
-          <FontAwesomeIcon icon={faTruck} /> Proveedores
+        <Link to="/menu-proveedores" className='menu-link'>
+          <FontAwesomeIcon icon={faTruck} /> <span className='menu-text'>Proveedores</span>
         </Link>
       </li>
-      <hr/>
     </ul>
   </nav>
 );
+
 
 export default MenuNavegacion;

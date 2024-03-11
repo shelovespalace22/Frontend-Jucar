@@ -1,0 +1,16 @@
+.menu-nav {
+    color: rgb(0, 0, 0); /* Color de texto rojo */
+    font-size: 20px; /* Tamaño de fuente más grande */
+    
+  }
+  
+  .menu-link {
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    color: black;
+  }
+  
+  .menu-text {
+    margin-top: 10%; /* Separación vertical superior */
+    margin-bottom: 40%; 
+  }
+  

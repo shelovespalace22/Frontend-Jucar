@@ -1,0 +1,20 @@
+.custom-card {
+    background-color: red;
+    color: black;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid red; /* Agrega un borde de 2px de ancho y color rojo */
+  }
+  
+  .custom-button {
+    display: block;
+    margin: 0 auto;
+  }
+  
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+  }
+  

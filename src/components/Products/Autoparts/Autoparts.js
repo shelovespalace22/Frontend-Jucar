@@ -46,6 +46,8 @@ const Autoparts = ({ subcategoryId }) => {
       try {
         const response = await axios.get('https://localhost:7028/api/rawMaterials');
         setRawMaterials(response.data);
+
+        console.log(rawMaterials);
       } catch (error) {
         console.error('Error fetching raw materials:', error);
       }
@@ -187,7 +189,6 @@ const Autoparts = ({ subcategoryId }) => {
   };
 
   const handleShowLosses = (autopartId) => {
-    // Redirige a la ruta "/autopart-losses" con el parámetro "autopartId"
     history.push('/autopart-losses', { autopartId });
   };
 
@@ -320,13 +321,15 @@ const Autoparts = ({ subcategoryId }) => {
                   onChange={(e) => setNewAutopart({ ...newAutopart, RawMaterialId: e.target.value })}
                 >
                   <option value="">Seleccione una materia prima</option>
+
                   {rawMaterials.map((rawMaterial) => (
-                    <option key={rawMaterial.rawMaterialID} value={rawMaterial.rawMaterialID}>
+                    <option key={rawMaterial.rawMaterialId} value={rawMaterial.rawMaterialId}>
                       {rawMaterial.name}
                     </option>
                   ))}
                 </Form.Control>
               </Form.Group>
+
             </Form>
           )}
           {modalAction === 'detail' && (

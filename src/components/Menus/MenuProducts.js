@@ -20,9 +20,7 @@ const MenuProducts = () => {
                             <Card.Title>Dirigirse a:</Card.Title>
                             <h2>Modulo Categorías</h2>
                             <br />
-                            <Button className="custom-button">
-                                Ver Categorías
-                            </Button>
+                            
                         </Card.Body>
                     </Link>
                 </Card>
@@ -34,9 +32,7 @@ const MenuProducts = () => {
                             <Card.Title>Dirigirse a:</Card.Title>
                             <h2>Modulo Subcategorías</h2>
                             <br />
-                            <Button className="custom-button">
-                                Ver Subcategorías
-                            </Button>
+                            
                         </Card.Body>
                     </Link>
                 </Card>
@@ -48,9 +44,7 @@ const MenuProducts = () => {
                             <Card.Title>Dirigirse a:</Card.Title>
                             <h2>Modulo Autopartes</h2>
                             <br />
-                            <Button className="custom-button">
-                                Ver Autopartes
-                            </Button>
+                            
                         </Card.Body>
                     </Link>
                 </Card>
@@ -62,9 +56,7 @@ const MenuProducts = () => {
                             <Card.Title>Dirigirse a:</Card.Title>
                             <h2>Modulo Materias Prima</h2>
                             <br />
-                            <Button className="custom-button">
-                                Ver Materias Primas
-                            </Button>
+                            
                         </Card.Body>
                     </Link>
                 </Card>

@@ -1,35 +1,46 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faBox, faTag, faTruck } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBox, faTag, faTruck, faCircleUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
 import './styles/MenuNavegacion.css';
 
 const MenuNavegacion = () => (
   <nav className='menu-nav'>
     <ul>
       <li>
-        <Link to="/menu-inicial" className='menu-link'>
+        <NavLink to="/perfil" className='menu-link icon-only'>
+          <FontAwesomeIcon icon={faCircleUser} className="icon" />
+        </NavLink>
+      </li>
+      <li>
+        <NavLink to="/menu-inicial" className='menu-link' activeClassName='active'>
           <FontAwesomeIcon icon={faHome} /> <span className='menu-text'>Inicio</span>
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/menu-productos" className='menu-link'>
+        <NavLink to="/menu-productos" className='menu-link' activeClassName='active'>
           <FontAwesomeIcon icon={faBox} /> <span className='menu-text'>Productos</span>
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/menu-ventas" className='menu-link'>
+        <NavLink to="/menu-ventas" className='menu-link' activeClassName='active'>
           <FontAwesomeIcon icon={faTag} /> <span className='menu-text'>Ventas</span>
-        </Link>
+        </NavLink>
       </li>
 
       <li>
-        <Link to="/menu-proveedores" className='menu-link'>
+        <NavLink to="/menu-proveedores" className='menu-link' activeClassName='active'>
           <FontAwesomeIcon icon={faTruck} /> <span className='menu-text'>Proveedores</span>
-        </Link>
+        </NavLink>
       </li>
+
+      {/* <li>
+        <NavLink to="/log-out" className="menu-link bottom-link" activeClassName="active" id="log-out">
+          <FontAwesomeIcon icon={faRightFromBracket} /> <span className='menu-text'>Cerrar Sesión</span>
+        </NavLink>
+      </li> */}
     </ul>
   </nav>
 );

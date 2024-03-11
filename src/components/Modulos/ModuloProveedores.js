@@ -25,7 +25,7 @@ const ModuloProveedores = () => {
         history.push('/provider-phones', { providerId });
     };
 
-    const handleShowProviderAdresses = (providerId) => {
+    const handleShowProviderAddresses = (providerId) => {
         history.push('/provider-addresses', { providerId });
     };
 
@@ -35,20 +35,20 @@ const ModuloProveedores = () => {
                 <h1>Proveedores</h1>
             </Container>
 
-            <Container>
+            <Container className="card-container">
                 {providers.map((provider) => (
-                    <Card key={provider.providerID}>
+                    <Card key={provider.providerID} className="custom-card">
                         <Card.Body>
                             <Card.Text>
                                 <strong>{provider.name}</strong>
                             </Card.Text>
                             <br />
-                            <Card.Title>¿Que deseas ver?</Card.Title>
+                            <Card.Title>¿Qué deseas ver?</Card.Title>
                             <br />
-                            <Button onClick={() => handleShowProviderAdresses(provider.providerID)}>
+                            <Button onClick={() => handleShowProviderAddresses(provider.providerID)} className="custom-button">
                                 Ver Direcciones
                             </Button>
-                            <Button onClick={() => handleShowProviderPhones(provider.providerID)}>
+                            <Button onClick={() => handleShowProviderPhones(provider.providerID)} className="custom-button">
                                 Ver Teléfonos
                             </Button>
                         </Card.Body>

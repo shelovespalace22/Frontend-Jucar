@@ -31,22 +31,22 @@ const ModuloSubcategories = () => {
         <h1>Elige la Categoría</h1>
       </Container>
 
-      <Container>
+      <Container className="card-container">
         {categories.map((category) => (
-            <Card key={category.categoryId}>
-              <Card.Body>
-                <Card.Title>Ver Subcategorías de: </Card.Title>
-                <br />
-                <Card.Text>
-                  <strong>{category.name}</strong>
-                </Card.Text>
-                <br />
-                <Button onClick={() => handleCategoryClick(category.categoryId)}>
-                  Ver
-                </Button>
-              </Card.Body>
-            </Card>
-          ))}
+          <Card key={category.categoryId} className="custom-card">
+            <Card.Body>
+              <Card.Title>Ver Subcategorías de: </Card.Title>
+              <br />
+              <Card.Text>
+                <strong>{category.name}</strong>
+              </Card.Text>
+              <br />
+              <Button onClick={() => handleCategoryClick(category.categoryId)} className="custom-button">
+                Ver
+              </Button>
+            </Card.Body>
+          </Card>
+        ))}
       </Container>
     </div>
   );

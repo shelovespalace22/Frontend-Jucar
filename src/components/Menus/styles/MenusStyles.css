@@ -1,0 +1,23 @@
+.custom-card {
+    background-color: rgb(224, 17, 17); /* Cambia el color de fondo a blanco */
+    color: black;
+    margin: 10px;
+    padding: 20px;
+    text-align: center;
+    border: 2px solid red; /* Agrega un borde de 2px de ancho y color rojo */
+}
+
+.custom-button {
+    display: block;
+    margin: 0 auto;
+}
+
+.card-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.iii{
+    text-decoration: none; /* Quita el subrayado de los enlaces */
+    color: black;
+}

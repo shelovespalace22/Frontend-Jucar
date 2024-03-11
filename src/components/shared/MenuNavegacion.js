@@ -1,94 +1,38 @@
-// MenuNavegacion.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faAddressCard, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBox, faTag, faTruck } from '@fortawesome/free-solid-svg-icons';
+import './styles/MenuNavegacion.css';
 
 const MenuNavegacion = () => (
-  <nav>
+  <nav className='menu-nav'>
     <ul>
       <li>
-        <Link to="/menu-inicial">
-          <FontAwesomeIcon icon={faHome} /> Inicio
+        <Link to="/menu-inicial" className='menu-link'>
+          <FontAwesomeIcon icon={faHome} /> <span className='menu-text'>Inicio</span>
         </Link>
       </li>
-      <hr/>
 
       <li>
-        <Link to="/menu-productos">
-          <FontAwesomeIcon icon={faHome} /> Productos
+        <Link to="/menu-productos" className='menu-link'>
+          <FontAwesomeIcon icon={faBox} /> <span className='menu-text'>Productos</span>
         </Link>
       </li>
-      <hr/>
 
       <li>
-        <Link to="/menu-ventas">
-          <FontAwesomeIcon icon={faHome} /> Ventas
+        <Link to="/menu-ventas" className='menu-link'>
+          <FontAwesomeIcon icon={faTag} /> <span className='menu-text'>Ventas</span>
         </Link>
       </li>
-      <hr/>
 
       <li>
-        <Link to="/menu-proveedores">
-          <FontAwesomeIcon icon={faHome} /> Proveedores
-        </Link>
-      </li>
-      <hr/>
-
-      <br/>
-
-      <li>
-        <Link to="/login">
-          <FontAwesomeIcon icon={faAddressCard} /> Log In
-        </Link>
-      </li>
-      <li>
-        <Link to="/registro">
-          <FontAwesomeIcon icon={faCog} /> Registrarse
-        </Link>
-      </li>
-      <li>
-        <Link to="/inicio-sesion">
-          <FontAwesomeIcon icon={faCog} /> Inicio Sesión
-        </Link>
-      </li>
-      <li>
-        <Link to="/categories">
-          <FontAwesomeIcon icon={faCog} /> Categorias
-        </Link>
-      </li>
-      <li>
-        <Link to="/menu-subcategories">
-          <FontAwesomeIcon icon={faCog} /> Menu Subcategorías
-        </Link>
-      </li>
-      <li>
-        <Link to="/menu-autoparts">
-          <FontAwesomeIcon icon={faCog} /> Menu Autopartes
-        </Link>
-      </li>
-      <li>
-        <Link to="/rawMaterials">
-          <FontAwesomeIcon icon={faCog} /> Materias Primas
-        </Link>
-      </li>
-      <li>
-        <Link to="/providers">
-          <FontAwesomeIcon icon={faCog} /> Proveedores
-        </Link>
-      </li>
-      <li>
-        <Link to="/provider-addresses">
-          <FontAwesomeIcon icon={faCog} /> Direcciones de Proveedor
-        </Link>
-      </li>
-      <li>
-        <Link to="/provider-phones">
-          <FontAwesomeIcon icon={faCog} /> Telefonos de Proveedor
+        <Link to="/menu-proveedores" className='menu-link'>
+          <FontAwesomeIcon icon={faTruck} /> <span className='menu-text'>Proveedores</span>
         </Link>
       </li>
     </ul>
   </nav>
 );
+
 
 export default MenuNavegacion;

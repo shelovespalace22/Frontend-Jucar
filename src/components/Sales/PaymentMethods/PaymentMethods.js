@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
 
-const Methods = () => {
+const PaymentMethods = () => {
 
     const [methods, setMethods] = useState ([]);
     const [newMethod, setNewMethod] = useState({
@@ -80,7 +80,8 @@ const Methods = () => {
     try{
         await axios.delete (`https://localhost:7028/api/paymentMethod${methodId}`);
 
-        const updatedMethods = methods.filter((method)=> method.methodId !== methodId);
+        const updatedMethods = methods.filter((method)=> method.methodID !== methodId);
+        
         setMethods(updatedMethods);
 
     }catch(error){
@@ -97,11 +98,11 @@ const Methods = () => {
     setModalAction('edit');
     setSelectedMethodId(methodId);
 
-    const selectedMethod = methods.find((method)=> method.methodId === methodId);
+    const selectedMethod = methods.find((method)=> method.methodID === methodId);
 
     if(selectedMethod){
         setNewMethod({
-            PaymentMethodName: selectedMethod.PaymentMethodName || ''
+            PaymentMethodName: selectedMethod.paymentMethodName || ''
         });
         
     }
@@ -112,11 +113,11 @@ const Methods = () => {
     setModalAction('detail');
     setSelectedMethodId(methodId);
 
-    const selectedMethod = methods.find((method)=> method.methodId === methodId);
+    const selectedMethod = methods.find((method)=> method.methodID === methodId);
 
     if(selectedMethod){
         setNewMethod({
-            PaymentMethodName: selectedMethod.PaymentMethodName || ''
+            PaymentMethodName: selectedMethod.paymentMethodName || ''
         });
         
     }
@@ -164,16 +165,16 @@ const Methods = () => {
             </thead>
             <tbody>
                 {currentMethods.map((method)=>(
-                    <tr key ={method.methodId}>
+                    <tr key ={method.methodID}>
                         <td>{method.PaymentMethodName}</td>
                         <td>
-                         <Button variant="info" onClick={() => handleShowEditModal(method.methodId)}>
+                         <Button variant="info" onClick={() => handleShowEditModal(method.methodID)}>
                             <FontAwesomeIcon icon={faEdit} /> Actualizar
                         </Button>
-                        <Button variant="danger" onClick={() => handleDeleteMethod(method.methodId)}>
+                        <Button variant="danger" onClick={() => handleDeleteMethod(method.methodID)}>
                             <FontAwesomeIcon icon={faTrash} /> Eliminar
                         </Button>
-                        <Button variant="primary" onClick={() => handleShowDetailModal(method.methodId)}>
+                        <Button variant="primary" onClick={() => handleShowDetailModal(method.methodID)}>
                             <FontAwesomeIcon icon={faEye} /> Ver Detalle
                         </Button>
                         </td>
@@ -211,8 +212,8 @@ const Methods = () => {
                         <Form.Control
                         type='text'
                         placeholder='ingrese el nombre del metodo de pago'
-                        value={newMethod.value}
-                        onChange={(e)=> setNewMethod({...newMethod, value: e.target.value})}
+                        value={newMethod.PaymentMethodName}
+                        onChange={(e)=> setNewMethod({...newMethod, PaymentMethodName: e.target.value})}
                         />
                         
                     </Form.Group>
@@ -254,4 +255,4 @@ const Methods = () => {
   );
 };
 
-export default Methods;
+export default PaymentMethods;

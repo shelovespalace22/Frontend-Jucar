@@ -17,6 +17,7 @@ const Autoparts = ({ subcategoryId }) => {
     Value: 0,
     RawMaterialId: '',
   });
+  const [rawMaterials, setRawMaterials] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [modalAction, setModalAction] = useState('create');
   const [selectedAutopartId, setSelectedAutopartId] = useState('');
@@ -40,9 +41,35 @@ const Autoparts = ({ subcategoryId }) => {
     fetchAutoparts();
   }, [subcategoryId]);
 
+  useEffect(() => {
+    const fetchRawMaterials = async () => {
+      try {
+        const response = await axios.get('https://localhost:7028/api/rawMaterials');
+        setRawMaterials(response.data);
+      } catch (error) {
+        console.error('Error fetching raw materials:', error);
+      }
+    };
+  
+    fetchRawMaterials();
+  }, []);
+  
+
   const handleCreateAutopart = async () => {
     try {
-      const response = await axios.post(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`, newAutopart);
+      console.log("Creating autopart with data: ", newAutopart);
+
+      // const response = await axios.post(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`, newAutopart);
+
+      const response = await axios.post(
+        `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`,
+        JSON.stringify(newAutopart),
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
 
       setAutoparts([response.data, ...autoparts]);
 
@@ -284,14 +311,21 @@ const Autoparts = ({ subcategoryId }) => {
                   onChange={(e) => setNewAutopart({ ...newAutopart, Value: e.target.value })}
                 />
               </Form.Group>
+
               <Form.Group controlId="formAutopartRawMaterialId">
-                <Form.Label>ID de Materia Prima</Form.Label>
+                <Form.Label>Materia Prima</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Ingrese el ID de materia prima..."
+                  as="select"
                   value={newAutopart.RawMaterialId}
                   onChange={(e) => setNewAutopart({ ...newAutopart, RawMaterialId: e.target.value })}
-                />
+                >
+                  <option value="">Seleccione una materia prima</option>
+                  {rawMaterials.map((rawMaterial) => (
+                    <option key={rawMaterial.rawMaterialID} value={rawMaterial.rawMaterialID}>
+                      {rawMaterial.name}
+                    </option>
+                  ))}
+                </Form.Control>
               </Form.Group>
             </Form>
           )}
@@ -328,7 +362,6 @@ const Autoparts = ({ subcategoryId }) => {
         </Modal.Footer>
 
       </Modal>
-
     </div>
   );
 };

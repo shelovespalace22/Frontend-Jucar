@@ -7,7 +7,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
 
-const Methods = () => {
+const PaymentMethods = () => {
 
     const [methods, setMethods] = useState ([]);
     const [newMethod, setNewMethod] = useState({
@@ -254,4 +254,4 @@ const Methods = () => {
   );
 };
 
-export default Methods;
+export default PaymentMethods;

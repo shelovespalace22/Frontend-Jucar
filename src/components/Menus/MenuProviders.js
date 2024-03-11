@@ -1,63 +1,43 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import axios from 'axios';
-import { Button, Card, Container } from 'react-bootstrap';
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { Card, Container } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTruck, faTruckFast } from '@fortawesome/free-solid-svg-icons';
 import './styles/MenusStyles.css';
 
 const MenuProviders = () => {
-    const [providers, setProviders] = useState([]);
-    const history = useHistory();
-
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await axios.get('https://localhost:7028/api/providers');
-                setProviders(response.data);
-            } catch (error) {
-                console.error('Error fetching providers:', error);
-            }
-        };
-
-        fetchData();
-    }, []);
-
-    const handleShowProviderPhones = (providerId) => {
-        history.push('/provider-phones', { providerId });
-    };
-
-    const handleShowProviderAdresses = (providerId) => {
-        history.push('/provider-addresses', { providerId });
-    };
-
-    return (
-        <div>
-            <Container className='mt-5 container-box'>
-                <h1 className='text-center'>Proveedores</h1>
+    return(
+        <Container>
+            <Container>
+                <h1>Menú Proveedores</h1>
             </Container>
 
-            <Container className='mt-5 container-box'>
-                {providers.map((provider) => (
-                    <Card key={provider.providerID}>
+            <Container>
+
+                <Card>
+                    <Link to='/providers'>
                         <Card.Body>
-                            <Card.Text>
-                                <strong>{provider.name}</strong>
-                            </Card.Text>
+                            <FontAwesomeIcon icon={faTruck} />
+                            <Card.Title>Dirigirse a:</Card.Title>
+                            <h2>Ver Proveedores</h2>
                             <br />
-                            <Card.Title>¿Que deseas ver?</Card.Title>
-                            <br />
-                            <Button variant='success' onClick={() => handleShowProviderAdresses(provider.providerID)}>
-                                Ver Direcciones
-                            </Button>
-                            <Button variant='success' onClick={() => handleShowProviderPhones(provider.providerID)}>
-                                Ver Teléfonos
-                            </Button>
                         </Card.Body>
-                    </Card>
-                ))}
-            </Container>
-        </div>
-    );
+                    </Link>
+                </Card>
 
+                <Card>
+                    <Link to='/modulo-providers'>
+                        <Card.Body>
+                            <FontAwesomeIcon icon={faTruckFast} />
+                            <Card.Title>Dirigirse a:</Card.Title>
+                            <h2>Modulo Proveedores</h2>
+                            <br />
+                        </Card.Body>
+                    </Link>
+                </Card>
+            </Container>
+        </Container>
+    );
 };
 
 export default MenuProviders;

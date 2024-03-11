@@ -6,280 +6,373 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-const ProviderAddresses = ({providerId}) => {
-    const [addressProviders, setAddressProviders] = useState ([]);
-    const [newAddressProvider, setNewAddressProvider] = useState({
+const ProviderAddresses = ({ providerId }) => {
+    const [providerAddresses, setProviderAddresses] = useState ([]);
+    const [newProviderAddress, setNewProviderAddress] = useState({
         Address: '',
         AddressType: '', 
-        NeighborhoodId: '' 
+        NeighborhoodId: '',
+        NeighborhoodName: '',
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
-    const [selectedAddressProviderId, setSelectedAddressProviderId] = useState('');
+    const [selectedProviderAddressId, setSelectedProviderAddressId] = useState('');
+    const [departments, setDepartments] = useState([]);
+    const [selectedDepartment, setSelectedDepartment] = useState('');
+    const [municipalities, setMunicipalities] = useState([]);
+    const [selectedMunicipality, setSelectedMunicipality] = useState('');
+    const [neighborhoods, setNeighborhoods] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentAddressProviders = addressProviders.slice(indexOfFirstItem, indexOfLastItem);
+    const currentProviderAddresses = providerAddresses.slice(indexOfFirstItem, indexOfLastItem);
     const history = useHistory();
 
     useEffect(()=> {
-    const fetchAddressProviders = async () => {
-        try{
-            const response = await axios.get (`https://localhost:7028/api/providers/${providerId}/addresses`);
-            setAddressProviders(response.data);
-        } catch (error){
-            console.error('error fetching AddressProvider', error);
+        const fetchProviderAddresses = async () => {
+            try{
+                const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/addresses`);
 
-        }
-    };
-    fetchAddressProviders();
+                setProviderAddresses(response.data);
+            } catch (error){
+                console.error('Error fetching Provider Addresses:', error);
+            }
+        };
+        fetchProviderAddresses();
 
     }, [providerId]);
 
-    const handleCreateAddressProvider = async () =>{
-    try{
-        const response = await axios.post (`https://localhost:7028/api/providers/${providerId}/addresses`);
-        setAddressProviders([response.data, ...addressProviders]);
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            try {
+                const response = await axios.get('https://localhost:7028/api/departments');
+                setDepartments(response.data);
+            } catch (error) {
+                console.error('Error fetching departments:', error);
+            }
+        };
+    
+        fetchDepartments();
+    }, []);
 
-        setNewAddressProvider({
-            Address: '',
-            AddressType: '',
-            NeighborhoodId: ''
-
-        });
-
-        handleCloseModal();
-    }catch(error){
-        console.error('Error creating Address')
-    }
+    const handleCreateProviderAddress = async () => {
+        try {
+            const response = await axios.post(
+                `https://localhost:7028/api/providers/${providerId}/addresses`,
+                JSON.stringify(newProviderAddress),
+                {
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+    
+            setProviderAddresses([response.data, ...providerAddresses]);
+    
+            setNewProviderAddress({
+                Address: '',
+                AddressType: '',
+                NeighborhoodId: '',
+                NeighborhoodName: '',
+            });
+    
+            handleCloseModal();
+        } catch (error) {
+            console.error('Error creating Address:', error);
+        }
     };
 
-    const handleUpdateAddressProvider = async () =>{
-    try{
-        await axios.put(
-            `https://localhost:7028/api/providers/${providerId}/addresses/${selectedAddressProviderId}`,
-            newAddressProvider
-        );
-        
-        const response = await axios.get (`https://localhost:7028/api/providers/${providerId}/addresses`);
+    const handleUpdateProviderAddress = async () =>{
+        try{
+            await axios.put(
+                `https://localhost:7028/api/providers/${providerId}/addresses/${selectedProviderAddressId}`,
+                newProviderAddress
+            );
+            
+            const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/addresses`);
 
-        const updatedAddressProviders = response.data;
+            const updatedproviderAddresses = response.data;
 
-        setAddressProviders(updatedAddressProviders);
+            setProviderAddresses(updatedproviderAddresses);
 
-        setNewAddressProvider({
-            Address: '',
-            AddressType: '',
-            NeighborhoodId: ''
+            setNewProviderAddress({
+                Address: '',
+                AddressType: '',
+                NeighborhoodId: '',
+                NeighborhoodName: '',
+            });
 
-        });
+            handleCloseModal();
 
-        handleCloseModal();
-
-    }catch (error) {
-        console.error('Error updating Address')
-    }
+        }catch (error) {
+            console.error('Error updating Address:', error);
+        }
     };
 
-    const handleDeleteAddressProvider = async (addressProviderId) => {
-    try{
-        await axios.delete (`https://localhost:7028/api/providers/${providerId}/addresses/${addressProviderId}`);
+    const handleDeleteproviderAddress = async (providerAddressId) => {
+        try{
+            await axios.delete(`https://localhost:7028/api/providers/${providerId}/addresses/${providerAddressId}`);
 
-        const updatedAddressProviders = addressProviders.filter((addressProvider)=> addressProvider.addressProviderId !== addressProviderId);
-        setAddressProviders(updatedAddressProviders);
-    }catch (error){
-        console.error('Error deleting Address', error);
-    }
+            const updatedproviderAddresses = providerAddresses.filter((providerAddress)=> providerAddress.providerAddressID !== providerAddressId);
+
+            setProviderAddresses(updatedproviderAddresses);
+
+        }catch (error){
+            console.error('Error deleting Address', error);
+        }
     };
 
     const handleShowCreateModal = () => {
-    setModalAction('create');
-    setShowModal(true);
+        setModalAction('create');
+        setShowModal(true);
     };
 
-    const handleShowEditModal = (addressProviderId) => {
-    setModalAction ('edit')
-    setSelectedAddressProviderId(addressProviderId);
+    const handleShowEditModal = (providerAddressId) => {
+        setModalAction('edit');
+        setSelectedProviderAddressId(providerAddressId);
 
-    const selectedAddressProvider = addressProviders.find((addressProvider)=> addressProvider.addressProviderId === addressProviderId);
+        const selectedproviderAddress = providerAddresses.find((providerAddress)=> providerAddress.providerAddressID === providerAddressId);
 
-    if(selectedAddressProvider){
-        setNewAddressProvider({
-            Address: selectedAddressProvider.Address || '', 
-            AddressType: selectedAddressProvider.AddressType || '',
-            NeighborhoodId: selectedAddressProvider.NeighborhoodId || ''
-
-        });
+        if(selectedproviderAddress){
+            setNewProviderAddress({
+                Address: selectedproviderAddress.address || '', 
+                AddressType: selectedproviderAddress.addressType || '',
+                NeighborhoodId: selectedproviderAddress.neighborhoodId || '',
+                NeighborhoodName: selectedproviderAddress.neighborhoodName || '',
+            });
         }
 
         setShowModal(true);
     };
 
-    const handleShowDetailModal = (addressProviderId) => {
-        setModalAction ('detail')
-        setSelectedAddressProviderId(addressProviderId);
+    const handleShowDetailModal = (providerAddressId) => {
+        setModalAction ('detail');
+        setSelectedProviderAddressId(providerAddressId);
 
-        const selectedAddressProvider = addressProviders.find((addressProvider)=> addressProvider.addressProviderId === addressProviderId);
+        const selectedproviderAddress = providerAddresses.find((providerAddress)=> providerAddress.providerAddressID === providerAddressId);
 
-        if(selectedAddressProvider){
-            setNewAddressProvider({
-                Address: selectedAddressProvider.Address || '', 
-                AddressType: selectedAddressProvider.AddressType || '',
-                NeighborhoodId: selectedAddressProvider.NeighborhoodId || ''
-
+        if(selectedproviderAddress){
+            setNewProviderAddress({
+                Address: selectedproviderAddress.address || '', 
+                AddressType: selectedproviderAddress.addressType || '',
+                NeighborhoodId: selectedproviderAddress.neighborhoodId || '',
+                NeighborhoodName: selectedproviderAddress.neighborhoodName || '',
             });
-            }
+        }
 
-            setShowModal(true);
+        setShowModal(true);
     };
 
     const handleCloseModal = () => {
         setShowModal(false);
-        setNewAddressProvider({
+        setNewProviderAddress({
             Address: '',
             AddressType: '',
-            NeighborhoodId: ''
-
+            NeighborhoodId: '',
+            NeighborhoodName: '',
         });
 
-
-        setSelectedAddressProviderId('');
+        setSelectedProviderAddressId('');
     };
 
+    const handleDepartmentChange = async (e) => {
+        const departmentId = e.target.value;
+        setSelectedDepartment(departmentId);
+    
+        if (departmentId) {
+            try {
+                const response = await axios.get(`https://localhost:7028/api/departments/${departmentId}/municipalities`);
+                setMunicipalities(response.data);
+            } catch (error) {
+                console.error('Error fetching municipalities:', error);
+            }
+        } else {
+            setMunicipalities([]);
+        }
+    };
+
+    const handleMunicipalityChange = async (e) => {
+        const municipalityId = e.target.value;
+        setSelectedMunicipality(municipalityId);
+        
+        if(municipalityId){
+            try {
+                const response = await axios.get(`https://localhost:7028/api/municipalities/${municipalityId}/neighborhoods`);
+                setNeighborhoods(response.data);
+            } catch (error) {
+                console.error('Error fetching neighborhoods:', error);
+            }
+        } else{
+            setNeighborhoods([]);
+        } 
+    };
+    
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleGoBack = () => {
-    history.goBack();
+        history.goBack();
     };
 
     return(
-    <div className='ContainerAddressP'>
-        <header>
-            <div>
-                <img src="" alt="logo"/>
-                <h1>Autupartes JUCAR</h1>
-            </div>
-        </header>
-        <br/>
-        <h2>Direcciones Provedores</h2>
-        <br/> 
+        <div>
 
-        <Button variant="primary" onClick={handleShowCreateModal}>
-        <FontAwesomeIcon icon={faPlus} /> Nueva Direccion
-        </Button>
-        <Button variant="danger" onClick={handleGoBack}>
-            Volver
-        </Button>
+            <br/>
+            <h2>Direcciones de Proveedor</h2>
+            <br/> 
 
-        <hr/>
+            <Button variant="primary" onClick={handleShowCreateModal}>
+                <FontAwesomeIcon icon={faPlus} /> Nueva Direccion
+            </Button>
 
-        <Table striped bordered hover>
-            <thead>
-                <tr>
-                    <th>Direccion</th>
-                    <th>Tipo de direccion</th>
-                    <th>ID del Barrio</th>
-                </tr>
-            </thead>
+            <Button variant="danger" onClick={handleGoBack}>
+                Volver
+            </Button>
 
-            <tbody>
-                {currentAddressProviders.map((addressProvider)=>(
-                    <tr key={addressProvider.addressProviderId}>
-                        <td>{addressProvider.Address}</td>
-                        <td>{addressProvider.AddressType}</td>
-                        <td>{addressProvider.NeighborhoodId}</td>
-                        <td>
-                        <Button variant='info' onClick={()=> handleShowEditModal(addressProvider.addressProviderId)}>
-                            <FontAwesomeIcon icon ={faEdit}/> Actualizar    
-                        </Button>
+            <hr/>
 
-                        <Button variant = "danger" onClick={()=>handleDeleteAddressProvider(addressProvider.addressProviderId)}>
-                            <FontAwesomeIcon icon={faTrash}/> Eliminar
-                        </Button>
-
-                        <Button variant='primary' onClick={()=> handleShowDetailModal(addressProvider.addressProviderId)}>
-                            <FontAwesomeIcon icon={faEye}/> Ver detalle 
-                        </Button>
-
-                        </td>     
+            <Table striped bordered hover>
+                <thead>
+                    <tr>
+                        <th>Dirección</th>
+                        <th>Tipo de Dirección</th>
+                        <th>Barrio</th>
+                        <th>Acciones</th>
                     </tr>
-                    
-                ))}
-            </tbody>
-        </Table>
+                </thead>
+                <tbody>
+                    {currentProviderAddresses.map((providerAddress)=>(
+                        <tr key={providerAddress.providerAddressID}>
+                            <td>{providerAddress.address}</td>
+                            <td>{providerAddress.addressType}</td>
+                            <td>{providerAddress.neighborhoodName}</td>
+                            <td>
+                                <Button variant='info' onClick={() => handleShowEditModal(providerAddress.providerAddressID)}>
+                                    <FontAwesomeIcon icon ={faEdit}/> Actualizar    
+                                </Button>
 
-        <Pagination>
-        {Array.from({ length: Math.ceil(addressProviders.length / itemsPerPage) }, (_, index) => (
-            <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
-            {index + 1}
-            </Pagination.Item>
-        ))}
-        </Pagination>
+                                <Button variant = "danger" onClick={() => handleDeleteproviderAddress(providerAddress.providerAddressID)}>
+                                    <FontAwesomeIcon icon={faTrash}/> Eliminar
+                                </Button>
 
-    <Modal show={showModal} onHide={handleCloseModal}>
-        <Modal.Header closeButton>
-            <Modal.Title>
-            {modalAction === 'create'
-                ? 'Nueva direccion'
-                : modalAction === 'edit'
-                ? 'Actualizar direccion'
-                : 'Detalle de direccion'}
-            </Modal.Title>
-        </Modal.Header>
+                                <Button variant='primary' onClick={() => handleShowDetailModal(providerAddress.providerAddressID)}>
+                                    <FontAwesomeIcon icon={faEye}/> Ver Detalle 
+                                </Button>
+                            </td>     
+                        </tr>
+                    ))}
+                </tbody>
+            </Table>
 
-            <Modal.Body>
-            {modalAction !== 'detail' &&(
-                <Form>
-                <Form.Group controlId='formAddresP'>
-                    <Form.Label>Direccion</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Ingrese la direccion"
-                        value={newAddressProvider.Address}
-                        onChange={(e) => setNewAddressProvider({ ...newAddressProvider, Address: e.target.value })}
-                    />
-                </Form.Group> 
+            <Pagination>
+            {Array.from({ length: Math.ceil(providerAddresses.length / itemsPerPage) }, (_, index) => (
+                <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+                {index + 1}
+                </Pagination.Item>
+            ))}
+            </Pagination>
 
-                <Form.Group controlId='formAddressType'>
-                    <Form.Label>Tipo de direccion</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Ingrese el tipo de direccion"
-                        value={newAddressProvider.AddressType}
-                        onChange={(e) => setNewAddressProvider({ ...newAddressProvider, AddressType: e.target.value })}
-                    />
-                </Form.Group>
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>
+                    {modalAction === 'create'
+                        ? 'Nueva Dirección'
+                        : modalAction === 'edit'
+                        ? 'Actualizar Dirección'
+                        : 'Detalle de Dirección'}
+                    </Modal.Title>
+                </Modal.Header>
 
-                <Form.Group controlId='formNeighborhoodId'>
-                    <Form.Label>Tipo de Telefono</Form.Label>
-                    <Form.Control
-                        type="text"
-                        placeholder="Ingrese el Id de barrio"
-                        value={newAddressProvider.NeighborhoodId}
-                        onChange={(e) => setNewAddressProvider({ ...newAddressProvider, NeighborhoodId: e.target.value })}
-                    />
-                </Form.Group>
-                </Form>
-                )}
-            </Modal.Body>
+                <Modal.Body>
+                {modalAction !== 'detail' &&(
+                    <Form>
+                        <Form.Group controlId='formAddresP'>
+                            <Form.Label>Dirección</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Ingrese la dirección"
+                                value={newProviderAddress.Address}
+                                onChange={(e) => setNewProviderAddress({ ...newProviderAddress, Address: e.target.value })}
+                            />
+                        </Form.Group> 
 
-            <Modal.Footer>
-                <Button variant='secondary' onClick={handleCloseModal}>
-                    Cancelar
-                </Button>
-                {modalAction !== 'detail' && (
-                    <Button
-                    variant='primary'
-                    onClick={modalAction === 'create' ? handleCreateAddressProvider: handleUpdateAddressProvider}
-                    >
-                    {modalAction === 'create' ? 'Crear' : 'Actualizar'}
+                        <Form.Group controlId='formAddressType'>
+                            <Form.Label>Tipo de Dirección</Form.Label>
+                            <Form.Control
+                                type="text"
+                                placeholder="Ingrese el tipo de dirección"
+                                value={newProviderAddress.AddressType}
+                                onChange={(e) => setNewProviderAddress({ ...newProviderAddress, AddressType: e.target.value })}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId='formDepartmentId'>
+                            <Form.Label>Departamento</Form.Label>
+                            <Form.Control as="select" value={selectedDepartment} onChange={handleDepartmentChange}>
+                                <option value="">Seleccione un departamento</option>
+                                {departments.map((department) => (
+                                    <option key={department.departmentID} value={department.departmentID}>
+                                        {department.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId='formMunicipalityId'>
+                            <Form.Label>Municipio</Form.Label>
+                            <Form.Control as="select" value={selectedMunicipality} onChange={handleMunicipalityChange}>
+                                <option value="">Seleccione un municipio</option>
+                                {municipalities.map((municipality) => (
+                                    <option key={municipality.municipalityID} value={municipality.municipalityID}>
+                                        {municipality.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId='formNeighborhoodId'>
+                            <Form.Label>Barrio</Form.Label>
+                            <Form.Control as="select" value={newProviderAddress.NeighborhoodId} onChange={(e) => setNewProviderAddress({ ...newProviderAddress, NeighborhoodId: e.target.value })}>
+                                <option value="">Seleccione un barrio</option>
+                                {neighborhoods.map((neighborhood) => (
+                                    <option key={neighborhood.neighborhoodID} value={neighborhood.neighborhoodID}>
+                                        {neighborhood.name}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>   
+
+                    </Form>
+                    )}
+                    {modalAction === 'detail' && (
+                        <div>
+                            {selectedProviderAddressId && (
+                                <div>
+                                    <p><b>ID:</b> {selectedProviderAddressId}</p>
+                                    <p><b>Dirección:</b> {newProviderAddress.Address}</p>
+                                    <p><b>Tipo de Dirección:</b> {newProviderAddress.AddressType}</p>
+                                    <p><b>Barrio:</b> {newProviderAddress.NeighborhoodName}</p>
+                                </div>
+                            )}
+                        </div>
+                    )}
+                </Modal.Body>
+
+                <Modal.Footer>
+                    <Button variant='secondary' onClick={handleCloseModal}>
+                        Cancelar
                     </Button>
-                )}
-            </Modal.Footer>
-    </Modal>
-    </div>
+                    {modalAction !== 'detail' && (
+                        <Button
+                        variant='primary'
+                        onClick={modalAction === 'create' ? handleCreateProviderAddress: handleUpdateProviderAddress}
+                        >
+                        {modalAction === 'create' ? 'Crear' : 'Actualizar'}
+                        </Button>
+                    )}
+                </Modal.Footer>
+            </Modal>
+        </div>
     );
 };
 

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const OrderDetailsComponent = ({ orderId }) => {
+const OrderDetails = ({ orderId }) => {
   const [orderDetails, setOrderDetails] = useState([]);
 
   useEffect(() => {
@@ -44,6 +44,6 @@ const OrderDetailsComponent = ({ orderId }) => {
   );
 };
 
-export default OrderDetailsComponent;
+export default OrderDetails;
 
 

@@ -1,8 +1,8 @@
-// MenuNavegacion.js
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faHome, faAddressCard, faCog } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBox, faTag, faTruck } from '@fortawesome/free-solid-svg-icons';
+import './styles/MenuNavegacion.css';
 
 const MenuNavegacion = () => (
   <nav>
@@ -16,82 +16,24 @@ const MenuNavegacion = () => (
 
       <li>
         <Link to="/menu-productos">
-          <FontAwesomeIcon icon={faHome} /> Productos
+          <FontAwesomeIcon icon={faBox} /> Productos
         </Link>
       </li>
       <hr/>
 
       <li>
         <Link to="/menu-ventas">
-          <FontAwesomeIcon icon={faHome} /> Ventas
+          <FontAwesomeIcon icon={faTag} /> Ventas
         </Link>
       </li>
       <hr/>
 
       <li>
         <Link to="/menu-proveedores">
-          <FontAwesomeIcon icon={faHome} /> Proveedores
+          <FontAwesomeIcon icon={faTruck} /> Proveedores
         </Link>
       </li>
       <hr/>
-
-      <br/>
-
-      <li>
-        <Link to="/login">
-          <FontAwesomeIcon icon={faAddressCard} /> Log In
-        </Link>
-      </li>
-      <li>
-        <Link to="/registro">
-          <FontAwesomeIcon icon={faCog} /> Registrarse
-        </Link>
-      </li>
-      <li>
-        <Link to="/inicio-sesion">
-          <FontAwesomeIcon icon={faCog} /> Inicio Sesión
-        </Link>
-      </li>
-      <li>
-        <Link to="/categories">
-          <FontAwesomeIcon icon={faCog} /> Categorias
-        </Link>
-      </li>
-      <li>
-        <Link to="/menu-subcategories">
-          <FontAwesomeIcon icon={faCog} /> Menu Subcategorías
-        </Link>
-      </li>
-      <li>
-        <Link to="/menu-autoparts">
-          <FontAwesomeIcon icon={faCog} /> Menu Autopartes
-        </Link>
-      </li>
-      <li>
-        <Link to="/rawMaterials">
-          <FontAwesomeIcon icon={faCog} /> Materias Primas
-        </Link>
-      </li>
-      <li>
-        <Link to="/providers">
-          <FontAwesomeIcon icon={faCog} /> Proveedores
-        </Link>
-      </li>
-      <li>
-        <Link to="/provider-addresses">
-          <FontAwesomeIcon icon={faCog} /> Direcciones de Proveedor
-        </Link>
-      </li>
-      <li>
-        <Link to="/provider-phones">
-          <FontAwesomeIcon icon={faCog} /> Telefonos de Proveedor
-        </Link>
-      </li>
-      <li>
-        <Link to="/menu-providers">
-          <FontAwesomeIcon icon={faCog} /> Menú Proveedores
-        </Link>
-      </li>
     </ul>
   </nav>
 );

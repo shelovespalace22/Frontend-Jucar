@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot, faBoxArchive } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Customers = () => {
     const [customers, setCustomers] = useState ([]);
@@ -113,17 +114,46 @@ const Customers = () => {
     };
 
     const handleDeleteCustomer = async (customerId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/customers/${customerId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
 
-            const updatedCustomers = customers.filter((customer) => customer.customerID !== customerId);
+        }).then(async (result) => {
 
-            setCustomers(updatedCustomers);
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/customers/${customerId}`);
 
-        } catch (error) {
-            console.error('Error deleting customer', error);
-        }
-    };
+              const updatedCustomers = customers.filter((customer) => customer.customerID !== customerId);
+
+              setCustomers(updatedCustomers);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡El cliente ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+
+              console.error('Error deleting customer:', error);
+            
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el cliente.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

@@ -131,10 +131,14 @@ const Autoparts = ({ subcategoryId }) => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
+
           // Elimina el elemento si el usuario confirma
           await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
+
           const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
+
           setAutoparts(updatedAutoparts);
+
           // Muestra una alerta de éxito
           Swal.fire(
             '¡Eliminado!',
@@ -143,6 +147,7 @@ const Autoparts = ({ subcategoryId }) => {
           );
         } catch (error) {
           console.error('Error deleting autopart:', error);
+          
           // Muestra una alerta de error si ocurre un problema
           Swal.fire(
             'Error',

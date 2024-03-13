@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ProviderAddresses = ({ providerId }) => {
     const [providerAddresses, setProviderAddresses] = useState ([]);
@@ -111,17 +112,45 @@ const ProviderAddresses = ({ providerId }) => {
     };
 
     const handleDeleteproviderAddress = async (providerAddressId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}/addresses/${providerAddressId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updatedproviderAddresses = providerAddresses.filter((providerAddress)=> providerAddress.providerAddressID !== providerAddressId);
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}/addresses/${providerAddressId}`);
 
-            setProviderAddresses(updatedproviderAddresses);
-
-        }catch (error){
-            console.error('Error deleting Address', error);
-        }
-    };
+              const updatedProviderAddresses = providerAddresses.filter((providerAddress) => providerAddress.providerAddressID !== providerAddressId);
+              
+              setProviderAddresses(updatedProviderAddresses);
+            
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu dirección del proveedor ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting Address:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la dirección del proveedor.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

@@ -52,7 +52,7 @@ const Categories = () => {
   };
 
   const handleDeleteCategory = async (categoryId) => {
-    // Muestra una alerta de confirmación
+    
     Swal.fire({
       title: '¿Estás seguro?',
       text: '¡No podrás revertir esto!',
@@ -64,11 +64,13 @@ const Categories = () => {
     }).then(async (result) => {
       if (result.isConfirmed) {
         try {
-          // Elimina la categoría si el usuario confirma
+         
           await axios.delete(`https://localhost:7028/api/categories/${categoryId}`);
+
           const updatedCategories = categories.filter((category) => category.categoryId !== categoryId);
+          
           setCategories(updatedCategories);
-          // Muestra una alerta de éxito
+          
           Swal.fire(
             '¡Eliminado!',
             '¡Tu categoría ha sido eliminada.',

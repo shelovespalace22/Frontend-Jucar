@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ProviderPhones = ({ providerId })  => {
     const [providerPhones, setProviderPhones] = useState ([]);
@@ -77,15 +78,44 @@ const ProviderPhones = ({ providerId })  => {
     };
 
     const handleDeleteProviderPhone = async (providerPhoneId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}/phones/${providerPhoneId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updateproviderPhones = providerPhones.filter((providerPhone)=> providerPhone.providerPhoneID !== providerPhoneId);
-            setProviderPhones(updateproviderPhones);
-        }catch(error){
-            console.error('error deleting phone', error);
-        }
-    };
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}/phones/${providerPhoneId}`);
+
+              const updatedProviderPhones = providerPhones.filter((providerPhone) => providerPhone.providerPhoneID !== providerPhoneId);
+              
+              setProviderPhones(updatedProviderPhones);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu teléfono del proveedor ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting phone:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el teléfono del proveedor.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

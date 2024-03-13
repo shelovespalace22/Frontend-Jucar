@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const CustomersPhones = ( {customerId} )=>{
     const [customersPhone, setCustomersPhone] = useState ([]);
@@ -80,18 +81,47 @@ const CustomersPhones = ( {customerId} )=>{
         }
     };
 
-    const handleDeleteCustomerPhone = async (customerPhoneId)=>{
-        try{
-            await axios.delete(`https://localhost:7028/api/customers/${customerId}/phones/${customerPhoneId}`);
+    const handleDeleteCustomerPhone = async (customerPhoneId) => {
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
 
-            const updateCustomersPhone = customersPhone.filter((customerPhone)=>customerPhone.customerPhoneID !== customerPhoneId);
+        }).then(async (result) => {
+            
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/customers/${customerId}/phones/${customerPhoneId}`);
 
-            setCustomersPhone(updateCustomersPhone);
-        } catch (error){
-            console.error('Error deleting phone:', error);
-        }
-    };
+              const updatedCustomersPhone = customersPhone.filter((customerPhone) => customerPhone.customerPhoneID !== customerPhoneId);
 
+              setCustomersPhone(updatedCustomersPhone);
+             
+              Swal.fire(
+                '¡Eliminado!',
+                '¡El teléfono del cliente ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+
+              console.error('Error deleting phone:', error);
+             
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el teléfono del cliente.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

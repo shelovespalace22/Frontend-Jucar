@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Providers = () => {
     const [providers, setProviders] = useState ([]);
@@ -113,15 +114,43 @@ const Providers = () => {
     };
 
     const handleDeleteProvider = async (providerId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
 
-            const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
-            setProviders(updatedProviders);
-        }catch(error){
-            console.error ('error deleting provider')
-        }
-    };
+              const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
+
+              setProviders(updatedProviders);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu proveedor ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting provider:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el proveedor.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

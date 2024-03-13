@@ -105,13 +105,16 @@ const Movements = ({ rawMaterialId }) => {
           cancelButtonColor: '#d33',
           confirmButtonText: 'Sí, eliminarlo!'
         }).then(async (result) => {
+            
           if (result.isConfirmed) {
             try {
-              // Elimina el movimiento si el usuario confirma
+             
               await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
+
               const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
+
               setMovements(updatedMovements);
-              // Muestra una alerta de éxito
+              
               Swal.fire(
                 '¡Eliminado!',
                 '¡Tu movimiento ha sido eliminado.',
@@ -119,7 +122,7 @@ const Movements = ({ rawMaterialId }) => {
               );
             } catch (error) {
               console.error('Error deleting movements:', error);
-              // Muestra una alerta de error si ocurre un problema
+              
               Swal.fire(
                 'Error',
                 'Hubo un problema al eliminar el movimiento.',

@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 const PaymentMethods = () => {
@@ -76,18 +77,43 @@ const PaymentMethods = () => {
     }
   };
 
-  const handleDeleteMethod = async (methodId) =>{
-    try{
-        await axios.delete (`https://localhost:7028/api/paymentMethod${methodId}`);
+  const handleDeleteMethod = async (methodId) => {
+   
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
 
-        const updatedMethods = methods.filter((method)=> method.methodID !== methodId);
-        
-        setMethods(updatedMethods);
-
-    }catch(error){
-        console.error('Error deleting method', error);
-    }
+      if (result.isConfirmed) {
+        try {
+          
+          await axios.delete(`https://localhost:7028/api/paymentMethod/${methodId}`);
+          const updatedMethods = methods.filter((method) => method.methodID !== methodId);
+          setMethods(updatedMethods);
+          
+          Swal.fire(
+            '¡Eliminado!',
+            '¡El método de pago ha sido eliminado.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting method:', error);
+         
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar el método de pago.',
+            'error'
+          );
+        }
+      }
+    });
   };
+  
 
   const handleShowCreateModal = () => {
     setModalAction('create');

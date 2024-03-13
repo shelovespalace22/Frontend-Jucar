@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2';
 
 import { useHistory } from 'react-router-dom';
 
@@ -100,16 +101,44 @@ const RawMaterials = () => {
     };
 
     const handleDeleteRawMaterial = async (rawMaterialId) => {
-        try {
-            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updatedRawMaterials = rawMaterials.filter((rawMaterial) => rawMaterial.rawMaterialId  !== rawMaterialId);
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}`);
 
-            setRawMaterials(updatedRawMaterials);
-        } catch (error) {
-            console.error('Error deleting rawMaterial:', error);
-        }
-    };
+              const updatedRawMaterials = rawMaterials.filter((rawMaterial) => rawMaterial.rawMaterialId  !== rawMaterialId);
+
+              setRawMaterials(updatedRawMaterials);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu materia prima ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting rawMaterial:', error);
+             
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la materia prima.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

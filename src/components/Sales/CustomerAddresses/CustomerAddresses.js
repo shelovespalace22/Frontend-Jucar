@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const CustomerAddresses = ({customerId}) => {
     const [addressCustomers, setAddressCustomers] = useState([]);
@@ -112,18 +113,45 @@ const CustomerAddresses = ({customerId}) => {
         }
     };
 
-    const handleDeleteAddressCustomer = async (customerAddressId) =>{
-        try{
-            await axios.delete(`https://localhost:7028/api/customers/${customerId}/addresses/${customerAddressId}`);
+    const handleDeleteAddressCustomer = async (customerAddressId) => {
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+            
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/customers/${customerId}/addresses/${customerAddressId}`);
 
-            const updatedAddressCustomers = addressCustomers.filter((addressCustomer)=> addressCustomer.customerAddressID !== customerAddressId);
+              const updatedAddressCustomers = addressCustomers.filter((addressCustomer) => addressCustomer.customerAddressID !== customerAddressId);
 
-            setAddressCustomers(updatedAddressCustomers);
-
-        }catch(error){
-            console.error('error deleting address customer', error);
-        }
-    };
+              setAddressCustomers(updatedAddressCustomers);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡La dirección del cliente ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting address customer:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la dirección del cliente.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

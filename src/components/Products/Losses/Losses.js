@@ -91,7 +91,7 @@ const Losses = ({ autopartId }) => {
     };
 
     const handleDeleteLoss = async (lossId) => {
-        // Muestra una alerta de confirmación
+        
         Swal.fire({
           title: '¿Estás seguro?',
           text: '¡No podrás revertir esto!',
@@ -101,13 +101,16 @@ const Losses = ({ autopartId }) => {
           cancelButtonColor: '#d33',
           confirmButtonText: 'Sí, eliminarlo!'
         }).then(async (result) => {
+
           if (result.isConfirmed) {
             try {
-              // Elimina la pérdida si el usuario confirma
+             
               await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
+
               const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
+
               setLosses(updatedLosses);
-              // Muestra una alerta de éxito
+              
               Swal.fire(
                 '¡Eliminado!',
                 '¡Tu pérdida ha sido eliminada.',
@@ -115,7 +118,7 @@ const Losses = ({ autopartId }) => {
               );
             } catch (error) {
               console.error('Error deleting loss:', error);
-              // Muestra una alerta de error si ocurre un problema
+             
               Swal.fire(
                 'Error',
                 'Hubo un problema al eliminar la pérdida.',

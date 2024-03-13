@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './Routes';
 import { Container, Row, Col } from 'react-bootstrap';
 import MenuNavegacion from './components/shared/MenuNavegacion';
-import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
 
 function App() {
@@ -15,9 +15,8 @@ function App() {
         </div>
 
         <main>
-          <div className="top-row px-4 navbar">
-            <button>Perfil</button>
-            <button>Cerrar Sesión</button>
+          <div className="top-row">
+            {/* Botones de Registro y Acceso */}
           </div>
 
           <article className="content px-4">

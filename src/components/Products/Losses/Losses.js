@@ -76,33 +76,43 @@ const Losses = ({ autopartId }) => {
       };
       
 
-    const handleUpdateLoss = async () => {
+      const handleUpdateLoss = async () => {
         try {
-            await axios.put(
-                `https://localhost:7028/api/autoparts/${autopartId}/losses/${selectedLossId}`,
-                newLoss
-            );
-
-            const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
-
-            const updatedLosses = response.data;
-
-            setLosses(updatedLosses);
-
-            setNewLoss({
-                AmountLoss: 0,
-                Responsible: '',
-                Reason: '',
-                LossDate: formattedDate,
-            });
-
-            handleCloseModal();
-
+          await axios.put(
+            `https://localhost:7028/api/autoparts/${autopartId}/losses/${selectedLossId}`,
+            newLoss
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
+          const updatedLosses = response.data;
+      
+          setLosses(updatedLosses);
+          setNewLoss({
+            AmountLoss: 0,
+            Responsible: '',
+            Reason: '',
+            LossDate: formattedDate,
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La pérdida ha sido actualizada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error updating loss:', error);
+          console.error('Error updating loss:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar la pérdida.',
+            'error'
+          );
         }
-    };
-
+      };
+      
     const handleDeleteLoss = async (lossId) => {
         
         Swal.fire({

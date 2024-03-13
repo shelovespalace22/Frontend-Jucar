@@ -72,26 +72,39 @@ const PaymentMethods = () => {
   
 
 
-  const handleUpdateMethod = async () =>{
-    try{
-        await axios.put(
-            `https://localhost:7028/api/paymentMethods/${selectedMethodId}`, newMethod
+  const handleUpdateMethod = async () => {
+    try {
+      await axios.put(
+        `https://localhost:7028/api/paymentMethods/${selectedMethodId}`, 
+        newMethod
+      );
+  
+      const response = await axios.get(`https://localhost:7028/api/paymentMethods`);
+      const updatedMethods = response.data;
+  
+      setMethods(updatedMethods);
+      setNewMethod({
+        PaymentMethodName: ''
+      });
+  
+      handleCloseModal();
 
-        );
-
-        const response = await axios.get (`https://localhost:7028/api/paymentMethods`);
-
-        const updateMethods = response.data;
-        setMethods(updateMethods);
-        setNewMethod({
-            PaymentMethodName:''
-        });
-
-        handleCloseModal();
-    }catch(error){
-        console.error('error updating method', error);
+      Swal.fire(
+        '¡Éxito!',
+        '¡El método de pago se ha actualizado correctamente!',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error updating method:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar el método de pago.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteMethod = async (methodId) => {
    

@@ -95,33 +95,44 @@ const CustomerAddresses = ({customerId}) => {
       };
       
 
-    const handleUpdateAddressCustomer = async () =>{
+      const handleUpdateAddressCustomer = async () => {
         try {
-            await axios.put(
-                `https://localhost:7028/api/customers/${customerId}/addresses/${selectedCustomerAddressId}`,
-                newAddressCustomer
-            );
+          await axios.put(
+            `https://localhost:7028/api/customers/${customerId}/addresses/${selectedCustomerAddressId}`,
+            newAddressCustomer
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/addresses`);
+      
+          const updatedAddressCustomers = response.data;
+      
+          setAddressCustomers(updatedAddressCustomers);
+      
+          setNewAddressCustomer({
+            Address: '',
+            AddressType: '',
+            NeighborhoodId: '',
+            NeighborhoodName: '',
+          });
+      
+          handleCloseModal();
 
-            const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/addresses`);
-
-            const updatedAddressCustomers = response.data;
-
-            setAddressCustomers(updatedAddressCustomers);
-
-            setNewAddressCustomer({
-                Address: '',
-                AddressType: '',
-                NeighborhoodId: '',
-                NeighborhoodName: '',
-            });
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('Error updating customer address:', error);
+          Swal.fire(
+            '¡Éxito!',
+            '¡La dirección del cliente ha sido actualizada exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating customer address:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar la dirección del cliente.',
+            'error'
+          );
         }
-    };
-
+      };
+      
     const handleDeleteAddressCustomer = async (customerAddressId) => {
         
         Swal.fire({

@@ -89,42 +89,55 @@ const Providers = () => {
       };
       
 
-    const handleUpdateProvider = async () => {
-        try{
-            await axios.put(
+      const handleUpdateProvider = async () => {
+        try {
+          await axios.put(
             `https://localhost:7028/api/providers/${selectedProviderId}`,
             newProvider
-            );
-
-            const response = await axios.get(`https://localhost:7028/api/providers`);
-
-            const updatedProviders = response.data;
-
-            setProviders(updatedProviders);
-
-            setNewProvider({
-                IdentifierType: '',
-                IdentifierNumber: '',
-                Name: '',
-                EmailAddress: '',
-                ProductType: '',
-                ProviderAddresses: [{
-                    Address:'',
-                    AddressType: '',
-                    NeighborhoodId: ''
-                }],
-                ProviderPhone:[{
-                    PhoneType:'',
-                    PhoneNumber:''
-                }]
-            });
-
-            handleCloseModal();
-        
-        }catch (error){
-            console.error('Error updating autopart:', error);
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/providers`);
+      
+          const updatedProviders = response.data;
+      
+          setProviders(updatedProviders);
+      
+          setNewProvider({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            EmailAddress: '',
+            ProductType: '',
+            ProviderAddresses: [{
+              Address:'',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            ProviderPhone:[{
+              PhoneType:'',
+              PhoneNumber:''
+            }]
+          });
+      
+          handleCloseModal();
+      
+         
+          Swal.fire(
+            '¡Éxito!',
+            '¡El proveedor ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating provider:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteProvider = async (providerId) => {
         

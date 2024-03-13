@@ -73,28 +73,42 @@ const CustomersPhones = ( {customerId} )=>{
       };
       
 
-    const handleUpdateCustomerPhone = async () =>{
-        try{
-            await axios.put(`https://localhost:7028/api/customers/${customerId}/phones/${selectedCustomerPhoneId}`, newCustomerPhone);
-
-            const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/phones`);
-
-            const updateCustomersPhone = response.data;
-
-            setCustomersPhone(updateCustomersPhone);
-
-            setNewCustomerPhone({
-                PhoneType:'',
-                PhoneNumber:'',
-            })
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('error updating Phone', error)
+      const handleUpdateCustomerPhone = async () => {
+        try {
+          await axios.put(
+            `https://localhost:7028/api/customers/${customerId}/phones/${selectedCustomerPhoneId}`,
+            newCustomerPhone
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/phones`);
+      
+          const updatedCustomerPhones = response.data;
+      
+          setCustomersPhone(updatedCustomerPhones);
+      
+          setNewCustomerPhone({
+            PhoneType: '',
+            PhoneNumber: '',
+          });
+      
+          handleCloseModal();
+     
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del cliente ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating Phone:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el teléfono del cliente.',
+            'error'
+          );
         }
-    };
-
+      };
+      
     const handleDeleteCustomerPhone = async (customerPhoneId) => {
         
         Swal.fire({

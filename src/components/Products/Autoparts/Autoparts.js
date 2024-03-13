@@ -84,7 +84,6 @@ const Autoparts = ({ subcategoryId }) => {
       });
       handleCloseModal();
   
-      // Muestra una alerta de éxito
       Swal.fire(
         '¡Éxito!',
         '¡La autoparte ha sido creada exitosamente.',
@@ -93,7 +92,7 @@ const Autoparts = ({ subcategoryId }) => {
     } catch (error) {
       console.error('Error creating autopart:', error);
   
-      // Muestra una alerta de error
+   
       Swal.fire(
         'Error',
         'Hubo un problema al crear la autoparte.',
@@ -109,13 +108,13 @@ const Autoparts = ({ subcategoryId }) => {
         `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${selectedAutopartId}`,
         newAutopart
       );
-
+  
       const response = await axios.get(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`);
-        
+  
       const updatedAutoparts = response.data;
-
+  
       setAutoparts(updatedAutoparts);
-
+  
       setNewAutopart({
         Name: '',
         Description: '',
@@ -123,13 +122,26 @@ const Autoparts = ({ subcategoryId }) => {
         Value: 0,
         RawMaterialId: '',
       });
-
+  
       handleCloseModal();
-      
+  
+     
+      Swal.fire(
+        '¡Éxito!',
+        '¡La autoparte ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error updating autopart:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la autoparte.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteAutopart = async (autopartId) => {
     

@@ -81,37 +81,48 @@ const Customers = () => {
 
     const handleUpdateCustomer = async () => {
         try {
-            await axios.put(`https://localhost:7028/api/customers/${selectedCustomerId}`, newCustomer);
-
-            const response = await axios.get(`https://localhost:7028/api/customers`);
-
-            const updatedCustomers = response.data;
-
-            setCustomers(updatedCustomers);
-
-            setNewCustomer({
-                IdentifierType: '',
-                IdentifierNumber : '',
-                Name: '',
-                Email: '',
-                CustomerAddresses: [{
-                    Address: '',
-                    AddressType:'',
-                    NeighborhoodId: '' 
-
-                }],
-                CustomerPhone: [{
-                    PhoneType: '',
-                    PhoneNumber: ''
-                }]
-            });
-
-            handleCloseModal();
-
+          await axios.put(`https://localhost:7028/api/customers/${selectedCustomerId}`, newCustomer);
+      
+          const response = await axios.get(`https://localhost:7028/api/customers`);
+      
+          const updatedCustomers = response.data;
+      
+          setCustomers(updatedCustomers);
+      
+          setNewCustomer({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            Email: '',
+            CustomerAddresses: [{
+              Address: '',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            CustomerPhone: [{
+              PhoneType: '',
+              PhoneNumber: ''
+            }]
+          });
+      
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡Los datos del cliente se han actualizado correctamente!',
+            'success'
+          );
         } catch (error) {
-            console.error('Error updating customer', error);
+          console.error('Error updating customer:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar los datos del cliente.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteCustomer = async (customerId) => {
         // Muestra una alerta de confirmación

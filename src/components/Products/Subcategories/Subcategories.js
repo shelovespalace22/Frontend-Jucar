@@ -70,18 +70,33 @@ const Subcategories = ({ categoryId }) => {
       await axios.put(`https://localhost:7028/api/categories/${categoryId}/subcategories/${selectedSubcategoryId}`, {
         name: newSubcategoryName,
       });
-
+  
       const updatedSubcategories = subcategories.map((subcategory) =>
         subcategory.subcategoryId === selectedSubcategoryId ? { ...subcategory, name: newSubcategoryName } : subcategory
       );
-
+  
       setSubcategories(updatedSubcategories);
       setNewSubcategoryName('');
       handleCloseModal();
+  
+      
+      Swal.fire(
+        '¡Éxito!',
+        '¡La subcategoría ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error updating subcategory:', error);
+  
+      
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la subcategoría.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteSubcategory = async (subcategoryId) => {  
     Swal.fire({

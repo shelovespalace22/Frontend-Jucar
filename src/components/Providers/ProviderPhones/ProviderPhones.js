@@ -70,26 +70,42 @@ const ProviderPhones = ({ providerId })  => {
       };
       
 
-    const handleUpdateProviderPhone = async () => {
-        try{
-            await axios.put(`https://localhost:7028/api/providers/${providerId}/phones/${selectedProviderPhoneId}`, newProviderPhone);
-
-            const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/phones`);
-
-            const updateproviderPhones = response.data;
-
-            setProviderPhones(updateproviderPhones);
-
-            setNewProviderPhone({
-                PhoneType:'',
-                PhoneNumber:'',
-            })
-
-            handleCloseModal();
-        } catch (error){
-            console.error ('Error updating phone', error);
+      const handleUpdateProviderPhone = async () => {
+        try {
+          await axios.put(
+            `https://localhost:7028/api/providers/${providerId}/phones/${selectedProviderPhoneId}`,
+            newProviderPhone
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/phones`);
+      
+          const updateproviderPhones = response.data;
+      
+          setProviderPhones(updateproviderPhones);
+      
+          setNewProviderPhone({
+            PhoneType:'',
+            PhoneNumber:'',
+          });
+      
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del proveedor ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating phone', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el teléfono del proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteProviderPhone = async (providerPhoneId) => {
         

@@ -45,7 +45,7 @@ const Categories = () => {
       setNewCategoryName('');
       setShowCreateModal(false);
   
-      // Muestra una alerta de éxito
+      
       Swal.fire(
         '¡Éxito!',
         '¡La categoría ha sido creada exitosamente.',
@@ -54,7 +54,7 @@ const Categories = () => {
     } catch (error) {
       console.error('Error creating category:', error);
   
-      // Muestra una alerta de error
+      
       Swal.fire(
         'Error',
         'Hubo un problema al crear la categoría.',
@@ -91,7 +91,8 @@ const Categories = () => {
           );
         } catch (error) {
           console.error('Error deleting category:', error);
-          // Muestra una alerta de error si ocurre un problema
+        
+          
           Swal.fire(
             'Error',
             'Hubo un problema al eliminar la categoría.',
@@ -105,25 +106,35 @@ const Categories = () => {
 
   const handleUpdateCategory = async (categoryId, newName) => {
     try {
-        await axios.put(
-            `https://localhost:7028/api/categories/${categoryId}`, {name: newName });
-
-        const response = await axios.get('https://localhost:7028/api/categories');
-
-        const updatedCategories = response.data;
-
-        setCategories(updatedCategories);
-
-        setNewCategoryName({
-            Name: '',
-        });
-
-        setShowUpdateModal(false);
-
+      await axios.put(
+        `https://localhost:7028/api/categories/${categoryId}`, 
+        { name: newName }
+      );
+  
+      const response = await axios.get('https://localhost:7028/api/categories');
+      const updatedCategories = response.data;
+  
+      setCategories(updatedCategories);
+      setNewCategoryName({ Name: '' });
+      setShowUpdateModal(false);
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La categoría ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
-        console.error('Error updating rawMaterial:', error);
+      console.error('Error updating category:', error);
+  
+      
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la categoría.',
+        'error'
+      );
     }
   };
+  
 
   const handlePageChange = (pageNumber) => {
     setCurrentPage(pageNumber);

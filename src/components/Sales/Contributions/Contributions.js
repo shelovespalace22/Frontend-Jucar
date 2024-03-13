@@ -74,30 +74,43 @@ const Contributions = ({orderId}) => {
   };
   
 
-  const handleUpdateContribution = async () =>{
-    try{
-        await axios.put(
-            `https://localhost:7028/api/orders/${orderId}/contributions/${selectedContributionId}`, newContribution
-        );
-
-        const response = await axios.get (`https://localhost:7028/api/orders/${orderId}/contributions`);
-
-        const updateContributions = response.data;
-
-        setContributions(updateContributions);
-
-        setNewContribution({
-            PaymentMethodId: '',
-            AmountPaid: 0,
-            ContributionDate: formattedDate
-        });
-
-        handleCloseModal();
-    }catch (error){
-        console.error('error updating contribution', error);
-
+  const handleUpdateContribution = async () => {
+    try {
+      await axios.put(
+        `https://localhost:7028/api/orders/${orderId}/contributions/${selectedContributionId}`,
+        newContribution
+      );
+  
+      const response = await axios.get(`https://localhost:7028/api/orders/${orderId}/contributions`);
+  
+      const updatedContributions = response.data;
+  
+      setContributions(updatedContributions);
+  
+      setNewContribution({
+        PaymentMethodId: '',
+        AmountPaid: 0,
+        ContributionDate: formattedDate
+      });
+  
+      handleCloseModal();
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La contribución ha sido actualizada exitosamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error updating contribution:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la contribución.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteContribution = async (contributionId) => {
     

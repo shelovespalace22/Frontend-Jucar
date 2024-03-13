@@ -74,36 +74,44 @@ const Movements = ({ rawMaterialId }) => {
       };
       
 
-    const handleUpdateMovement = async () => {
-
-      try {
-        
-        await axios.put(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`, newMovement);
-
-        const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`);
-
-        const updatedMovements = response.data;
-
-        setMovements(updatedMovements);
-
-        setNewMovement({
+      const handleUpdateMovement = async () => {
+        try {
+          await axios.put(
+            `https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`,
+            newMovement
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`);
+          const updatedMovements = response.data;
+      
+          setMovements(updatedMovements);
+          setNewMovement({
             Quantity: 0,
             MovementType: '',
             MovementDate: formattedDate,
-        });
-
-        handleCloseModal();
-
-      } catch (error) {
-        
-        console.error('Error updating movements:', error);
-
-      } 
-
-    };
-
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡El movimiento ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating movements:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el movimiento.',
+            'error'
+          );
+        }
+      };
+      
     const handleDeleteMovement = async (movementId) => {
-        // Muestra una alerta de confirmación
+      
         Swal.fire({
           title: '¿Estás seguro?',
           text: '¡No podrás revertir esto!',

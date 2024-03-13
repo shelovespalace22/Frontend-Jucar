@@ -68,28 +68,37 @@ const Stocks = ({ rawMaterialId }) => {
 
     const handleUpdateStock = async () => {
         try {
-            await axios.put(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/stocks/${selectedStockId}`, newStock);
-
-            const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/stocks`);
-
-            const updatedStock = response.data;
-
-            setStocks(updatedStock);
-
-            setNewStock({
-                QuantityAvailable: 0,
-                InitialStock: 0,
-                ReorderPoint: 0,
-                MinimumInventory: 0,
-                MaximumInventory: 0,
-            });
-
-            handleCloseModal();
-            
+          await axios.put(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/stocks/${selectedStockId}`, newStock);
+      
+          const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/stocks`);
+          const updatedStock = response.data;
+      
+          setStocks(updatedStock);
+          setNewStock({
+            QuantityAvailable: 0,
+            InitialStock: 0,
+            ReorderPoint: 0,
+            MinimumInventory: 0,
+            MaximumInventory: 0,
+          });
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El stock ha sido actualizado exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error updating stock:', error);
+          console.error('Error updating stock:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el stock.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleGoBack = () => {
         history.goBack();

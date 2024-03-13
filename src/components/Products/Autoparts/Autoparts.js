@@ -269,7 +269,7 @@ const Autoparts = ({ subcategoryId }) => {
               ? 'Nueva Autoparte'
               : modalAction === 'edit'
               ? 'Actualizar Autoparte'
-              : 'Detalle de Autoparte'}
+              : 'Detalles de Autoparte'}
           </Modal.Title>
         </Modal.Header>
 
@@ -277,7 +277,7 @@ const Autoparts = ({ subcategoryId }) => {
           {modalAction !== 'detail' && (
             <Form>
               <Form.Group controlId="formAutopartName">
-                <Form.Label>Nombre</Form.Label>
+                <Form.Label><b>Nombre</b></Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ingrese el nombre..."
@@ -286,7 +286,7 @@ const Autoparts = ({ subcategoryId }) => {
                 />
               </Form.Group>
               <Form.Group controlId="formAutopartDescription">
-                <Form.Label>Descripción</Form.Label>
+                <Form.Label><b>Descripción</b></Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ingrese la descripción..."
@@ -295,7 +295,7 @@ const Autoparts = ({ subcategoryId }) => {
                 />
               </Form.Group>
               <Form.Group controlId="formAutopartInventory">
-                <Form.Label>Inventario</Form.Label>
+                <Form.Label><b>Inventario</b></Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Ingrese el inventario..."
@@ -304,7 +304,7 @@ const Autoparts = ({ subcategoryId }) => {
                 />
               </Form.Group>
               <Form.Group controlId="formAutopartValue">
-                <Form.Label>Valor</Form.Label>
+                <Form.Label><b>Valor</b></Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Ingrese el valor..."
@@ -314,7 +314,7 @@ const Autoparts = ({ subcategoryId }) => {
               </Form.Group>
 
               <Form.Group controlId="formAutopartRawMaterialId">
-                <Form.Label>Materia Prima</Form.Label>
+                <Form.Label><b>Materia Prima</b></Form.Label>
                 <Form.Control
                   as="select"
                   value={newAutopart.RawMaterialId}
@@ -337,13 +337,12 @@ const Autoparts = ({ subcategoryId }) => {
               {/* Muestra la información detallada de la autoparte */}
               {selectedAutopartId && (
                 <div>
-                  <h4>Detalles de la Autoparte</h4>
-                  <p>ID: {selectedAutopartId}</p>
-                  <p>Nombre: {newAutopart.Name}</p>
-                  <p>Descripción: {newAutopart.Description}</p>
-                  <p>Inventario: {newAutopart.Inventory}</p>
-                  <p>Valor: {newAutopart.Value}</p>
-                  <p>ID de Materia Prima: {newAutopart.RawMaterialId}</p>
+                  <p><b>ID:</b> {selectedAutopartId}</p>
+                  <p><b>Nombre:</b> {newAutopart.Name}</p>
+                  <p><b>Descripción:</b> {newAutopart.Description}</p>
+                  <p><b>Inventario:</b> {newAutopart.Inventory}</p>
+                  <p><b>Valor:</b> {newAutopart.Value}</p>
+                  <p><b>ID de Materia Prima:</b> {newAutopart.RawMaterialId}</p>
                 </div>
               )}
             </div>

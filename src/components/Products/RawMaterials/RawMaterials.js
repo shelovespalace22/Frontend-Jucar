@@ -11,18 +11,29 @@ const RawMaterials = () => {
     const [rawMaterials, setRawMaterials] = useState([]);
     const [newRawMaterial, setNewRawMaterial] = useState({
         Name: '',
+        Stock: {
+            QuantityAvailable: 0,
+            InitialStock: 0,
+            ReorderPoint: 0,
+            MinimumInventory: 0,
+            MaximumInventory: 0,
+        }
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
     const [selectedRawMaterialId, setSelectedRawMaterialId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentRawMaterials = rawMaterials.slice(indexOfFirstItem, indexOfLastItem);
+    const history = useHistory();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 const response = await axios.get('https://localhost:7028/api/rawMaterials');
+                
                 setRawMaterials(response.data);
             } catch (error) {
                 console.error('Error fetching rawMaterials:', error);
@@ -33,12 +44,6 @@ const RawMaterials = () => {
 
     }, []);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentRawMaterials = rawMaterials.slice(indexOfFirstItem, indexOfLastItem);
-
-    const history = useHistory();
-
     const handleCreateRawMaterial = async () => {
         try {
             const response = await axios.post('https://localhost:7028/api/rawMaterials', newRawMaterial );
@@ -47,6 +52,13 @@ const RawMaterials = () => {
 
             setNewRawMaterial({
                 Name: '',
+                Stock: {
+                    QuantityAvailable: 0,
+                    InitialStock: 0,
+                    ReorderPoint: 0,
+                    MinimumInventory: 0,
+                    MaximumInventory: 0,
+                }
             });
 
             handleCloseModal();
@@ -63,16 +75,21 @@ const RawMaterials = () => {
                 newRawMaterial
             );
     
-            // Realiza una nueva solicitud para obtener la lista actualizada
             const response = await axios.get('https://localhost:7028/api/rawMaterials');
 
             const updatedRawMaterials = response.data;
     
-            // Actualiza el estado con la nueva lista
             setRawMaterials(updatedRawMaterials);
     
             setNewRawMaterial({
                 Name: '',
+                Stock: {
+                    QuantityAvailable: 0,
+                    InitialStock: 0,
+                    ReorderPoint: 0,
+                    MinimumInventory: 0,
+                    MaximumInventory: 0,
+                }
             });
     
             handleCloseModal();
@@ -107,7 +124,7 @@ const RawMaterials = () => {
 
         if (selectedRawMaterial){
             setNewRawMaterial({
-                Name: selectedRawMaterial.name || '',
+                Name: selectedRawMaterial.name || ''
             });
         }
 
@@ -133,6 +150,13 @@ const RawMaterials = () => {
         setShowModal(false);
         setNewRawMaterial({
             Name: '',
+            Stock: {
+                QuantityAvailable: 0,
+                InitialStock: 0,
+                ReorderPoint: 0,
+                MinimumInventory: 0,
+                MaximumInventory: 0,
+            }
         });
 
         setSelectedRawMaterialId('');
@@ -146,28 +170,32 @@ const RawMaterials = () => {
         history.push('/rawMaterial-stocks', {rawMaterialId})
     };
 
+    const handleGoBack = () => {
+        history.goBack();
+    };
+
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     return (
         <div className='rawMaterials-container'>
             <br/>
 
-            {/* Título */}
             <h2>Modulo Materias Primas</h2>
 
             <br/>
 
-            {/* Botón para crear un nuevo registro */}
             <Button variant='primary' onClick={handleShowCreateModal}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Materia Prima
             </Button>
 
+            <Button variant="danger" onClick={handleGoBack}>
+                Volver
+            </Button>
+
             <hr/>
 
-            {/* Tabla de registros */}
             <Table striped bordered hover>
 
-                {/* Cabecera de Tabla */}
                 <thead>
                     <tr>
                         <th>Nombre</th>
@@ -175,7 +203,6 @@ const RawMaterials = () => {
                     </tr>
                 </thead>
 
-                {/* Cuerpo de Tabla */}
                 <tbody>
                     {currentRawMaterials.map((rawMaterial) => (
                         <tr key={rawMaterial.rawMaterialId}>
@@ -203,7 +230,6 @@ const RawMaterials = () => {
                 </tbody>
             </Table>
 
-            {/* Paginación de registros */}
             <Pagination>
                 {Array.from({ length: Math.ceil(rawMaterials.length / itemsPerPage) }, (_, index) => (
                     <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
@@ -212,7 +238,6 @@ const RawMaterials = () => {
                 ))}
             </Pagination>
 
-            {/* Ventana(s) Modal(es) */}
             <Modal show={showModal} onHide={handleCloseModal}>
 
                 <Modal.Header closeButton>
@@ -221,15 +246,85 @@ const RawMaterials = () => {
                             ? 'Nueva Materia Prima'
                             : modalAction === 'edit'
                             ? 'Actualizar Materia Prima'
-                            : 'Detalle de Materia Prima'}
+                            : 'Detalles de Materia Prima'}
                     </Modal.Title>
                 </Modal.Header>
 
                 <Modal.Body>
-                    {modalAction !== 'detail' && (
+                    {modalAction === 'create' && (
                         <Form>
                             <FormGroup controlId='formRawMaterialName'>
-                                <Form.Label>Nombre</Form.Label>
+                                <Form.Label><b>Nombre</b></Form.Label>
+                                <Form.Control 
+                                    type='text'
+                                    placeholder='Ingrese el nombre...'
+                                    value={newRawMaterial.Name}
+                                    onChange={(e) => setNewRawMaterial({ ...newRawMaterial, Name: e.target.value})}
+                                />
+                            </FormGroup>
+
+                            <br />
+
+                            <h3>Stock</h3>
+
+                            <hr/>
+
+                            <FormGroup controlId='formQuantityAvailable'>
+                                <Form.Label><b>Cantidad Disponible</b></Form.Label>
+                                <Form.Control 
+                                    type='text'
+                                    placeholder='Ingrese la cantidad disponible...'
+                                    value={newRawMaterial.Stock.QuantityAvailable}
+                                    onChange={(e) => setNewRawMaterial({ ...newRawMaterial, Stock: { ...newRawMaterial.Stock, QuantityAvailable: e.target.value}})}
+                                />
+                            </FormGroup>
+
+                            <FormGroup controlId='formInitialStock'>
+                                <Form.Label><b>Stock Inicial</b></Form.Label>
+                                <Form.Control 
+                                    type='text'
+                                    placeholder='Ingrese el stock inicial...'
+                                    value={newRawMaterial.Stock.InitialStock}
+                                    onChange={(e) => setNewRawMaterial({ ...newRawMaterial, Stock: { ...newRawMaterial.Stock, InitialStock: e.target.value}})}
+                                />
+                            </FormGroup>
+
+                            <FormGroup controlId='formReorderPoint'>
+                                <Form.Label><b>Punto de Reorden</b></Form.Label>
+                                <Form.Control 
+                                    type='text'
+                                    placeholder='Ingrese el punto de reorden...'
+                                    value={newRawMaterial.Stock.ReorderPoint}
+                                    onChange={(e) => setNewRawMaterial({ ...newRawMaterial, Stock: { ...newRawMaterial.Stock, ReorderPoint: e.target.value}})}
+                                />
+                            </FormGroup>
+
+                            <FormGroup controlId='formMinimumInventory'>
+                                <Form.Label><b>Inventario Mínimo</b></Form.Label>
+                                <Form.Control 
+                                    type='text'
+                                    placeholder='Ingrese el inventario minimo...'
+                                    value={newRawMaterial.Stock.MinimumInventory}
+                                    onChange={(e) => setNewRawMaterial({ ...newRawMaterial, Stock: { ...newRawMaterial.Stock, MinimumInventory: e.target.value}})}
+                                />
+                            </FormGroup>
+
+                            <FormGroup controlId='formMaximumInventory'>
+                                <Form.Label><b>Inventario Máximo</b></Form.Label>
+                                <Form.Control 
+                                    type='text'
+                                    placeholder='Ingrese el inventario máximo...'
+                                    value={newRawMaterial.Stock.MaximumInventory}
+                                    onChange={(e) => setNewRawMaterial({ ...newRawMaterial, Stock: { ...newRawMaterial.Stock, MaximumInventory: e.target.value}})}
+                                />
+                            </FormGroup>
+                        </Form>
+                    )}
+
+                    {modalAction === 'edit' && (
+                        <Form>
+                            <FormGroup controlId='formRawMaterialName'>
+                                <Form.Label><b>Nombre</b></Form.Label>
                                 <Form.Control 
                                     type='text'
                                     placeholder='Ingrese el nombre...'
@@ -244,9 +339,8 @@ const RawMaterials = () => {
                         <div>
                             {selectedRawMaterialId && (
                                 <div>
-                                    <h4>Detalles de la Materia Prima</h4>
-                                    <p>ID: {selectedRawMaterialId}</p>
-                                    <p>Nombre: {newRawMaterial.Name}</p>
+                                    <p><b>ID:</b> {selectedRawMaterialId}</p>
+                                    <p><b>Nombre:</b> {newRawMaterial.Name}</p>
                                 </div>
                             )}
                         </div>

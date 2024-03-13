@@ -111,7 +111,7 @@ const Stocks = ({ rawMaterialId }) => {
                                 <strong>Stock Inicial:</strong> {stock.initialStock}
                             </Card.Text>
                             <Card.Text>
-                                <strong>Punto Reorden:</strong>{stock.reorderPoint}
+                                <strong>Punto Reorden:</strong> {stock.reorderPoint}
                             </Card.Text>
                             <Card.Text>
                                 <strong>Inventario Mínimo:</strong> {stock.minimumInventory}

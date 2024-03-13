@@ -25,10 +25,19 @@ const ModuloSubcategories = () => {
     history.push('/category-subcategories', { categoryId });
   };
 
+  const handleGoBack = () => {
+    history.goBack();
+  };
+
   return (
     <div>
       <Container>
         <h1>Elige la Categoría</h1>
+
+        <Button variant="danger" onClick={handleGoBack}>
+          Volver
+        </Button>
+        
       </Container>
 
       <Container className="card-container">

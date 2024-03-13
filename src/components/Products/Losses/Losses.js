@@ -9,25 +9,22 @@ import { useHistory } from 'react-router-dom';
 const Losses = ({ autopartId }) => {
     
     const [losses, setLosses] = useState([]);
-
-    // Obtén la fecha actual
     const currentDate = new Date();
-
-    // Formatea la fecha según tus necesidades
-    const formattedDate = currentDate.toISOString().split('T')[0]; // Formato YYYY-MM-DD
-
+    const formattedDate = currentDate.toISOString().split('T')[0];
     const [newLoss, setNewLoss] = useState({
         AmountLoss: 0,
         Responsible: '',
         Reason: '',
         LossDate: formattedDate,
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
     const [selectedLossId, setSelectedLossId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(5);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentLosses = losses.slice(indexOfFirstItem, indexOfLastItem);
     const history = useHistory();
 
     useEffect(() => {
@@ -45,10 +42,6 @@ const Losses = ({ autopartId }) => {
         fetchLosses();
 
     }, [autopartId]);
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentLosses = losses.slice(indexOfFirstItem, indexOfLastItem);
 
     const handleCreateLoss = async () => {
         try {
@@ -114,9 +107,6 @@ const Losses = ({ autopartId }) => {
     };
 
     const handleShowEditModal = (lossId) => {
-
-        console.log('Loss ID', lossId)
-
         setModalAction('edit');
         setSelectedLossId(lossId);
 
@@ -182,16 +172,21 @@ const Losses = ({ autopartId }) => {
 
     return (
         <div className="losses-container">
+
             <br />
             <h2>Modulo Pérdidas</h2>
             <br />
+
             <Button variant="primary" onClick={handleShowCreateModal}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Pérdida
             </Button>
+
             <Button variant="danger" onClick={handleGoBack}>
                 Volver a Autopartes
             </Button>
+
             <hr />
+
             <Table striped bordered hover>
                 <thead>
                     <tr>
@@ -202,6 +197,7 @@ const Losses = ({ autopartId }) => {
                         <th>Acciones</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     
                 {currentLosses.map((loss) => (
@@ -224,16 +220,9 @@ const Losses = ({ autopartId }) => {
                     </tr>
                 ))}
                 </tbody>
+
             </Table>
             
-            {/* <Pagination>
-                {Array.from({ length: Math.ceil(losses.length / itemsPerPage) }, (_, index) => (
-                <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
-                    {index + 1}
-                </Pagination.Item>
-                ))}
-            </Pagination> */}
-
             <Pagination>
                 {Array.from({ length: Math.ceil(losses.length / itemsPerPage) }, (_, index) => (
                     <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
@@ -250,7 +239,7 @@ const Losses = ({ autopartId }) => {
                             ? 'Nueva Pérdida'
                             : modalAction === 'edit'
                             ? 'Actualizar Pérdida'
-                            : 'Detalle de Pérdida'}
+                            : 'Detalles de Pérdida'}
                     </Modal.Title>
                 </Modal.Header>
 
@@ -259,7 +248,7 @@ const Losses = ({ autopartId }) => {
                         <Form>
 
                             <Form.Group controlId="formLossAmountLoss">
-                                <Form.Label>Cantidad Pérdida</Form.Label>
+                                <Form.Label><b>Cantidad Pérdida</b></Form.Label>
                                 <Form.Control
                                 type="text"
                                 placeholder="Ingrese la cantidad pérdida..."
@@ -269,7 +258,7 @@ const Losses = ({ autopartId }) => {
                             </Form.Group>
 
                             <Form.Group controlId="formLossResponsible">
-                                <Form.Label>Responsable</Form.Label>
+                                <Form.Label><b>Responsable</b></Form.Label>
                                 <Form.Control
                                 type="text"
                                 placeholder="Ingrese el responsable..."
@@ -279,7 +268,7 @@ const Losses = ({ autopartId }) => {
                             </Form.Group>
 
                             <Form.Group controlId="formLossReason">
-                                <Form.Label>Razón</Form.Label>
+                                <Form.Label><b>Razón</b></Form.Label>
                                 <Form.Control
                                 type="text"
                                 placeholder="Ingrese la razón..."
@@ -289,7 +278,7 @@ const Losses = ({ autopartId }) => {
                             </Form.Group>
 
                             <Form.Group controlId="formLossLossDate">
-                                <Form.Label>Fecha Pérdida</Form.Label>
+                                <Form.Label><b>Fecha Pérdida</b></Form.Label>
                                 <Form.Control
                                     type="date"
                                     value={newLoss.LossDate}
@@ -305,12 +294,11 @@ const Losses = ({ autopartId }) => {
                             {/* Muestra la información detallada de la pérdida */}
                             {selectedLossId && (
                                 <div>
-                                    <h4>Detalles de la Pérdida</h4>
-                                    <p>ID: {selectedLossId}</p>
-                                    <p>Cantidad Pérdida: {newLoss.AmountLoss}</p>
-                                    <p>Responsable: {newLoss.Responsible}</p>
-                                    <p>Razón: {newLoss.Reason}</p>
-                                    <p>Fecha Perdida: {newLoss.LossDate}</p>
+                                    <p><b>ID:</b> {selectedLossId}</p>
+                                    <p><b>Cantidad Pérdida:</b> {newLoss.AmountLoss}</p>
+                                    <p><b>Responsable:</b> {newLoss.Responsible}</p>
+                                    <p><b>Razón:</b> {newLoss.Reason}</p>
+                                    <p><b>Fecha Perdida:</b> {newLoss.LossDate}</p>
                                 </div>
                             )}
                         </div>

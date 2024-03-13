@@ -101,7 +101,6 @@ const Subcategories = ({ categoryId }) => {
     history.push('/subcategory-autoparts', { subcategoryId })
   };
 
-  // Cambia la página actual
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleGoBack = () => {
@@ -168,6 +167,7 @@ const Subcategories = ({ categoryId }) => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="formSubcategoryName">
+            <Form.Label><b>Nombre</b></Form.Label>
             <Form.Control
               type="text"
               placeholder="Ingrese el nombre..."
@@ -185,6 +185,7 @@ const Subcategories = ({ categoryId }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      
     </div>
   );
 };

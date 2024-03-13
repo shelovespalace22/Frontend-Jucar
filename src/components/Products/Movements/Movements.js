@@ -10,21 +10,21 @@ import Swal from 'sweetalert2';
 const Movements = ({ rawMaterialId }) => {
 
     const [movements, setMovements] = useState([]);
-
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split('T')[0];
-
     const [newMovement, setNewMovement] = useState({
         Quantity: 0,
         MovementType: '',
         MovementDate: formattedDate,
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
     const [selectedMovementId, setSelectedMovementId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentMovements = movements.slice(indexOfFirstItem, indexOfLastItem);
     const history = useHistory();
 
     useEffect(() => {
@@ -42,10 +42,6 @@ const Movements = ({ rawMaterialId }) => {
         fetchMovements();
 
     }, [rawMaterialId]);
-
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentMovements = movements.slice(indexOfFirstItem, indexOfLastItem);
 
     const handleCreateMovement = async () => {
         
@@ -271,7 +267,7 @@ const Movements = ({ rawMaterialId }) => {
                             ? 'Nuevo Movimiento'
                             : modalAction === 'edit'
                             ? 'Actualizar Movimiento'
-                            : 'Detalle de Movimiento'
+                            : 'Detalles de Movimiento'
                         }
                     </Modal.Title>
                 </Modal.Header>
@@ -282,7 +278,7 @@ const Movements = ({ rawMaterialId }) => {
                         <Form>
 
                             <Form.Group controlId='formMovementQuantity'>
-                                <Form.Label>Cantidad</Form.Label>
+                                <Form.Label><b>Cantidad</b></Form.Label>
                                 <Form.Control 
                                     type='text'
                                     placeholder='Ingrese la cantidad...'
@@ -292,7 +288,7 @@ const Movements = ({ rawMaterialId }) => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label>Tipo Movimiento</Form.Label>
+                                <Form.Label><b>Tipo Movimiento</b></Form.Label>
                                 <Form.Control 
                                     type='text'
                                     placeholder='Ingrese el tipo de movimiento...'
@@ -302,7 +298,7 @@ const Movements = ({ rawMaterialId }) => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label>Fecha Movimiento</Form.Label>
+                                <Form.Label><b>Fecha Movimiento</b></Form.Label>
                                 <Form.Control 
                                     type='date'
                                     value={newMovement.MovementDate}
@@ -318,11 +314,10 @@ const Movements = ({ rawMaterialId }) => {
                         <div>
                             {selectedMovementId && (
                                 <div>
-                                    <h4>Detalles del registro</h4>
-                                    <p>Id: {selectedMovementId}</p>
-                                    <p>Cantidad: {newMovement.Quantity}</p>
-                                    <p>Tipo Movimiento: {newMovement.MovementType}</p>
-                                    <p>Fecha Movimiento: {newMovement.MovementDate}</p>
+                                    <p><b>Id:</b> {selectedMovementId}</p>
+                                    <p><b>Cantidad:</b> {newMovement.Quantity}</p>
+                                    <p><b>Tipo Movimiento:</b> {newMovement.MovementType}</p>
+                                    <p><b>Fecha Movimiento:</b> {newMovement.MovementDate}</p>
                                 </div>
                             )}
                         </div>

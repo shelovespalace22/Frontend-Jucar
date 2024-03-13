@@ -12,18 +12,14 @@ import Swal from 'sweetalert2';
 const Categories = () => {
   const [categories, setCategories] = useState([]);
   const [newCategoryName, setNewCategoryName] = useState('');
-
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showUpdateModal, setShowUpdateModal] = useState(false);
   const [updateCategoryId, setUpdateCategoryId] = useState(null);
-
   const [currentPage, setCurrentPage] = useState(1);
   const [categoriesPerPage] = useState(10);
-
   const indexOfLastCategory = currentPage * categoriesPerPage;
   const indexOfFirstCategory = indexOfLastCategory - categoriesPerPage;
   const currentCategories = categories.slice(indexOfFirstCategory, indexOfLastCategory);
-
   const history = useHistory();
 
   useEffect(() => {
@@ -97,12 +93,10 @@ const Categories = () => {
         await axios.put(
             `https://localhost:7028/api/categories/${categoryId}`, {name: newName });
 
-        // Realiza una nueva solicitud para obtener la lista actualizada
         const response = await axios.get('https://localhost:7028/api/categories');
 
         const updatedCategories = response.data;
 
-        // Actualiza el estado con la nueva lista
         setCategories(updatedCategories);
 
         setNewCategoryName({
@@ -127,7 +121,6 @@ const Categories = () => {
   const handleGoBack = () => {
     history.goBack();
   };
-
 
   return (
     <div className="categories-container">
@@ -178,7 +171,6 @@ const Categories = () => {
         </tbody>
       </Table>
 
-      {/* Componente de paginación */}
       <Pagination>
         {Array.from({ length: Math.ceil(categories.length / categoriesPerPage) }).map((_, index) => (
           <Pagination.Item
@@ -191,15 +183,16 @@ const Categories = () => {
         ))}
       </Pagination>
 
-      {/* Modal para crear categoría */}
       <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
+
         <Modal.Header closeButton>
           <Modal.Title>Nueva Categoría</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form>
             <Form.Group controlId="formCategoryName">
-              <Form.Label>Nombre</Form.Label>
+              <Form.Label><b>Nombre</b></Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Ingresa el nombre de la categoría"
@@ -209,6 +202,7 @@ const Categories = () => {
             </Form.Group>
           </Form>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
             Cancelar
@@ -217,17 +211,19 @@ const Categories = () => {
             Crear
           </Button>
         </Modal.Footer>
+
       </Modal>
 
-      {/* Modal para actualizar categoría */}
       <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
+
         <Modal.Header closeButton>
           <Modal.Title>Actualizar Categoría</Modal.Title>
         </Modal.Header>
+
         <Modal.Body>
           <Form>
             <Form.Group controlId="formUpdatedCategoryName">
-              <Form.Label>Nombre</Form.Label>
+              <Form.Label><b>Nombre</b></Form.Label>
               <Form.Control
                 type="text"
                 placeholder="Ingresa el nuevo nombre de la categoría"
@@ -237,6 +233,7 @@ const Categories = () => {
             </Form.Group>
           </Form>
         </Modal.Body>
+
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
             Cancelar
@@ -245,7 +242,9 @@ const Categories = () => {
             Actualizar
           </Button>
         </Modal.Footer>
+        
       </Modal>
+
     </div>
   );
 };

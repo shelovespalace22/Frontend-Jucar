@@ -27,10 +27,18 @@ const ModuloAutoparts = () => {
     history.push('/subcategory-autoparts', { subcategoryId });
   };
 
+  const handleGoBack = () => {
+    history.goBack();
+  };
+
   return (
     <div>
       <Container>
         <h1>Elige la Subcategoría</h1>
+
+        <Button variant="danger" onClick={handleGoBack}>
+          Volver
+        </Button>
       </Container>
 
       <Container className="card-container">

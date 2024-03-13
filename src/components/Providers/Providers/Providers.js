@@ -6,9 +6,6 @@ import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot } from '@fortawe
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 
-
-
-
 const Providers = () => {
     const [providers, setProviders] = useState ([]);
     const [newProvider, setNewProvider] = useState({
@@ -27,7 +24,6 @@ const Providers = () => {
             PhoneNumber:''
         }]
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
     const [selectedProviderId, setSelectedProviderId] = useState('');

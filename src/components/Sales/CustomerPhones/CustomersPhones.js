@@ -41,23 +41,37 @@ const CustomersPhones = ( {customerId} )=>{
 
 
 
-    const handleCreateCustomerPhone = async ()=>{
-        try{
-            const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/phones`, newCustomerPhone);
-
-            setCustomersPhone([response.data, ...customersPhone]);
-
-            setNewCustomerPhone({
-                PhoneType:'',
-                PhoneNumber:'',
-            });
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('error creating customerPhone', error);
+    const handleCreateCustomerPhone = async () => {
+        try {
+          const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/phones`, newCustomerPhone);
+      
+          setCustomersPhone([response.data, ...customersPhone]);
+      
+          setNewCustomerPhone({
+            PhoneType: '',
+            PhoneNumber: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del cliente ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating customerPhone', error);
+      
+       
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el teléfono del cliente.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleUpdateCustomerPhone = async () =>{
         try{

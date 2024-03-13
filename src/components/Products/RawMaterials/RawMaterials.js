@@ -47,28 +47,39 @@ const RawMaterials = () => {
 
     const handleCreateRawMaterial = async () => {
         try {
-            const response = await axios.post('https://localhost:7028/api/rawMaterials', newRawMaterial );
-
-            setRawMaterials([response.data, ...rawMaterials]);
-
-            setNewRawMaterial({
-                Name: '',
-                Stock: {
-                    QuantityAvailable: 0,
-                    InitialStock: 0,
-                    ReorderPoint: 0,
-                    MinimumInventory: 0,
-                    MaximumInventory: 0,
-                }
-            });
-
-            handleCloseModal();
-
+          const response = await axios.post('https://localhost:7028/api/rawMaterials', newRawMaterial);
+      
+          setRawMaterials([response.data, ...rawMaterials]);
+          setNewRawMaterial({
+            Name: '',
+            Stock: {
+              QuantityAvailable: 0,
+              InitialStock: 0,
+              ReorderPoint: 0,
+              MinimumInventory: 0,
+              MaximumInventory: 0,
+            }
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La materia prima ha sido creada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error creating rawMaterial:', error);
+          console.error('Error creating rawMaterial:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear la materia prima.',
+            'error'
+          );
         }
-    };
-
+      };
+      
     const handelUpdateRawMaterial = async () => {
         try {
             await axios.put(

@@ -40,16 +40,29 @@ const Categories = () => {
       const response = await axios.post('https://localhost:7028/api/categories', {
         name: newCategoryName,
       });
-
+  
       setCategories([response.data, ...categories]);
-      
       setNewCategoryName('');
-      
       setShowCreateModal(false);
+  
+      // Muestra una alerta de éxito
+      Swal.fire(
+        '¡Éxito!',
+        '¡La categoría ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error creating category:', error);
+  
+      // Muestra una alerta de error
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la categoría.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteCategory = async (categoryId) => {
     

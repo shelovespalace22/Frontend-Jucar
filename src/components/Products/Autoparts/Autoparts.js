@@ -62,9 +62,7 @@ const Autoparts = ({ subcategoryId }) => {
   const handleCreateAutopart = async () => {
     try {
       console.log("Creating autopart with data: ", newAutopart);
-
-      // const response = await axios.post(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`, newAutopart);
-
+  
       const response = await axios.post(
         `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`,
         JSON.stringify(newAutopart),
@@ -74,9 +72,9 @@ const Autoparts = ({ subcategoryId }) => {
           }
         }
       );
-
+  
       setAutoparts([response.data, ...autoparts]);
-
+  
       setNewAutopart({
         Name: '',
         Description: '',
@@ -85,10 +83,25 @@ const Autoparts = ({ subcategoryId }) => {
         RawMaterialId: '',
       });
       handleCloseModal();
+  
+      // Muestra una alerta de éxito
+      Swal.fire(
+        '¡Éxito!',
+        '¡La autoparte ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error creating autopart:', error);
+  
+      // Muestra una alerta de error
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la autoparte.',
+        'error'
+      );
     }
   };
+  
 
   const handleUpdateAutopart = async () => {
     try {

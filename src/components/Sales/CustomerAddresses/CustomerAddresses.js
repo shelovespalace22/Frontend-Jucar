@@ -57,34 +57,43 @@ const CustomerAddresses = ({customerId}) => {
         fetchDepartments();
     }, []);
 
-    const handleCreateAddressCustomer = async () =>{
-
-        
-        console.log('Data to send:', newAddressCustomer);
-
-        try{
-            const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/addresses`, JSON.stringify(newAddressCustomer), 
-            {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            setAddressCustomers([response.data, ...addressCustomers]);
-
-            setNewAddressCustomer({
-                Address: '',
-                AddressType: '',
-                NeighborhoodId: '',
-                NeighborhoodName: '',
-            });
-
-            handleCloseModal();
-
+    const handleCreateAddressCustomer = async () => {
+        try {
+          const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/addresses`, JSON.stringify(newAddressCustomer), {
+            headers: {
+              'Content-Type': 'application/json'
+            }
+          });
+      
+          setAddressCustomers([response.data, ...addressCustomers]);
+      
+          setNewAddressCustomer({
+            Address: '',
+            AddressType: '',
+            NeighborhoodId: '',
+            NeighborhoodName: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La dirección del cliente ha sido creada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('error creating address customer', error);
+          console.error('Error creating address customer', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear la dirección del cliente.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleUpdateAddressCustomer = async () =>{
         try {

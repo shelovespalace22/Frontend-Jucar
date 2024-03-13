@@ -36,16 +36,34 @@ const Subcategories = ({ categoryId }) => {
   const handleCreateSubcategory = async () => {
     try {
       const response = await axios.post(`https://localhost:7028/api/categories/${categoryId}/subcategories`, {
-        name: newSubcategoryName,
-      });
 
-      setSubcategories([ response.data, ...subcategories]);
+        name: newSubcategoryName,
+
+      });
+  
+      setSubcategories([response.data, ...subcategories]);
       setNewSubcategoryName('');
       handleCloseModal();
+  
+      
+      Swal.fire(
+        '¡Éxito!',
+        '¡La subcategoría ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
+      
       console.error('Error creating subcategory:', error);
+  
+      // Muestra una alerta de error
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la subcategoría.',
+        'error'
+      );
     }
   };
+  
 
   const handleUpdateSubcategory = async () => {
     try {

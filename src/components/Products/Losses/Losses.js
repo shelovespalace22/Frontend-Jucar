@@ -46,22 +46,35 @@ const Losses = ({ autopartId }) => {
 
     const handleCreateLoss = async () => {
         try {
-            const response = await axios.post(`https://localhost:7028/api/autoparts/${autopartId}/losses`, newLoss);
-
-            setLosses([response.data, ...losses]);
-
-            setNewLoss({
-                AmountLoss: 0,
-                Responsible: '',
-                Reason: '',
-                LossDate: formattedDate,
-            });
-
-            handleCloseModal();
+          const response = await axios.post(`https://localhost:7028/api/autoparts/${autopartId}/losses`, newLoss);
+      
+          setLosses([response.data, ...losses]);
+          setNewLoss({
+            AmountLoss: 0,
+            Responsible: '',
+            Reason: '',
+            LossDate: formattedDate,
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La pérdida ha sido registrada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error creating loss:', error);
+          console.error('Error creating loss:', error);
+      
+         
+          Swal.fire(
+            'Error',
+            'Hubo un problema al registrar la pérdida.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleUpdateLoss = async () => {
         try {

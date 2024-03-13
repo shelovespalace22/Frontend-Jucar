@@ -39,22 +39,36 @@ const ProviderPhones = ({ providerId })  => {
     }, [providerId]);
 
     const handleCreateProviderPhone = async () => {
-        try { 
-            const response = await axios.post(`https://localhost:7028/api/providers/${providerId}/phones`, newProviderPhone);
-
-            setProviderPhones([response.data, ...providerPhones]);
-
-            setNewProviderPhone({
-                PhoneType: '',
-                PhoneNumber: '',
-            });
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('Error creating phone', error);
+        try {
+          const response = await axios.post(`https://localhost:7028/api/providers/${providerId}/phones`, newProviderPhone);
+      
+          setProviderPhones([response.data, ...providerPhones]);
+      
+          setNewProviderPhone({
+            PhoneType: '',
+            PhoneNumber: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del proveedor ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating phone', error);
+      
+         
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el teléfono del proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleUpdateProviderPhone = async () => {
         try{

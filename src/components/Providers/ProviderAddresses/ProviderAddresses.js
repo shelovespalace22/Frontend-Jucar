@@ -59,31 +59,45 @@ const ProviderAddresses = ({ providerId }) => {
 
     const handleCreateProviderAddress = async () => {
         try {
-            const response = await axios.post(
-                `https://localhost:7028/api/providers/${providerId}/addresses`,
-                JSON.stringify(newProviderAddress),
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-    
-            setProviderAddresses([response.data, ...providerAddresses]);
-    
-            setNewProviderAddress({
-                Address: '',
-                AddressType: '',
-                NeighborhoodId: '',
-                NeighborhoodName: '',
-            });
-    
-            handleCloseModal();
+          const response = await axios.post(
+            `https://localhost:7028/api/providers/${providerId}/addresses`,
+            JSON.stringify(newProviderAddress),
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+      
+          setProviderAddresses([response.data, ...providerAddresses]);
+      
+          setNewProviderAddress({
+            Address: '',
+            AddressType: '',
+            NeighborhoodId: '',
+            NeighborhoodName: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La dirección del proveedor ha sido creada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error creating Address:', error);
+          console.error('Error creating Address:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear la dirección del proveedor.',
+            'error'
+          );
         }
-    };
-
+      };
+      
     const handleUpdateProviderAddress = async () =>{
         try{
             await axios.put(

@@ -41,25 +41,38 @@ const Contributions = ({orderId}) => {
     fetchContributions();
   },[orderId]);
 
-  const handleCreateContribution = async ()=> {
-    try{
-        const response = await axios.post(`https://localhost:7028/api/orders/${orderId}/contributions`, newContribution );
-
-        setContributions([response.data, ...contributions]);
-
-        setNewContribution({
-            PaymentMethodId: '',
-            AmountPaid: 0,
-            ContributionDate: formattedDate
-        });
-
-        handleCloseModal();
-        
-    }catch (error){
-        console.error('error creating contribution', error)
-
+  const handleCreateContribution = async () => {
+    try {
+      const response = await axios.post(`https://localhost:7028/api/orders/${orderId}/contributions`, newContribution);
+  
+      setContributions([response.data, ...contributions]);
+  
+      setNewContribution({
+        PaymentMethodId: '',
+        AmountPaid: 0,
+        ContributionDate: formattedDate
+      });
+  
+      handleCloseModal();
+  
+    
+      Swal.fire(
+        '¡Éxito!',
+        '¡La contribución ha sido creada exitosamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error creating contribution', error);
+  
+      
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la contribución.',
+        'error'
+      );
     }
   };
+  
 
   const handleUpdateContribution = async () =>{
     try{

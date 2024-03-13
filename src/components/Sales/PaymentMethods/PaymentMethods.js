@@ -41,19 +41,35 @@ const PaymentMethods = () => {
 
 
   const handleCreateMethod = async () => {
-    try{
-        const response = await axios.post (`https://localhost:7028/api/paymentMethods`);
-
-        setMethods([response.data, ...methods]);
-
-        setNewMethod({
-            PaymentMethodName:''
-        });
-        handleCloseModal();
-    }catch(error){
-        console.error('error creating method', error)
+    try {
+      const response = await axios.post('https://localhost:7028/api/paymentMethods');
+  
+      setMethods([response.data, ...methods]);
+  
+      setNewMethod({
+        PaymentMethodName: ''
+      });
+  
+      handleCloseModal();
+  
+     
+      Swal.fire(
+        '¡Éxito!',
+        '¡El método de pago ha sido creado exitosamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error creating method', error);
+  
+    
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear el método de pago.',
+        'error'
+      );
     }
   };
+  
 
 
   const handleUpdateMethod = async () =>{

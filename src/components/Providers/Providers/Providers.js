@@ -48,33 +48,46 @@ const Providers = () => {
     }, [])
 
     const handleCreateProvider = async () => {
-        try{
-            const response = await axios.post ('https://localhost:7028/api/providers', newProvider);
-            
-            setProviders ([response.data, ...providers]);
-
-            setNewProvider({
-                IdentifierType: '',
-                IdentifierNumber: '',
-                Name: '',
-                EmailAddress: '',
-                ProductType: '',
-                ProviderAddresses: [{
-                    Address:'',
-                    AddressType: '',
-                    NeighborhoodId: ''
-                }],
-                ProviderPhone:[{
-                    PhoneType:'',
-                    PhoneNumber:''
-                }]
-            });
-            handleCloseModal();
-
-        }catch (error){
-            console.error('Error creating a provider')
+        try {
+          const response = await axios.post('https://localhost:7028/api/providers', newProvider);
+          
+          setProviders([response.data, ...providers]);
+      
+          setNewProvider({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            EmailAddress: '',
+            ProductType: '',
+            ProviderAddresses: [{
+              Address:'',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            ProviderPhone:[{
+              PhoneType:'',
+              PhoneNumber:''
+            }]
+          });
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El proveedor ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating a provider', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleUpdateProvider = async () => {
         try{

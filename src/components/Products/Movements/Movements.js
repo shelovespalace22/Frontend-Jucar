@@ -44,27 +44,35 @@ const Movements = ({ rawMaterialId }) => {
     }, [rawMaterialId]);
 
     const handleCreateMovement = async () => {
-        
         try {
-            const response = await axios.post(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`, newMovement);
-
-            setMovements([response.data, ...movements]);
-
-            setNewMovement({
-                Quantity: 0,
-                MovementType: '',
-                MovementDate: formattedDate,
-            });
-
-            handleCloseModal();
-
+          const response = await axios.post(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`, newMovement);
+      
+          setMovements([response.data, ...movements]);
+          setNewMovement({
+            Quantity: 0,
+            MovementType: '',
+            MovementDate: formattedDate,
+          });
+          handleCloseModal();
+      
+         
+          Swal.fire(
+            '¡Éxito!',
+            '¡El movimiento ha sido registrado exitosamente.',
+            'success'
+          );
         } catch (error) {
+          console.error('Error creating movement:', error);
+      
 
-            console.error('Error creating movement:', error);
-
+          Swal.fire(
+            'Error',
+            'Hubo un problema al registrar el movimiento.',
+            'error'
+          );
         }
-
-    };
+      };
+      
 
     const handleUpdateMovement = async () => {
 

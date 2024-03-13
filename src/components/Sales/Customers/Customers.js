@@ -114,7 +114,7 @@ const Customers = () => {
     };
 
     const handleDeleteCustomer = async (customerId) => {
-        
+        // Muestra una alerta de confirmación
         Swal.fire({
           title: '¿Estás seguro?',
           text: '¡No podrás revertir esto!',
@@ -123,27 +123,22 @@ const Customers = () => {
           confirmButtonColor: '#3085d6',
           cancelButtonColor: '#d33',
           confirmButtonText: 'Sí, eliminarlo!'
-
         }).then(async (result) => {
-
           if (result.isConfirmed) {
             try {
-              
+              // Elimina el cliente si el usuario confirma
               await axios.delete(`https://localhost:7028/api/customers/${customerId}`);
-
               const updatedCustomers = customers.filter((customer) => customer.customerID !== customerId);
-
               setCustomers(updatedCustomers);
-              
+              // Muestra una alerta de éxito
               Swal.fire(
                 '¡Eliminado!',
                 '¡El cliente ha sido eliminado.',
                 'success'
               );
             } catch (error) {
-
               console.error('Error deleting customer:', error);
-            
+              // Muestra una alerta de error si ocurre un problema
               Swal.fire(
                 'Error',
                 'Hubo un problema al eliminar el cliente.',

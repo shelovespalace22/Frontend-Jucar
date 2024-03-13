@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Movements = ({ rawMaterialId }) => {
 
@@ -98,18 +99,41 @@ const Movements = ({ rawMaterialId }) => {
     };
 
     const handleDeleteMovement = async (movementId) => {
-        try {
-
-            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
-
-            const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
-
-            setMovements(updatedMovements);
-
-        } catch (error) {
-            console.error('Error deleting movements:', error);
-        }
-    };
+        // Muestra una alerta de confirmación
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              // Elimina el movimiento si el usuario confirma
+              await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
+              const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
+              setMovements(updatedMovements);
+              // Muestra una alerta de éxito
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu movimiento ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting movements:', error);
+              // Muestra una alerta de error si ocurre un problema
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el movimiento.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         

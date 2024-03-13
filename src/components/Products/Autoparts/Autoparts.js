@@ -5,6 +5,8 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
 
 const Autoparts = ({ subcategoryId }) => {
 
@@ -117,17 +119,41 @@ const Autoparts = ({ subcategoryId }) => {
   };
 
   const handleDeleteAutopart = async (autopartId) => {
-    try {
-      await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
-
-      const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
-
-      setAutoparts(updatedAutoparts);
-
-    } catch (error) {
-      console.error('Error deleting autopart:', error);
-    }
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Elimina el elemento si el usuario confirma
+          await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
+          const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
+          setAutoparts(updatedAutoparts);
+          // Muestra una alerta de éxito
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu autoparte ha sido eliminada.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting autopart:', error);
+          // Muestra una alerta de error si ocurre un problema
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la autoparte.',
+            'error'
+          );
+        }
+      }
+    });
   };
+
 
   const handleShowCreateModal = () => {
     setModalAction('create');

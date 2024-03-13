@@ -7,6 +7,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash, faEdit, faList } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2';
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -55,15 +56,41 @@ const Categories = () => {
   };
 
   const handleDeleteCategory = async (categoryId) => {
-    try {
-      await axios.delete(`https://localhost:7028/api/categories/${categoryId}`);
-      
-      const updatedCategories = categories.filter((category) => category.categoryId !== categoryId);
-      setCategories(updatedCategories);
-    } catch (error) {
-      console.error('Error deleting category:', error);
-    }
+    // Muestra una alerta de confirmación
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Elimina la categoría si el usuario confirma
+          await axios.delete(`https://localhost:7028/api/categories/${categoryId}`);
+          const updatedCategories = categories.filter((category) => category.categoryId !== categoryId);
+          setCategories(updatedCategories);
+          // Muestra una alerta de éxito
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu categoría ha sido eliminada.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting category:', error);
+          // Muestra una alerta de error si ocurre un problema
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la categoría.',
+            'error'
+          );
+        }
+      }
+    });
   };
+  
 
   const handleUpdateCategory = async (categoryId, newName) => {
     try {

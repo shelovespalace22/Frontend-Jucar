@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Losses = ({ autopartId }) => {
     
@@ -97,17 +98,41 @@ const Losses = ({ autopartId }) => {
     };
 
     const handleDeleteLoss = async (lossId) => {
-        try {
-            await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
-
-            const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
-
-            setLosses(updatedLosses);
-        } catch (error) {
-            console.error('Error deleting loss:', error);
-        }
-    };
-
+        // Muestra una alerta de confirmación
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              // Elimina la pérdida si el usuario confirma
+              await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
+              const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
+              setLosses(updatedLosses);
+              // Muestra una alerta de éxito
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu pérdida ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting loss:', error);
+              // Muestra una alerta de error si ocurre un problema
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la pérdida.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

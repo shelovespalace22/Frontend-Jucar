@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const CustomersPhones = ( {customerId} )=>{
     const [customersPhone, setCustomersPhone] = useState ([]);
@@ -40,58 +41,115 @@ const CustomersPhones = ( {customerId} )=>{
 
 
 
-    const handleCreateCustomerPhone = async ()=>{
-        try{
-            const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/phones`, newCustomerPhone);
-
-            setCustomersPhone([response.data, ...customersPhone]);
-
-            setNewCustomerPhone({
-                PhoneType:'',
-                PhoneNumber:'',
-            });
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('error creating customerPhone', error);
+    const handleCreateCustomerPhone = async () => {
+        try {
+          const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/phones`, newCustomerPhone);
+      
+          setCustomersPhone([response.data, ...customersPhone]);
+      
+          setNewCustomerPhone({
+            PhoneType: '',
+            PhoneNumber: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del cliente ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating customerPhone', error);
+      
+       
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el teléfono del cliente.',
+            'error'
+          );
         }
-    };
+      };
+      
 
-    const handleUpdateCustomerPhone = async () =>{
-        try{
-            await axios.put(`https://localhost:7028/api/customers/${customerId}/phones/${selectedCustomerPhoneId}`, newCustomerPhone);
-
-            const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/phones`);
-
-            const updateCustomersPhone = response.data;
-
-            setCustomersPhone(updateCustomersPhone);
-
-            setNewCustomerPhone({
-                PhoneType:'',
-                PhoneNumber:'',
-            })
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('error updating Phone', error)
+      const handleUpdateCustomerPhone = async () => {
+        try {
+          await axios.put(
+            `https://localhost:7028/api/customers/${customerId}/phones/${selectedCustomerPhoneId}`,
+            newCustomerPhone
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/phones`);
+      
+          const updatedCustomerPhones = response.data;
+      
+          setCustomersPhone(updatedCustomerPhones);
+      
+          setNewCustomerPhone({
+            PhoneType: '',
+            PhoneNumber: '',
+          });
+      
+          handleCloseModal();
+     
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del cliente ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating Phone:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el teléfono del cliente.',
+            'error'
+          );
         }
-    };
+      };
+      
+    const handleDeleteCustomerPhone = async (customerPhoneId) => {
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
 
-    const handleDeleteCustomerPhone = async (customerPhoneId)=>{
-        try{
-            await axios.delete(`https://localhost:7028/api/customers/${customerId}/phones/${customerPhoneId}`);
+        }).then(async (result) => {
+            
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/customers/${customerId}/phones/${customerPhoneId}`);
 
-            const updateCustomersPhone = customersPhone.filter((customerPhone)=>customerPhone.customerPhoneID !== customerPhoneId);
+              const updatedCustomersPhone = customersPhone.filter((customerPhone) => customerPhone.customerPhoneID !== customerPhoneId);
 
-            setCustomersPhone(updateCustomersPhone);
-        } catch (error){
-            console.error('Error deleting phone:', error);
-        }
-    };
+              setCustomersPhone(updatedCustomersPhone);
+             
+              Swal.fire(
+                '¡Eliminado!',
+                '¡El teléfono del cliente ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
 
+              console.error('Error deleting phone:', error);
+             
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el teléfono del cliente.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

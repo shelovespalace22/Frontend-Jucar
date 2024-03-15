@@ -5,7 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
-
+import Swal from 'sweetalert2';
 const Contributions = ({orderId}) => {
     
   
@@ -41,62 +41,116 @@ const Contributions = ({orderId}) => {
     fetchContributions();
   },[orderId]);
 
-  const handleCreateContribution = async ()=> {
-    try{
-        const response = await axios.post(`https://localhost:7028/api/orders/${orderId}/contributions`, newContribution );
-
-        setContributions([response.data, ...contributions]);
-
-        setNewContribution({
-            PaymentMethodId: '',
-            AmountPaid: 0,
-            ContributionDate: formattedDate
-        });
-
-        handleCloseModal();
-        
-    }catch (error){
-        console.error('error creating contribution', error)
-
+  const handleCreateContribution = async () => {
+    try {
+      const response = await axios.post(`https://localhost:7028/api/orders/${orderId}/contributions`, newContribution);
+  
+      setContributions([response.data, ...contributions]);
+  
+      setNewContribution({
+        PaymentMethodId: '',
+        AmountPaid: 0,
+        ContributionDate: formattedDate
+      });
+  
+      handleCloseModal();
+  
+    
+      Swal.fire(
+        '¡Éxito!',
+        '¡La contribución ha sido creada exitosamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error creating contribution', error);
+  
+      
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la contribución.',
+        'error'
+      );
     }
   };
+  
 
-  const handleUpdateContribution = async () =>{
-    try{
-        await axios.put(
-            `https://localhost:7028/api/orders/${orderId}/contributions/${selectedContributionId}`, newContribution
-        );
-
-        const response = await axios.get (`https://localhost:7028/api/orders/${orderId}/contributions`);
-
-        const updateContributions = response.data;
-
-        setContributions(updateContributions);
-
-        setNewContribution({
-            PaymentMethodId: '',
-            AmountPaid: 0,
-            ContributionDate: formattedDate
-        });
-
-        handleCloseModal();
-    }catch (error){
-        console.error('error updating contribution', error);
-
+  const handleUpdateContribution = async () => {
+    try {
+      await axios.put(
+        `https://localhost:7028/api/orders/${orderId}/contributions/${selectedContributionId}`,
+        newContribution
+      );
+  
+      const response = await axios.get(`https://localhost:7028/api/orders/${orderId}/contributions`);
+  
+      const updatedContributions = response.data;
+  
+      setContributions(updatedContributions);
+  
+      setNewContribution({
+        PaymentMethodId: '',
+        AmountPaid: 0,
+        ContributionDate: formattedDate
+      });
+  
+      handleCloseModal();
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La contribución ha sido actualizada exitosamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error updating contribution:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la contribución.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteContribution = async (contributionId) => {
-    try{
-        await axios.delete (`https://localhost:7028/api/orders/${orderId}/contributions/${contributionId}`);
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+        
+      if (result.isConfirmed) {
+        try {
+         
+          await axios.delete(`https://localhost:7028/api/orders/${orderId}/contributions/${contributionId}`);
 
-        const updatedContributions = contributions.filter((contribution)=> contribution.contributionID !== contributionId);
-        setContributions(updatedContributions);
-    }catch (error){
-        console.error ('error deleting contribution', error);
+          const updatedContributions = contributions.filter((contribution) => contribution.contributionID !== contributionId);
 
-    }
+          setContributions(updatedContributions);
+          
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu contribución ha sido eliminada.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting contribution:', error);
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la contribución.',
+            'error'
+          );
+        }
+      }
+    });
   };
+  
 
   const handleShowCreateModal = () => {
     setModalAction('create');

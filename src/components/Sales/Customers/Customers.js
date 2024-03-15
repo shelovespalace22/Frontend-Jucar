@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot, faBoxArchive } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Customers = () => {
     const [customers, setCustomers] = useState ([]);
@@ -80,50 +81,85 @@ const Customers = () => {
 
     const handleUpdateCustomer = async () => {
         try {
-            await axios.put(`https://localhost:7028/api/customers/${selectedCustomerId}`, newCustomer);
-
-            const response = await axios.get(`https://localhost:7028/api/customers`);
-
-            const updatedCustomers = response.data;
-
-            setCustomers(updatedCustomers);
-
-            setNewCustomer({
-                IdentifierType: '',
-                IdentifierNumber : '',
-                Name: '',
-                Email: '',
-                CustomerAddresses: [{
-                    Address: '',
-                    AddressType:'',
-                    NeighborhoodId: '' 
-
-                }],
-                CustomerPhone: [{
-                    PhoneType: '',
-                    PhoneNumber: ''
-                }]
-            });
-
-            handleCloseModal();
-
+          await axios.put(`https://localhost:7028/api/customers/${selectedCustomerId}`, newCustomer);
+      
+          const response = await axios.get(`https://localhost:7028/api/customers`);
+      
+          const updatedCustomers = response.data;
+      
+          setCustomers(updatedCustomers);
+      
+          setNewCustomer({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            Email: '',
+            CustomerAddresses: [{
+              Address: '',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            CustomerPhone: [{
+              PhoneType: '',
+              PhoneNumber: ''
+            }]
+          });
+      
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡Los datos del cliente se han actualizado correctamente!',
+            'success'
+          );
         } catch (error) {
-            console.error('Error updating customer', error);
+          console.error('Error updating customer:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar los datos del cliente.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteCustomer = async (customerId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/customers/${customerId}`);
-
-            const updatedCustomers = customers.filter((customer) => customer.customerID !== customerId);
-
-            setCustomers(updatedCustomers);
-
-        } catch (error) {
-            console.error('Error deleting customer', error);
-        }
-    };
+        // Muestra una alerta de confirmación
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+              // Elimina el cliente si el usuario confirma
+              await axios.delete(`https://localhost:7028/api/customers/${customerId}`);
+              const updatedCustomers = customers.filter((customer) => customer.customerID !== customerId);
+              setCustomers(updatedCustomers);
+              // Muestra una alerta de éxito
+              Swal.fire(
+                '¡Eliminado!',
+                '¡El cliente ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting customer:', error);
+              // Muestra una alerta de error si ocurre un problema
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el cliente.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

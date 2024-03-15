@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Providers = () => {
     const [providers, setProviders] = useState ([]);
@@ -47,81 +48,135 @@ const Providers = () => {
     }, [])
 
     const handleCreateProvider = async () => {
-        try{
-            const response = await axios.post ('https://localhost:7028/api/providers', newProvider);
-            
-            setProviders ([response.data, ...providers]);
-
-            setNewProvider({
-                IdentifierType: '',
-                IdentifierNumber: '',
-                Name: '',
-                EmailAddress: '',
-                ProductType: '',
-                ProviderAddresses: [{
-                    Address:'',
-                    AddressType: '',
-                    NeighborhoodId: ''
-                }],
-                ProviderPhone:[{
-                    PhoneType:'',
-                    PhoneNumber:''
-                }]
-            });
-            handleCloseModal();
-
-        }catch (error){
-            console.error('Error creating a provider')
+        try {
+          const response = await axios.post('https://localhost:7028/api/providers', newProvider);
+          
+          setProviders([response.data, ...providers]);
+      
+          setNewProvider({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            EmailAddress: '',
+            ProductType: '',
+            ProviderAddresses: [{
+              Address:'',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            ProviderPhone:[{
+              PhoneType:'',
+              PhoneNumber:''
+            }]
+          });
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El proveedor ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating a provider', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
-    const handleUpdateProvider = async () => {
-        try{
-            await axios.put(
+      const handleUpdateProvider = async () => {
+        try {
+          await axios.put(
             `https://localhost:7028/api/providers/${selectedProviderId}`,
             newProvider
-            );
-
-            const response = await axios.get(`https://localhost:7028/api/providers`);
-
-            const updatedProviders = response.data;
-
-            setProviders(updatedProviders);
-
-            setNewProvider({
-                IdentifierType: '',
-                IdentifierNumber: '',
-                Name: '',
-                EmailAddress: '',
-                ProductType: '',
-                ProviderAddresses: [{
-                    Address:'',
-                    AddressType: '',
-                    NeighborhoodId: ''
-                }],
-                ProviderPhone:[{
-                    PhoneType:'',
-                    PhoneNumber:''
-                }]
-            });
-
-            handleCloseModal();
-        
-        }catch (error){
-            console.error('Error updating autopart:', error);
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/providers`);
+      
+          const updatedProviders = response.data;
+      
+          setProviders(updatedProviders);
+      
+          setNewProvider({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            EmailAddress: '',
+            ProductType: '',
+            ProviderAddresses: [{
+              Address:'',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            ProviderPhone:[{
+              PhoneType:'',
+              PhoneNumber:''
+            }]
+          });
+      
+          handleCloseModal();
+      
+         
+          Swal.fire(
+            '¡Éxito!',
+            '¡El proveedor ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating provider:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteProvider = async (providerId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
 
-            const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
-            setProviders(updatedProviders);
-        }catch(error){
-            console.error ('error deleting provider')
-        }
-    };
+              const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
+
+              setProviders(updatedProviders);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu proveedor ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting provider:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el proveedor.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

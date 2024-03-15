@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 
 const PaymentMethods = () => {
@@ -40,54 +41,108 @@ const PaymentMethods = () => {
 
 
   const handleCreateMethod = async () => {
-    try{
-        const response = await axios.post (`https://localhost:7028/api/paymentMethods`);
-
-        setMethods([response.data, ...methods]);
-
-        setNewMethod({
-            PaymentMethodName:''
-        });
-        handleCloseModal();
-    }catch(error){
-        console.error('error creating method', error)
+    try {
+      const response = await axios.post('https://localhost:7028/api/paymentMethods');
+  
+      setMethods([response.data, ...methods]);
+  
+      setNewMethod({
+        PaymentMethodName: ''
+      });
+  
+      handleCloseModal();
+  
+     
+      Swal.fire(
+        '¡Éxito!',
+        '¡El método de pago ha sido creado exitosamente.',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error creating method', error);
+  
+    
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear el método de pago.',
+        'error'
+      );
     }
   };
+  
 
 
-  const handleUpdateMethod = async () =>{
-    try{
-        await axios.put(
-            `https://localhost:7028/api/paymentMethods/${selectedMethodId}`, newMethod
+  const handleUpdateMethod = async () => {
+    try {
+      await axios.put(
+        `https://localhost:7028/api/paymentMethods/${selectedMethodId}`, 
+        newMethod
+      );
+  
+      const response = await axios.get(`https://localhost:7028/api/paymentMethods`);
+      const updatedMethods = response.data;
+  
+      setMethods(updatedMethods);
+      setNewMethod({
+        PaymentMethodName: ''
+      });
+  
+      handleCloseModal();
 
-        );
-
-        const response = await axios.get (`https://localhost:7028/api/paymentMethods`);
-
-        const updateMethods = response.data;
-        setMethods(updateMethods);
-        setNewMethod({
-            PaymentMethodName:''
-        });
-
-        handleCloseModal();
-    }catch(error){
-        console.error('error updating method', error);
+      Swal.fire(
+        '¡Éxito!',
+        '¡El método de pago se ha actualizado correctamente!',
+        'success'
+      );
+    } catch (error) {
+      console.error('Error updating method:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar el método de pago.',
+        'error'
+      );
     }
   };
+  
 
-  const handleDeleteMethod = async (methodId) =>{
-    try{
-        await axios.delete (`https://localhost:7028/api/paymentMethod${methodId}`);
+  const handleDeleteMethod = async (methodId) => {
+   
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
 
-        const updatedMethods = methods.filter((method)=> method.methodID !== methodId);
-        
-        setMethods(updatedMethods);
-
-    }catch(error){
-        console.error('Error deleting method', error);
-    }
+      if (result.isConfirmed) {
+        try {
+          
+          await axios.delete(`https://localhost:7028/api/paymentMethod/${methodId}`);
+          const updatedMethods = methods.filter((method) => method.methodID !== methodId);
+          setMethods(updatedMethods);
+          
+          Swal.fire(
+            '¡Eliminado!',
+            '¡El método de pago ha sido eliminado.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting method:', error);
+         
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar el método de pago.',
+            'error'
+          );
+        }
+      }
+    });
   };
+  
 
   const handleShowCreateModal = () => {
     setModalAction('create');

@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
-import { Container, Card, Form, Button} from 'react-bootstrap';
+import { Container, Card, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
 
 const Registro = () => {
-
   const rolesOptions = ['Administrator', 'Manager'];
 
   const [userData, setUserData] = useState({
@@ -26,7 +25,6 @@ const Registro = () => {
 
     setUserData((prevData) => {
       if (name === 'Roles') {
-        // Para el campo de roles, obtenemos todos los roles seleccionados en un array
         const selectedRoles = Array.from(e.target.selectedOptions, (option) => option.value);
         return {
           ...prevData,
@@ -45,23 +43,16 @@ const Registro = () => {
     e.preventDefault();
 
     try {
-
       const response = await axios.post('https://localhost:7028/api/authentication', userData);
 
       console.log('Registro exitoso:', response);
-
       setRedirectToSuccess(true);
-
     } catch (error) {
-
-      console.error('Error al registrar:', error.response); 
+      console.error('Error al registrar:', error.response);
 
       if (error.response && error.response.data && error.response.data.title) {
-
         setErrorMessages(error.response.data.title);
-
       } else {
-
         setErrorMessages(['Hubo un error al procesar la solicitud. Por favor, inténtalo de nuevo.']);
       }
 
@@ -69,11 +60,35 @@ const Registro = () => {
     }
   };
 
+  const styles = {
+    container: {
+      marginTop: '50px',
+    },
+    card: {
+      backgroundColor: '#d62121',
+      color: 'white',
+      fontSize: '1.2rem',
+      padding: '20px',
+      maxWidth: '500px', 
+      margin: '0 auto', 
+    },
+    form: {
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    inputField: {
+      marginBottom: '15px',
+    },
+    cardButton: {
+      display: 'block',
+      margin: '0 auto',
+    },
+  };
+
   return (
-    <Container className="mt-5 container-box">
-      <Card className="card">
-        <Form onSubmit={handleRegister}>
-          {/* Agrega campos de formulario según el modelo UserForRegistrationDto */}
+    <Container style={styles.container}>
+      <Card style={styles.card}>
+        <Form onSubmit={handleRegister} style={styles.form}>
           <Form.Group controlId="formFirstName">
             <Form.Label>Nombre</Form.Label>
             <Form.Control
@@ -82,6 +97,7 @@ const Registro = () => {
               value={userData.FirstName}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             />
           </Form.Group>
 
@@ -93,6 +109,7 @@ const Registro = () => {
               value={userData.LastName}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             />
           </Form.Group>
 
@@ -104,6 +121,7 @@ const Registro = () => {
               value={userData.UserName}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             />
           </Form.Group>
 
@@ -115,6 +133,7 @@ const Registro = () => {
               value={userData.Password}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             />
           </Form.Group>
 
@@ -126,6 +145,7 @@ const Registro = () => {
               value={userData.Email}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             />
           </Form.Group>
 
@@ -137,6 +157,7 @@ const Registro = () => {
               value={userData.PhoneNumber}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             />
           </Form.Group>
 
@@ -148,6 +169,7 @@ const Registro = () => {
               value={userData.Roles}
               onChange={handleInputChange}
               required
+              style={styles.inputField}
             >
               <option disabled value="">
                 -- Selecciona un rol --
@@ -161,7 +183,7 @@ const Registro = () => {
             </Form.Control>
           </Form.Group>
 
-          <Button variant="primary" type="submit" className="card-button">
+          <Button variant="primary" type="submit" style={styles.cardButton}>
             Registrarse
           </Button>
         </Form>
@@ -169,9 +191,9 @@ const Registro = () => {
 
       {redirectToSuccess && <Redirect to="/registro-exitoso" />}
       {redirectToError && <Redirect to="/error-al-registrar" />}
-
     </Container>
   );
 };
 
 export default Registro;
+

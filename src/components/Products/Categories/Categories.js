@@ -3,10 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Table, Button, Form, Pagination, Modal } from 'react-bootstrap';
 import axios from 'axios';
-
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faTrash, faEdit, faList } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2';
+import '.././styles/Crud.css'
 
 const Categories = () => {
   const [categories, setCategories] = useState([]);
@@ -39,48 +40,90 @@ const Categories = () => {
       const response = await axios.post('https://localhost:7028/api/categories', {
         name: newCategoryName,
       });
-
+  
       setCategories([response.data, ...categories]);
-      
       setNewCategoryName('');
-      
       setShowCreateModal(false);
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La categoría ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error creating category:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la categoría.',
+        'error'
+      );
     }
   };
 
   const handleDeleteCategory = async (categoryId) => {
-    try {
-      await axios.delete(`https://localhost:7028/api/categories/${categoryId}`);
-      
-      const updatedCategories = categories.filter((category) => category.categoryId !== categoryId);
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await axios.delete(`https://localhost:7028/api/categories/${categoryId}`);
 
-      setCategories(updatedCategories);
-    } catch (error) {
-      console.error('Error deleting category:', error);
-    }
+          const updatedCategories = categories.filter((category) => category.categoryId !== categoryId);
+          
+          setCategories(updatedCategories);
+          
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu categoría ha sido eliminada.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting category:', error);
+        
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la categoría.',
+            'error'
+          );
+        }
+      }
+    });
   };
 
   const handleUpdateCategory = async (categoryId, newName) => {
     try {
-        await axios.put(
-            `https://localhost:7028/api/categories/${categoryId}`, {name: newName });
-
-        const response = await axios.get('https://localhost:7028/api/categories');
-
-        const updatedCategories = response.data;
-
-        setCategories(updatedCategories);
-
-        setNewCategoryName({
-            Name: '',
-        });
-
-        setShowUpdateModal(false);
-
+      await axios.put(
+        `https://localhost:7028/api/categories/${categoryId}`, 
+        { name: newName }
+      );
+  
+      const response = await axios.get('https://localhost:7028/api/categories');
+      const updatedCategories = response.data;
+  
+      setCategories(updatedCategories);
+      setNewCategoryName({ Name: '' });
+      setShowUpdateModal(false);
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La categoría ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
-        console.error('Error updating rawMaterial:', error);
+      console.error('Error updating category:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la categoría.',
+        'error'
+      );
     }
   };
 
@@ -98,23 +141,16 @@ const Categories = () => {
 
   return (
     <div className="categories-container">
-
       <br/>
-
       <h2>Modulo Categorías</h2>
-
       <br />
-
       <Button variant="primary" onClick={() => setShowCreateModal(true)}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Categoría
       </Button>
-
       <Button variant="danger" onClick={handleGoBack}>
         Volver
       </Button>
-
       <hr/>
-
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -127,16 +163,28 @@ const Categories = () => {
             <tr key={category.categoryId}>
               <td>{category.name}</td>
               <td>
-                <Button variant="info" onClick={() => {
-                  setUpdateCategoryId(category.categoryId);
-                  setShowUpdateModal(true);
-                }}>
+                <Button
+                  variant="info"
+                  onClick={() => {
+                    setUpdateCategoryId(category.categoryId);
+                    setShowUpdateModal(true);
+                  }}
+                  className="action-button"
+                >
                   <FontAwesomeIcon icon={faEdit} /> Actualizar
                 </Button>{' '}
-                <Button variant="danger" onClick={() => handleDeleteCategory(category.categoryId)}>
+                <Button
+                  variant="danger"
+                  onClick={() => handleDeleteCategory(category.categoryId)}
+                  className="action-button"
+                >
                   <FontAwesomeIcon icon={faTrash} /> Eliminar
                 </Button>
-                <Button variant="primary" onClick={() => handleShowSubcategories(category.categoryId)}>
+                <Button
+                  variant="primary"
+                  onClick={() => handleShowSubcategories(category.categoryId)}
+                  className="action-button"
+                >
                   <FontAwesomeIcon icon={faList} /> Ver Subcategorías
                 </Button>
               </td>
@@ -144,7 +192,6 @@ const Categories = () => {
           ))}
         </tbody>
       </Table>
-
       <Pagination>
         {Array.from({ length: Math.ceil(categories.length / categoriesPerPage) }).map((_, index) => (
           <Pagination.Item
@@ -156,13 +203,10 @@ const Categories = () => {
           </Pagination.Item>
         ))}
       </Pagination>
-
       <Modal show={showCreateModal} onHide={() => setShowCreateModal(false)}>
-
         <Modal.Header closeButton>
           <Modal.Title>Nueva Categoría</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <Form>
             <Form.Group controlId="formCategoryName">
@@ -176,7 +220,6 @@ const Categories = () => {
             </Form.Group>
           </Form>
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowCreateModal(false)}>
             Cancelar
@@ -185,15 +228,11 @@ const Categories = () => {
             Crear
           </Button>
         </Modal.Footer>
-
       </Modal>
-
       <Modal show={showUpdateModal} onHide={() => setShowUpdateModal(false)}>
-
         <Modal.Header closeButton>
           <Modal.Title>Actualizar Categoría</Modal.Title>
         </Modal.Header>
-
         <Modal.Body>
           <Form>
             <Form.Group controlId="formUpdatedCategoryName">
@@ -207,7 +246,6 @@ const Categories = () => {
             </Form.Group>
           </Form>
         </Modal.Body>
-
         <Modal.Footer>
           <Button variant="secondary" onClick={() => setShowUpdateModal(false)}>
             Cancelar
@@ -216,9 +254,7 @@ const Categories = () => {
             Actualizar
           </Button>
         </Modal.Footer>
-        
       </Modal>
-
     </div>
   );
 };

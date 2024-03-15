@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Losses = ({ autopartId }) => {
     
@@ -45,62 +46,112 @@ const Losses = ({ autopartId }) => {
 
     const handleCreateLoss = async () => {
         try {
-            const response = await axios.post(`https://localhost:7028/api/autoparts/${autopartId}/losses`, newLoss);
-
-            setLosses([response.data, ...losses]);
-
-            setNewLoss({
-                AmountLoss: 0,
-                Responsible: '',
-                Reason: '',
-                LossDate: formattedDate,
-            });
-
-            handleCloseModal();
+          const response = await axios.post(`https://localhost:7028/api/autoparts/${autopartId}/losses`, newLoss);
+      
+          setLosses([response.data, ...losses]);
+          setNewLoss({
+            AmountLoss: 0,
+            Responsible: '',
+            Reason: '',
+            LossDate: formattedDate,
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La pérdida ha sido registrada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error creating loss:', error);
+          console.error('Error creating loss:', error);
+      
+         
+          Swal.fire(
+            'Error',
+            'Hubo un problema al registrar la pérdida.',
+            'error'
+          );
         }
-    };
+      };
+      
 
-    const handleUpdateLoss = async () => {
+      const handleUpdateLoss = async () => {
         try {
-            await axios.put(
-                `https://localhost:7028/api/autoparts/${autopartId}/losses/${selectedLossId}`,
-                newLoss
-            );
-
-            const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
-
-            const updatedLosses = response.data;
-
-            setLosses(updatedLosses);
-
-            setNewLoss({
-                AmountLoss: 0,
-                Responsible: '',
-                Reason: '',
-                LossDate: formattedDate,
-            });
-
-            handleCloseModal();
-
+          await axios.put(
+            `https://localhost:7028/api/autoparts/${autopartId}/losses/${selectedLossId}`,
+            newLoss
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
+          const updatedLosses = response.data;
+      
+          setLosses(updatedLosses);
+          setNewLoss({
+            AmountLoss: 0,
+            Responsible: '',
+            Reason: '',
+            LossDate: formattedDate,
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La pérdida ha sido actualizada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error updating loss:', error);
+          console.error('Error updating loss:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar la pérdida.',
+            'error'
+          );
         }
-    };
-
+      };
+      
     const handleDeleteLoss = async (lossId) => {
-        try {
-            await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
 
-            setLosses(updatedLosses);
-        } catch (error) {
-            console.error('Error deleting loss:', error);
-        }
-    };
+              const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
 
+              setLosses(updatedLosses);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu pérdida ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting loss:', error);
+             
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la pérdida.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

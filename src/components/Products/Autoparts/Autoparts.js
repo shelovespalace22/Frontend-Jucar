@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+import '.././styles/Crud.css'
+
 
 const Autoparts = ({ subcategoryId }) => {
 
@@ -60,9 +63,7 @@ const Autoparts = ({ subcategoryId }) => {
   const handleCreateAutopart = async () => {
     try {
       console.log("Creating autopart with data: ", newAutopart);
-
-      // const response = await axios.post(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`, newAutopart);
-
+  
       const response = await axios.post(
         `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`,
         JSON.stringify(newAutopart),
@@ -72,9 +73,9 @@ const Autoparts = ({ subcategoryId }) => {
           }
         }
       );
-
+  
       setAutoparts([response.data, ...autoparts]);
-
+  
       setNewAutopart({
         Name: '',
         Description: '',
@@ -83,10 +84,24 @@ const Autoparts = ({ subcategoryId }) => {
         RawMaterialId: '',
       });
       handleCloseModal();
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La autoparte ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error creating autopart:', error);
+  
+   
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la autoparte.',
+        'error'
+      );
     }
   };
+  
 
   const handleUpdateAutopart = async () => {
     try {
@@ -94,13 +109,13 @@ const Autoparts = ({ subcategoryId }) => {
         `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${selectedAutopartId}`,
         newAutopart
       );
-
+  
       const response = await axios.get(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`);
-        
+  
       const updatedAutoparts = response.data;
-
+  
       setAutoparts(updatedAutoparts);
-
+  
       setNewAutopart({
         Name: '',
         Description: '',
@@ -108,26 +123,68 @@ const Autoparts = ({ subcategoryId }) => {
         Value: 0,
         RawMaterialId: '',
       });
-
+  
       handleCloseModal();
-      
+  
+     
+      Swal.fire(
+        '¡Éxito!',
+        '¡La autoparte ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error updating autopart:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la autoparte.',
+        'error'
+      );
     }
   };
+  
 
   const handleDeleteAutopart = async (autopartId) => {
-    try {
-      await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
 
-      const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
+          // Elimina el elemento si el usuario confirma
+          await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
 
-      setAutoparts(updatedAutoparts);
+          const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
 
-    } catch (error) {
-      console.error('Error deleting autopart:', error);
-    }
+          setAutoparts(updatedAutoparts);
+
+          // Muestra una alerta de éxito
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu autoparte ha sido eliminada.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting autopart:', error);
+          
+          // Muestra una alerta de error si ocurre un problema
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la autoparte.',
+            'error'
+          );
+        }
+      }
+    });
   };
+
 
   const handleShowCreateModal = () => {
     setModalAction('create');

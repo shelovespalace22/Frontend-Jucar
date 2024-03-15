@@ -6,6 +6,7 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import '.././styles/Crud.css'
 
 
 const Autoparts = ({ subcategoryId }) => {

@@ -7,7 +7,7 @@ const Logout = () => {
 
   const handleLogout = () => {
     // Limpiar el token de acceso del almacenamiento local
-    localStorage.removeItem('token');
+    localStorage.removeItem('accessToken');
     // Redirigir al usuario a la página de inicio de sesión u otra página relevante
     history.push('/inicio-sesion');
   };

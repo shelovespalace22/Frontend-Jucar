@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Movements = ({ rawMaterialId }) => {
 
@@ -43,69 +44,111 @@ const Movements = ({ rawMaterialId }) => {
     }, [rawMaterialId]);
 
     const handleCreateMovement = async () => {
-        
         try {
-            const response = await axios.post(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`, newMovement);
-
-            setMovements([response.data, ...movements]);
-
-            setNewMovement({
-                Quantity: 0,
-                MovementType: '',
-                MovementDate: formattedDate,
-            });
-
-            handleCloseModal();
-
-        } catch (error) {
-
-            console.error('Error creating movement:', error);
-
-        }
-
-    };
-
-    const handleUpdateMovement = async () => {
-
-      try {
-        
-        await axios.put(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`, newMovement);
-
-        const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`);
-
-        const updatedMovements = response.data;
-
-        setMovements(updatedMovements);
-
-        setNewMovement({
+          const response = await axios.post(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`, newMovement);
+      
+          setMovements([response.data, ...movements]);
+          setNewMovement({
             Quantity: 0,
             MovementType: '',
             MovementDate: formattedDate,
-        });
-
-        handleCloseModal();
-
-      } catch (error) {
-        
-        console.error('Error updating movements:', error);
-
-      } 
-
-    };
-
-    const handleDeleteMovement = async (movementId) => {
-        try {
-
-            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
-
-            const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
-
-            setMovements(updatedMovements);
-
+          });
+          handleCloseModal();
+      
+         
+          Swal.fire(
+            '¡Éxito!',
+            '¡El movimiento ha sido registrado exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error deleting movements:', error);
+          console.error('Error creating movement:', error);
+      
+
+          Swal.fire(
+            'Error',
+            'Hubo un problema al registrar el movimiento.',
+            'error'
+          );
         }
-    };
+      };
+      
+
+      const handleUpdateMovement = async () => {
+        try {
+          await axios.put(
+            `https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`,
+            newMovement
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`);
+          const updatedMovements = response.data;
+      
+          setMovements(updatedMovements);
+          setNewMovement({
+            Quantity: 0,
+            MovementType: '',
+            MovementDate: formattedDate,
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡El movimiento ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating movements:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el movimiento.',
+            'error'
+          );
+        }
+      };
+      
+    const handleDeleteMovement = async (movementId) => {
+      
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+            
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
+
+              const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
+
+              setMovements(updatedMovements);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu movimiento ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting movements:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el movimiento.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         

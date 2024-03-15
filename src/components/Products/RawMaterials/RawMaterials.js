@@ -4,6 +4,7 @@ import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import Swal from 'sweetalert2';
 
 import { useHistory } from 'react-router-dom';
 
@@ -46,70 +47,118 @@ const RawMaterials = () => {
 
     const handleCreateRawMaterial = async () => {
         try {
-            const response = await axios.post('https://localhost:7028/api/rawMaterials', newRawMaterial );
-
-            setRawMaterials([response.data, ...rawMaterials]);
-
-            setNewRawMaterial({
-                Name: '',
-                Stock: {
-                    QuantityAvailable: 0,
-                    InitialStock: 0,
-                    ReorderPoint: 0,
-                    MinimumInventory: 0,
-                    MaximumInventory: 0,
-                }
-            });
-
-            handleCloseModal();
-
+          const response = await axios.post('https://localhost:7028/api/rawMaterials', newRawMaterial);
+      
+          setRawMaterials([response.data, ...rawMaterials]);
+          setNewRawMaterial({
+            Name: '',
+            Stock: {
+              QuantityAvailable: 0,
+              InitialStock: 0,
+              ReorderPoint: 0,
+              MinimumInventory: 0,
+              MaximumInventory: 0,
+            }
+          });
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La materia prima ha sido creada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error creating rawMaterial:', error);
+          console.error('Error creating rawMaterial:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear la materia prima.',
+            'error'
+          );
         }
-    };
-
-    const handelUpdateRawMaterial = async () => {
+      };
+      
+      const handelUpdateRawMaterial = async () => {
         try {
-            await axios.put(
-                `https://localhost:7028/api/rawMaterials/${selectedRawMaterialId}`, 
-                newRawMaterial
-            );
-    
-            const response = await axios.get('https://localhost:7028/api/rawMaterials');
-
-            const updatedRawMaterials = response.data;
-    
-            setRawMaterials(updatedRawMaterials);
-    
-            setNewRawMaterial({
-                Name: '',
-                Stock: {
-                    QuantityAvailable: 0,
-                    InitialStock: 0,
-                    ReorderPoint: 0,
-                    MinimumInventory: 0,
-                    MaximumInventory: 0,
-                }
-            });
-    
-            handleCloseModal();
-    
+          await axios.put(
+            `https://localhost:7028/api/rawMaterials/${selectedRawMaterialId}`,
+            newRawMaterial
+          );
+      
+          const response = await axios.get('https://localhost:7028/api/rawMaterials');
+          const updatedRawMaterials = response.data;
+      
+          setRawMaterials(updatedRawMaterials);
+          setNewRawMaterial({
+            Name: '',
+            Stock: {
+              QuantityAvailable: 0,
+              InitialStock: 0,
+              ReorderPoint: 0,
+              MinimumInventory: 0,
+              MaximumInventory: 0,
+            }
+          });
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El material ha sido actualizado exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error updating rawMaterial:', error);
+          console.error('Error updating rawMaterial:', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el material.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteRawMaterial = async (rawMaterialId) => {
-        try {
-            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updatedRawMaterials = rawMaterials.filter((rawMaterial) => rawMaterial.rawMaterialId  !== rawMaterialId);
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}`);
 
-            setRawMaterials(updatedRawMaterials);
-        } catch (error) {
-            console.error('Error deleting rawMaterial:', error);
-        }
-    };
+              const updatedRawMaterials = rawMaterials.filter((rawMaterial) => rawMaterial.rawMaterialId  !== rawMaterialId);
+
+              setRawMaterials(updatedRawMaterials);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu materia prima ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting rawMaterial:', error);
+             
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la materia prima.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');

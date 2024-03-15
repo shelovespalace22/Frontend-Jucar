@@ -3,6 +3,7 @@ import { Card, Button, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Stocks = ({ rawMaterialId }) => {
     const [stocks, setStocks] = useState([]);

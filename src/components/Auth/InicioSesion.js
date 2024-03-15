@@ -36,6 +36,44 @@ const InicioSesion = () => {
           </Button>
         </Link>
       </Card>
+
+      {/* Estilos en línea */}
+      <style>
+        {`
+          .card {
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+          }
+
+          .card-link {
+            text-decoration: none;
+            color: inherit;
+          }
+
+          .card-icon {
+            font-size: 24px;
+            margin-bottom: 10px;
+          }
+
+          .card-heading {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+          }
+
+          .card-description {
+            font-size: 16px;
+            margin-bottom: 10px;
+          }
+
+          .card-button {
+            width: 100%;
+          }
+        `}
+      </style>
     </Container>
   );
 };

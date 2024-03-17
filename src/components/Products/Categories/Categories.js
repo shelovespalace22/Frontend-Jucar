@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import { Table, Button, Form, Pagination, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faTrash, faEdit, faList } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faTrash, faEdit, faList, faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Swal from 'sweetalert2';
 import '.././styles/Crud.css'
@@ -148,7 +148,7 @@ const Categories = () => {
         <FontAwesomeIcon icon={faPlus} /> Nueva Categoría
       </Button>
       <Button variant="danger" onClick={handleGoBack}>
-        Volver
+        <FontAwesomeIcon icon={faArrowLeft} /> Volver
       </Button>
       <hr/>
       <Table striped bordered hover>
@@ -164,7 +164,7 @@ const Categories = () => {
               <td>{category.name}</td>
               <td>
                 <Button
-                  variant="info"
+                  variant="primary"
                   onClick={() => {
                     setUpdateCategoryId(category.categoryId);
                     setShowUpdateModal(true);
@@ -174,7 +174,7 @@ const Categories = () => {
                   <FontAwesomeIcon icon={faEdit} /> Actualizar
                 </Button>{' '}
                 <Button
-                  variant="danger"
+                  variant="primary"
                   onClick={() => handleDeleteCategory(category.categoryId)}
                   className="action-button"
                 >

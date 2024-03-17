@@ -5,11 +5,14 @@ import { faPlus, faEdit, faTrash, faEye, faMinus } from '@fortawesome/free-solid
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Orders = ({ customerId }) => {
     const [orders, setOrders] = useState([]);
+    const currentDate = new Date();
+    const formattedDate = currentDate.toISOString().split('T')[0];
     const [newOrder, setNewOrder] = useState({
-        OrderDate: new Date().toISOString().split('T')[0],
+        OrderDate: formattedDate,
         PaymentStatus: '',
         ShippingAddress: '',
         ShippingStatus: '',
@@ -21,11 +24,17 @@ const Orders = ({ customerId }) => {
         Contributions: [{
             PaymentMethodId: '',
             AmountPaid: 0,
-            ContributionDate: new Date().toISOString().split('T')[0],
+            ContributionDate: formattedDate,
         }]
     });
+    const [autoparts, setAutoparts] = useState([]);
+    const [paymentMethods, setPaymentMethods] = useState([]);
+    const [selectedOrderId, setSelectedOrderId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
     const history = useHistory();
 
     useEffect(() => {
@@ -39,6 +48,94 @@ const Orders = ({ customerId }) => {
         };
         fetchOrders();
     }, [customerId]);
+
+    useEffect(() => {
+        const fetchAutoparts = async () => {
+            try {
+                const response = await axios.get('https://localhost:7028/api/autoparts');
+
+                setAutoparts(response.data);
+
+                console.log(autoparts);
+            } catch (error) {
+                console.error('Error fetching autoparts:', error);
+            }
+        };
+
+        fetchAutoparts();
+    }, []);
+
+    useEffect(() => {
+        const fetchPaymentMethods = async () => {
+            try {
+                const response = await axios.get('https://localhost:7028/api/paymentMethods');
+
+                setPaymentMethods(response.data);
+
+                console.log(paymentMethods);
+            } catch (error) {
+                console.error('Error fetching payment methods:', error);
+            }
+        };
+
+        fetchPaymentMethods();
+    }, []);
+
+    const handleCreateOrder = async () => {
+        try {
+            console.log('Creating order with the next data:', newOrder);
+
+            const response = await axios.post(`https://localhost:7028/api/customers/${customerId}/orders`, newOrder);
+
+            setOrders([response.data, ...orders]);
+
+            setNewOrder({
+                OrderDate: formattedDate,
+                PaymentStatus: '',
+                ShippingAddress: '',
+                ShippingStatus: '',
+                Observation: '',
+                OrderDetails: [{
+                    AutopartId: '',
+                    Quantity: 0,
+                }],
+                Contributions: [{
+                    PaymentMethodId: '',
+                    AmountPaid: 0,
+                    ContributionDate: formattedDate,
+                }]
+            });
+
+            Swal.fire(
+                '¡Éxito!',
+                '¡La autoparte ha sido creada exitosamente.',
+                'success'
+            );
+
+        } catch (error) {
+            console.error('Error creating a order:', error);
+
+            Swal.fire(
+                'Error',
+                'Hubo un problema al crear la autoparte.',
+                'error'
+            );
+        }
+    };
+
+    const handleDetailChange = (index, field, value) => {
+        const updatedDetails = newOrder.OrderDetails.map((detail, i) =>
+            i === index ? { ...detail, [field]: value } : detail
+        );
+        setNewOrder({ ...newOrder, OrderDetails: updatedDetails });
+    };
+    
+    const handleContributionChange = (index, field, value) => {
+        const updatedContributions = newOrder.Contributions.map((contribution, i) =>
+            i === index ? { ...contribution, [field]: value } : contribution
+        );
+        setNewOrder({ ...newOrder, Contributions: updatedContributions });
+    };
 
     const addOrderDetail = () => {
         setNewOrder({
@@ -66,6 +163,10 @@ const Orders = ({ customerId }) => {
         setNewOrder({ ...newOrder, Contributions: updatedContributions });
     };
 
+    const handleGoBack = () => {
+        history.goBack();
+    };
+
     return (
         <Container fluid>
             <Row>
@@ -78,44 +179,53 @@ const Orders = ({ customerId }) => {
                             <Form.Label><b>Fecha del Pedido</b></Form.Label>
                             <Form.Control
                                 type="date"
-                                name="OrderDate"
                                 value={newOrder.OrderDate}
+                                onChange={(e) => setNewOrder({
+                                    ...newOrder, OrderDate: e.target.value
+                                })}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label><b>Estado de Pago</b></Form.Label>
                             <Form.Control
                                 type="text"
-                                name="PaymentStatus"
+                                placeholder='Ej: (Pendiente, Pagado)...'
                                 value={newOrder.PaymentStatus}
+                                onChange={(e) => setNewOrder({ ...newOrder, PaymentStatus: e.target.value})}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label><b>Dirección de Envío</b></Form.Label>
                             <Form.Control
                                 type="text"
-                                name="ShippingAddress"
+                                placeholder='Ej: (Cra. 19 Este #32-17)'
                                 value={newOrder.ShippingAddress}
+                                onChange={(e) => setNewOrder({ ...newOrder, ShippingAddress: e.target.value})}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label><b>Estado de Envío</b></Form.Label>
                             <Form.Control
                                 type="text"
-                                name="ShippingStatus"
+                                placeholder='Ej: (Entregado, En camino, En fabrica)'
                                 value={newOrder.ShippingStatus}
+                                onChange={(e) => setNewOrder({ ...newOrder, ShippingStatus: e.target.value})}
                             />
                         </Form.Group>
+
                         <Form.Group className="mb-3">
                             <Form.Label><b>Observación</b></Form.Label>
                             <Form.Control
                                 type="text"
-                                name="Observation"
+                                placeholder='Agregue una observación si lo desea...'
                                 value={newOrder.Observation}
+                                onChange={(e) => setNewOrder({ ...newOrder, Observation: e.target.value})}
                             />
                         </Form.Group>
 
-                        
                         <h4>Detalles del Pedido</h4>
                         <hr/>
                         {newOrder.OrderDetails.map((detail, index) => (
@@ -124,10 +234,16 @@ const Orders = ({ customerId }) => {
                                     <Form.Group>
                                         <Form.Label><b>Autoparte</b></Form.Label>
                                         <Form.Control
-                                            type="text"
-                                            name="AutopartId"
+                                            as="select"
                                             value={detail.AutopartId}
-                                        />
+                                            onChange={(e) => handleDetailChange(index, 'AutopartId', e.target.value)}
+                                        >
+                                            <option value="">- Seleccione -</option>
+
+                                            {autoparts.map((autopart) => (
+                                                <option key={autopart.autopartID} value={autopart.autopartID}>{autopart.name}</option>
+                                            ))}
+                                        </Form.Control>
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -135,8 +251,8 @@ const Orders = ({ customerId }) => {
                                         <Form.Label><b>Cantidad</b></Form.Label>
                                         <Form.Control
                                             type="number"
-                                            name="Quantity"
                                             value={detail.Quantity}
+                                            onChange={(e) => handleDetailChange(index, 'Quantity', e.target.value)}
                                         />
                                     </Form.Group>
                                 </Col>
@@ -152,7 +268,7 @@ const Orders = ({ customerId }) => {
                         </Button>
 
                         {/* Contribuciones */}
-                        <h4>Contribuciones</h4>
+                        <h4>Contribuciones <i>(Opcional)</i></h4>
                         <hr/>
                         {newOrder.Contributions.map((contribution, index) => (
                             <Row key={index} className="mb-3">
@@ -160,10 +276,16 @@ const Orders = ({ customerId }) => {
                                     <Form.Group>
                                         <Form.Label><b>Método de Pago</b></Form.Label>
                                         <Form.Control
-                                            type="text"
-                                            name="PaymentMethodId"
+                                            as="select"
                                             value={contribution.PaymentMethodId}
-                                        />
+                                            onChange={(e) => handleContributionChange(index, 'PaymentMethodId', e.target.value)}
+                                        >
+                                            <option value="">-  Selecccione -</option>
+
+                                            {paymentMethods.map((paymentMethod) => (
+                                                <option key={paymentMethod.paymentMethodID} value={paymentMethod.paymentMethodID}>{paymentMethod.paymentMethodName}</option>
+                                            ))}
+                                        </Form.Control>
                                     </Form.Group>
                                 </Col>
                                 <Col>
@@ -171,8 +293,18 @@ const Orders = ({ customerId }) => {
                                         <Form.Label><b>Monto Aportado</b></Form.Label>
                                         <Form.Control
                                             type="number"
-                                            name="AmountPaid"
                                             value={contribution.AmountPaid}
+                                            onChange={(e) => handleContributionChange(index, 'AmountPaid', e.target.value)}
+                                        />
+                                    </Form.Group>
+                                </Col>
+                                <Col>
+                                    <Form.Group>
+                                        <Form.Label><b>Fecha de Contribución</b></Form.Label>
+                                        <Form.Control
+                                            type="date"
+                                            value={contribution.ContributionDate}
+                                            onChange={(e) => handleContributionChange(index, 'ContributionDate', e.target.value)}
                                         />
                                     </Form.Group>
                                 </Col>
@@ -186,14 +318,20 @@ const Orders = ({ customerId }) => {
                         <Button variant="primary" onClick={addContribution} className="mb-3">
                             <FontAwesomeIcon icon={faPlus} /> Agregar Contribución
                         </Button>
-
-                        <Button type="submit" variant="success">Guardar Pedido</Button>
+                        <br/>
+                        <Button variant="success" onClick={handleCreateOrder}>
+                            Guardar Pedido
+                        </Button>
                     </Form>
                 </Col>
 
                 <Col md={8}>
                     {/* Tabla para mostrar los pedidos existentes */}
                     <h4>Tabla de Registros</h4>
+                    <Button variant="danger" onClick={handleGoBack}>
+                        Volver
+                    </Button>
+                    <hr/>
                     <Table striped bordered hover>
                         <thead>
                             <tr>
@@ -208,13 +346,13 @@ const Orders = ({ customerId }) => {
                         </thead>
                         <tbody>
                             {orders.map((order) => (
-                                <tr key={order.OrderID}>
-                                    <td>{new Date(order.OrderDate).toLocaleDateString()}</td>
-                                    <td>{order.Total}</td>
-                                    <td>{order.PaymentStatus}</td>
-                                    <td>{order.ShippingAddress}</td>
-                                    <td>{order.ShippingStatus}</td>
-                                    <td>{order.Observation}</td>
+                                <tr key={order.orderID}>
+                                    <td>{order.orderDate}</td>
+                                    <td>{order.total}</td>
+                                    <td>{order.paymentStatus}</td>
+                                    <td>{order.shippingAddress}</td>
+                                    <td>{order.shippingStatus}</td>
+                                    <td>{order.observation}</td>
                                     <td>
                                         <Button variant="info" className="me-2">
                                             <FontAwesomeIcon icon={faEye} />

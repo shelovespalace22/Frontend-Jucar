@@ -2,39 +2,39 @@
 /* Estilos para las tablas */
 .table {
     border: 1px solid#d62121;; /* Borde rojo */
-  }
-  
-  .table th, .table td {
-    border: 1px solid #d62121; /* Borde rojo */
-  }
-  
-  /* Estilos para los botones */
-  .autoparts-container Button {
-    margin-right: 10px; /* Margen derecho para separar los botones */
-  }
-  
-  .modal-content {
-    background-color: #d62121; /* Fondo rojo */
-    color: white; /* Texto blanco para mejor contraste */
-  }
-  
-  /* Estilos para los botones dentro del modal */
-  .modal-content Button {
-    margin-right: 10px; /* Margen derecho para separar los botones */
-  }
-  
-  /* Estilos para separar los textos de los cuadros de texto dentro del modal */
-  .modal-content .form-group label {
-    margin-bottom: 5px; /* Margen inferior para separar los textos */
-  }
+}
 
-  .action-button {
-    margin-right: 10px; /* Margen derecho para separar los botones */
-    margin-bottom: 10px; /* Margen inferior para separar los botones */
-  }
-  
-  /* Animación hover para los botones de acción */
-  .action-button:hover {
-    background-color: #2bdb43; /* Cambio de color al pasar el mouse sobre el botón */
-  }
-  
+.table th, .table td {
+  border: 1px solid #d62121; /* Borde rojo */
+}
+
+/* Estilos para los botones */
+.autoparts-container Button {
+  margin-right: 10px; /* Margen derecho para separar los botones */
+}
+
+.modal-content {
+  background-color: #d62121; /* Fondo rojo */
+  color: white; /* Texto blanco para mejor contraste */
+}
+
+/* Estilos para los botones dentro del modal */
+.modal-content Button {
+  margin-right: 10px; /* Margen derecho para separar los botones */
+}
+
+/* Estilos para separar los textos de los cuadros de texto dentro del modal */
+.modal-content .form-group label {
+  margin-bottom: 5px; /* Margen inferior para separar los textos */
+}
+
+.action-button {
+  margin-right: 10px; /* Margen derecho para separar los botones */
+  margin-bottom: 10px; /* Margen inferior para separar los botones */
+}
+
+/* Animación hover para los botones de acción */
+.action-button:hover {
+  background-color: #007b00; /* Cambio de color al pasar el mouse sobre el botón */
+  border-color: #007b00;
+}

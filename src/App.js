@@ -3,7 +3,7 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Routes from './Routes';
 import { Container, Row, Col } from 'react-bootstrap';
 import MenuNavegacion from './components/shared/MenuNavegacion';
-import { faHome, faBox, faTag, faTruck, faCircleUser, faRightFromBracket } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBox, faTag, faTruck, faCircleUser, faRightFromBracket, faRightToBracket } from '@fortawesome/free-solid-svg-icons';
 import { NavLink } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import Logout from './components/Auth/LogOut';
@@ -24,7 +24,7 @@ function App() {
             {/* Botones de Registro y Acceso */}
           
             <NavLink to="/inicio-sesion" className='menu-link' activeClassName='active'>
-              <FontAwesomeIcon icon={faCircleUser} /> <span className='menu-text'>Inicio Sesión</span>
+              <FontAwesomeIcon icon={faRightToBracket} /> <span className='menu-text'>Inicio Sesión</span>
             </NavLink>
 
             <Logout className='menu-link'/>

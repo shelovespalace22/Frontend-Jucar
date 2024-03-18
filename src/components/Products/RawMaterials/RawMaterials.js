@@ -78,48 +78,47 @@ const RawMaterials = () => {
             'error'
           );
         }
-      };
+    };
       
-      const handelUpdateRawMaterial = async () => {
-        try {
-          await axios.put(
-            `https://localhost:7028/api/rawMaterials/${selectedRawMaterialId}`,
-            newRawMaterial
-          );
-      
-          const response = await axios.get('https://localhost:7028/api/rawMaterials');
-          const updatedRawMaterials = response.data;
-      
-          setRawMaterials(updatedRawMaterials);
-          setNewRawMaterial({
-            Name: '',
-            Stock: {
-              QuantityAvailable: 0,
-              InitialStock: 0,
-              ReorderPoint: 0,
-              MinimumInventory: 0,
-              MaximumInventory: 0,
-            }
-          });
-          handleCloseModal();
-      
-          Swal.fire(
-            '¡Éxito!',
-            '¡El material ha sido actualizado exitosamente.',
-            'success'
-          );
-        } catch (error) {
-          console.error('Error updating rawMaterial:', error);
-      
-          Swal.fire(
-            'Error',
-            'Hubo un problema al actualizar el material.',
-            'error'
-          );
+    const handelUpdateRawMaterial = async () => {
+    try {
+        await axios.put(
+        `https://localhost:7028/api/rawMaterials/${selectedRawMaterialId}`,
+        newRawMaterial
+        );
+    
+        const response = await axios.get('https://localhost:7028/api/rawMaterials');
+        const updatedRawMaterials = response.data;
+    
+        setRawMaterials(updatedRawMaterials);
+        setNewRawMaterial({
+        Name: '',
+        Stock: {
+            QuantityAvailable: 0,
+            InitialStock: 0,
+            ReorderPoint: 0,
+            MinimumInventory: 0,
+            MaximumInventory: 0,
         }
-      };
+        });
+        handleCloseModal();
+    
+        Swal.fire(
+        '¡Éxito!',
+        '¡El material ha sido actualizado exitosamente.',
+        'success'
+        );
+    } catch (error) {
+        console.error('Error updating rawMaterial:', error);
+    
+        Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar el material.',
+        'error'
+        );
+    }
+    };
       
-
     const handleDeleteRawMaterial = async (rawMaterialId) => {
         
         Swal.fire({
@@ -157,9 +156,8 @@ const RawMaterials = () => {
             }
           }
         });
-      };
+    };
       
-
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

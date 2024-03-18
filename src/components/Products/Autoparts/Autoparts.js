@@ -59,7 +59,6 @@ const Autoparts = ({ subcategoryId }) => {
     fetchRawMaterials();
   }, []);
   
-
   const handleCreateAutopart = async () => {
     try {
       console.log("Creating autopart with data: ", newAutopart);
@@ -102,7 +101,6 @@ const Autoparts = ({ subcategoryId }) => {
     }
   };
   
-
   const handleUpdateAutopart = async () => {
     try {
       await axios.put(
@@ -143,7 +141,6 @@ const Autoparts = ({ subcategoryId }) => {
     }
   };
   
-
   const handleDeleteAutopart = async (autopartId) => {
     
     Swal.fire({
@@ -184,7 +181,6 @@ const Autoparts = ({ subcategoryId }) => {
       }
     });
   };
-
 
   const handleShowCreateModal = () => {
     setModalAction('create');

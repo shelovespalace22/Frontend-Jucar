@@ -14,5 +14,22 @@
 .custom-card-link {
     text-decoration: none; /* Quita la decoración de los enlaces */
 }
+/* Estilos para el componente de inicio del menú */
 
+.inicio-menu-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .carousel-container {
+    width: 50%; /* Ajusta el ancho del carrusel según sea necesario */
+  }
+  
+  .texto-container {
+    width: 45%; /* Ajusta el ancho del contenedor de texto según sea necesario */
+  }
+  
+  /* Añade estilos adicionales según lo necesites */
+  
 

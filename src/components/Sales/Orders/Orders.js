@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card, Table, Modal, Pagination, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash, faEye, faMinus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faTrash, faEye, faMinus, faL } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
@@ -29,6 +29,8 @@ const Orders = ({ customerId }) => {
     });
     const [autoparts, setAutoparts] = useState([]);
     const [paymentMethods, setPaymentMethods] = useState([]);
+    const [showModal, setShowModal] = useState(false);
+    const [modalAction, setModalAction] = useState('edit');
     const [selectedOrderId, setSelectedOrderId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
@@ -81,6 +83,28 @@ const Orders = ({ customerId }) => {
         fetchPaymentMethods();
     }, []);
 
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setNewOrder({
+            OrderDate: formattedDate,
+            PaymentStatus: '',
+            ShippingAddress: '',
+            ShippingStatus: '',
+            Observation: '',
+            OrderDetails: [{
+                AutopartId: '',
+                Quantity: 0,
+            }],
+            Contributions: [{
+                PaymentMethodId: '',
+                AmountPaid: 0,
+                ContributionDate: formattedDate,
+            }]
+        });
+
+        setSelectedOrderId('');
+    };
+
     const handleCreateOrder = async () => {
         try {
             console.log('Creating order with the next data:', newOrder);
@@ -123,6 +147,164 @@ const Orders = ({ customerId }) => {
         }
     };
 
+    const handleShowEditModal = (orderId) => {
+        setModalAction('edit');
+        setSelectedOrderId(orderId);
+
+        const selectedOrder = orders.filter((order) => order.orderID === orderId);
+
+        if(selectedOrder.length > 0) {
+            const order = selectedOrder[0];
+
+            const orderDetails = order.orderDetails.map(detail => ({
+                AutopartId: detail.autopartId || '',
+                Quantity: detail.quantity || 0,
+            }));
+
+            const contributions = order.contributions.map(contribution => ({
+                PaymentMethodId: contribution.paymentMethodId || '',
+                AmountPaid: contribution.amountPaid || 0,
+                ContributionDate: contribution.contributionDate || formattedDate,
+            }));
+
+            console.log(order);
+            console.log(orderDetails);
+            console.log(contributions);
+
+            setNewOrder({
+                OrderDate: order.orderDate || formattedDate,
+                PaymentStatus: order.paymentStatus || '',
+                ShippingAddress: order.shippingAddress || '',
+                ShippingStatus: order.shippingStatus || '',
+                Observation: order.observation || '',
+                OrderDetails: orderDetails,
+                Contributions: contributions,
+            });
+        }
+
+        setShowModal(true);
+    };
+
+    const handleUpdateOrder = async () => {
+        try {
+            await axios.put(`https://localhost:7028/api/customers/${customerId}/orders/${selectedOrderId}`, newOrder);
+
+            const response = await axios.get(`https://localhost:7028/api/customers/${customerId}/orders`);
+
+            const updatedOrders = response.data;
+
+            setOrders(updatedOrders);
+
+            setNewOrder({
+                OrderDate: formattedDate,
+                PaymentStatus: '',
+                ShippingAddress: '',
+                ShippingStatus: '',
+                Observation: '',
+                OrderDetails: [{
+                    AutopartId: '',
+                    Quantity: 0,
+                }],
+                Contributions: [{
+                    PaymentMethodId: '',
+                    AmountPaid: 0,
+                    ContributionDate: formattedDate,
+                }]
+            });
+
+            handleCloseModal();
+
+            Swal.fire(
+                '¡Éxito!',
+                '¡El pedido ha sido actualizado exitosamente.',
+                'success'
+            );
+
+        } catch (error) {
+            console.error('Error updating order:', error);
+
+            Swal.fire(
+                'Error',
+                'Hubo un problema al actualizar el pedido.',
+                'error'
+            );
+        }
+    };
+
+    const handleShowDetailModal = (orderId) => {
+        setModalAction('detail');
+        setSelectedOrderId(orderId);
+
+        const selectedOrder = orders.filter((order) => order.orderID === orderId);
+
+        if(selectedOrder.length > 0) {
+            const order = selectedOrder[0];
+
+            const orderDetails = order.orderDetails.map(detail => ({
+                AutopartId: detail.autopartId || '',
+                Quantity: detail.quantity || 0,
+            }));
+
+            const contributions = order.contributions.map(contribution => ({
+                PaymentMethodId: contribution.paymentMethodId || '',
+                AmountPaid: contribution.amountPaid || 0,
+                ContributionDate: contribution.contributionDate || formattedDate,
+            }));
+
+            console.log(order);
+            console.log(orderDetails);
+            console.log(contributions);
+
+            setNewOrder({
+                OrderDate: order.orderDate || formattedDate,
+                PaymentStatus: order.paymentStatus || '',
+                ShippingAddress: order.shippingAddress || '',
+                ShippingStatus: order.shippingStatus || '',
+                Observation: order.observation || '',
+                OrderDetails: orderDetails,
+                Contributions: contributions,
+            });
+        }
+
+        setShowModal(true);
+    };
+
+    const handleDeleteOrder = (orderId) => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¡No podrás revertir esto!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+          }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`https://localhost:7028/api/customers/${customerId}/orders/${orderId}`);
+
+                    const updatedOrders = orders.filter((order) => order.orderID !== orderId);
+
+                    setOrders(updatedOrders);
+
+                    Swal.fire(
+                        '¡Eliminado!',
+                        '¡El pedido ha sido eliminada.',
+                        'success'
+                    );
+                } catch (error) {
+                    console.error('Error deleting order:', error);
+
+                    Swal.fire(
+                        'Error',
+                        'Hubo un problema al eliminar el pedido.',
+                        'error'
+                    );
+                }
+            }
+          })
+    };
+
     const handleDetailChange = (index, field, value) => {
         const updatedDetails = newOrder.OrderDetails.map((detail, i) =>
             i === index ? { ...detail, [field]: value } : detail
@@ -162,6 +344,8 @@ const Orders = ({ customerId }) => {
         updatedContributions.splice(index, 1);
         setNewOrder({ ...newOrder, Contributions: updatedContributions });
     };
+
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const handleGoBack = () => {
         history.goBack();
@@ -345,7 +529,7 @@ const Orders = ({ customerId }) => {
                             </tr>
                         </thead>
                         <tbody>
-                            {orders.map((order) => (
+                            {currentOrders.map((order) => (
                                 <tr key={order.orderID}>
                                     <td>{order.orderDate}</td>
                                     <td>{order.total}</td>
@@ -354,13 +538,13 @@ const Orders = ({ customerId }) => {
                                     <td>{order.shippingStatus}</td>
                                     <td>{order.observation}</td>
                                     <td>
-                                        <Button variant="info" className="me-2">
+                                        <Button variant="info" onClick={() => handleShowDetailModal(order.orderID)} className="me-2">
                                             <FontAwesomeIcon icon={faEye} />
                                         </Button>
-                                        <Button variant="warning" className="me-2">
+                                        <Button variant="warning" onClick={() => handleShowEditModal(order.orderID)} className="me-2">
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Button>
-                                        <Button variant="danger">
+                                        <Button variant="danger" onClick={() => handleDeleteOrder(order.orderID)}>
                                             <FontAwesomeIcon icon={faTrash} />
                                         </Button>
                                     </td>
@@ -368,6 +552,113 @@ const Orders = ({ customerId }) => {
                             ))}
                         </tbody>
                     </Table>
+
+                    <Pagination>
+                        {Array.from({ length: Math.ceil(orders.length / itemsPerPage) }, (_, index) => (
+                        <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
+                            {index + 1}
+                        </Pagination.Item>
+                        ))}
+                    </Pagination>
+
+                    <Modal show={showModal} onHide={handleCloseModal}>
+                        <Modal.Header closeButton>
+                            <Modal.Title>
+                                {modalAction === 'edit'
+                                ? 'Actualizar Pedido'
+                                : 'Detalles del Pedido'}
+                            </Modal.Title>
+                        </Modal.Header>
+
+                        <Modal.Body>
+                            {modalAction !== 'detail' && (
+                                <Form>
+                                    
+                                    <h4>Datos Generales</h4>
+                                    <hr/>
+                                    <Form.Group className="mb-3">
+                                        <Form.Label><b>Fecha del Pedido</b></Form.Label>
+                                        <Form.Control
+                                            type="date"
+                                            value={newOrder.OrderDate}
+                                            onChange={(e) => setNewOrder({
+                                                ...newOrder, OrderDate: e.target.value
+                                            })}
+                                        />
+                                    </Form.Group>
+            
+                                    <Form.Group className="mb-3">
+                                        <Form.Label><b>Estado de Pago</b></Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder='Ej: (Pendiente, Pagado)...'
+                                            value={newOrder.PaymentStatus}
+                                            onChange={(e) => setNewOrder({ ...newOrder, PaymentStatus: e.target.value})}
+                                        />
+                                    </Form.Group>
+            
+                                    <Form.Group className="mb-3">
+                                        <Form.Label><b>Dirección de Envío</b></Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder='Ej: (Cra. 19 Este #32-17)'
+                                            value={newOrder.ShippingAddress}
+                                            onChange={(e) => setNewOrder({ ...newOrder, ShippingAddress: e.target.value})}
+                                        />
+                                    </Form.Group>
+            
+                                    <Form.Group className="mb-3">
+                                        <Form.Label><b>Estado de Envío</b></Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder='Ej: (Entregado, En camino, En fabrica)'
+                                            value={newOrder.ShippingStatus}
+                                            onChange={(e) => setNewOrder({ ...newOrder, ShippingStatus: e.target.value})}
+                                        />
+                                    </Form.Group>
+            
+                                    <Form.Group className="mb-3">
+                                        <Form.Label><b>Observación</b></Form.Label>
+                                        <Form.Control
+                                            type="text"
+                                            placeholder='Agregue una observación si lo desea...'
+                                            value={newOrder.Observation}
+                                            onChange={(e) => setNewOrder({ ...newOrder, Observation: e.target.value})}
+                                        />
+                                    </Form.Group>
+                                    <br/>
+                                </Form>
+                            )}
+                            {modalAction === 'detail' && (
+                                <div>
+                                    {selectedOrderId && (
+                                        <div>
+                                            <p><b>ID:</b> {selectedOrderId}</p>
+                                            <p><b>Fecha del Pedido:</b> {newOrder.OrderDate}</p>
+                                            <p><b>Estado de Pago:</b> {newOrder.PaymentStatus}</p>
+                                            <p><b>Dirección de Envío:</b> {newOrder.ShippingAddress}</p>
+                                            <p><b>Estado de Envío:</b> {newOrder.ShippingStatus}</p>
+                                            <p><b>Observaciones:</b> {newOrder.Observation}</p>
+                                        </div>
+                                    )}
+                                </div>
+                            )}
+                        </Modal.Body>
+
+                        <Modal.Footer>
+                            <Button variant='secondary' onClick={handleCloseModal}>
+                                Cancelar
+                            </Button>
+                            {modalAction !== 'detail' && (
+                                <Button
+                                    variant='primary'
+                                    onClick={handleUpdateOrder}
+                                >
+                                    Actualizar
+                                </Button>
+                            )}
+                        </Modal.Footer>
+                    </Modal>
                 </Col>
                 
             </Row>

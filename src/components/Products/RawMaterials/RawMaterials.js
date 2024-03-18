@@ -78,7 +78,7 @@ const RawMaterials = () => {
             'error'
           );
         }
-      };
+    };
       
     const handelUpdateRawMaterial = async () => {
     try {
@@ -119,7 +119,6 @@ const RawMaterials = () => {
     }
     };
       
-
     const handleDeleteRawMaterial = async (rawMaterialId) => {
         
         Swal.fire({
@@ -159,7 +158,6 @@ const RawMaterials = () => {
         });
     };
       
-
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

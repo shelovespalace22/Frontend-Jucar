@@ -271,10 +271,10 @@ const CustomerAddresses = ({customerId}) => {
             <h2>Direcciones del Cliente</h2>
             <br/>
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Dirección
             </Button>
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
 
@@ -295,15 +295,15 @@ const CustomerAddresses = ({customerId}) => {
                             <td>{addressCustomer.addressType}</td>
                             <td>{addressCustomer.neighborhoodName}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(addressCustomer.customerAddressID)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(addressCustomer.customerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon ={faEdit}/> Actualizar    
                                 </Button>
 
-                                <Button variant = "danger" onClick={()=>handleDeleteAddressCustomer(addressCustomer.customerAddressID)}>
+                                <Button variant = "danger" onClick={()=>handleDeleteAddressCustomer(addressCustomer.customerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash}/> Eliminar
                                 </Button>
 
-                                <Button variant='primary' onClick={()=> handleShowDetailModal(addressCustomer.customerAddressID)}>
+                                <Button variant='primary' onClick={()=> handleShowDetailModal(addressCustomer.customerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver detalle 
                                 </Button>
                             </td>     

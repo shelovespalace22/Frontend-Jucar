@@ -231,11 +231,11 @@ const RawMaterials = () => {
 
             <br/>
 
-            <Button variant='primary' onClick={handleShowCreateModal}>
+            <Button variant='primary' onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Materia Prima
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
 
@@ -255,20 +255,20 @@ const RawMaterials = () => {
                         <tr key={rawMaterial.rawMaterialId}>
                             <td>{rawMaterial.name}</td>
                             <td>
-                                <Button variant='info' onClick={() => handleShowEditModal(rawMaterial.rawMaterialId)}>
+                                <Button variant='info' onClick={() => handleShowEditModal(rawMaterial.rawMaterialId)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEdit} /> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={() => handleDeleteRawMaterial(rawMaterial.rawMaterialId)}>
+                                <Button variant='danger' onClick={() => handleDeleteRawMaterial(rawMaterial.rawMaterialId)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash} /> Eliminar
                                 </Button>
-                                <Button variant='primary' onClick={() => handleShowDetailModal(rawMaterial.rawMaterialId)}>
+                                <Button variant='primary' onClick={() => handleShowDetailModal(rawMaterial.rawMaterialId)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye} /> Ver Detalle
                                 </Button>
 
-                                <Button variant='secondary' onClick={() => handleShowMovements(rawMaterial.rawMaterialId)}>
+                                <Button variant='secondary' onClick={() => handleShowMovements(rawMaterial.rawMaterialId)} style={{ marginRight: '10px' }}>
                                     Ver Movimientos
                                 </Button>
-                                <Button variant='secondary' onClick={() => handleShowStocks(rawMaterial.rawMaterialId)}>
+                                <Button variant='secondary' onClick={() => handleShowStocks(rawMaterial.rawMaterialId)} style={{ marginRight: '10px' }}>
                                     Ver Stocks
                                 </Button>
                             </td>

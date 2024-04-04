@@ -32,9 +32,7 @@ const Losses = ({ autopartId }) => {
         const fetchLosses = async () => {
             try {
                 const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
-
                 setLosses(response.data);
-
             } catch (error) {
                 console.error('Error fetching losses:', error);
             }
@@ -46,112 +44,93 @@ const Losses = ({ autopartId }) => {
 
     const handleCreateLoss = async () => {
         try {
-          const response = await axios.post(`https://localhost:7028/api/autoparts/${autopartId}/losses`, newLoss);
-      
-          setLosses([response.data, ...losses]);
-          setNewLoss({
-            AmountLoss: 0,
-            Responsible: '',
-            Reason: '',
-            LossDate: formattedDate,
-          });
-          handleCloseModal();
-      
-          
-          Swal.fire(
-            '¡Éxito!',
-            '¡La pérdida ha sido registrada exitosamente.',
-            'success'
-          );
-        } catch (error) {
-          console.error('Error creating loss:', error);
-      
-         
-          Swal.fire(
-            'Error',
-            'Hubo un problema al registrar la pérdida.',
-            'error'
-          );
-        }
-      };
-      
-
-      const handleUpdateLoss = async () => {
-        try {
-          await axios.put(
-            `https://localhost:7028/api/autoparts/${autopartId}/losses/${selectedLossId}`,
-            newLoss
-          );
-      
-          const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
-          const updatedLosses = response.data;
-      
-          setLosses(updatedLosses);
-          setNewLoss({
-            AmountLoss: 0,
-            Responsible: '',
-            Reason: '',
-            LossDate: formattedDate,
-          });
-          handleCloseModal();
-      
-          
-          Swal.fire(
-            '¡Éxito!',
-            '¡La pérdida ha sido actualizada exitosamente.',
-            'success'
-          );
-        } catch (error) {
-          console.error('Error updating loss:', error);
-      
-          
-          Swal.fire(
-            'Error',
-            'Hubo un problema al actualizar la pérdida.',
-            'error'
-          );
-        }
-      };
-      
-    const handleDeleteLoss = async (lossId) => {
-        
-        Swal.fire({
-          title: '¿Estás seguro?',
-          text: '¡No podrás revertir esto!',
-          icon: 'warning',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Sí, eliminarlo!'
-        }).then(async (result) => {
-
-          if (result.isConfirmed) {
-            try {
-             
-              await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
-
-              const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
-
-              setLosses(updatedLosses);
-              
-              Swal.fire(
-                '¡Eliminado!',
-                '¡Tu pérdida ha sido eliminada.',
+            const response = await axios.post(`https://localhost:7028/api/autoparts/${autopartId}/losses`, newLoss);
+            setLosses([response.data, ...losses]);
+            setNewLoss({
+                AmountLoss: 0,
+                Responsible: '',
+                Reason: '',
+                LossDate: formattedDate,
+            });
+            handleCloseModal();
+            Swal.fire(
+                '¡Éxito!',
+                '¡La pérdida ha sido registrada exitosamente.',
                 'success'
-              );
-            } catch (error) {
-              console.error('Error deleting loss:', error);
-             
-              Swal.fire(
+            );
+        } catch (error) {
+            console.error('Error creating loss:', error);
+            Swal.fire(
                 'Error',
-                'Hubo un problema al eliminar la pérdida.',
+                'Hubo un problema al registrar la pérdida.',
                 'error'
-              );
+            );
+        }
+    };
+
+    const handleUpdateLoss = async () => {
+        try {
+            await axios.put(
+                `https://localhost:7028/api/autoparts/${autopartId}/losses/${selectedLossId}`,
+                newLoss
+            );
+            const response = await axios.get(`https://localhost:7028/api/autoparts/${autopartId}/losses`);
+            const updatedLosses = response.data;
+            setLosses(updatedLosses);
+            setNewLoss({
+                AmountLoss: 0,
+                Responsible: '',
+                Reason: '',
+                LossDate: formattedDate,
+            });
+            handleCloseModal();
+            Swal.fire(
+                '¡Éxito!',
+                '¡La pérdida ha sido actualizada exitosamente.',
+                'success'
+            );
+        } catch (error) {
+            console.error('Error updating loss:', error);
+            Swal.fire(
+                'Error',
+                'Hubo un problema al actualizar la pérdida.',
+                'error'
+            );
+        }
+    };
+
+    const handleDeleteLoss = async (lossId) => {
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: '¡No podrás revertir esto!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                try {
+                    await axios.delete(`https://localhost:7028/api/autoparts/${autopartId}/losses/${lossId}`);
+                    const updatedLosses = losses.filter((loss) => loss.lossID !== lossId);
+                    setLosses(updatedLosses);
+                    Swal.fire(
+                        '¡Eliminado!',
+                        '¡Tu pérdida ha sido eliminada.',
+                        'success'
+                    );
+                } catch (error) {
+                    console.error('Error deleting loss:', error);
+                    Swal.fire(
+                        'Error',
+                        'Hubo un problema al eliminar la pérdida.',
+                        'error'
+                    );
+                }
             }
-          }
         });
-      };
-      
+    };
+
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);
@@ -160,58 +139,41 @@ const Losses = ({ autopartId }) => {
     const handleShowEditModal = (lossId) => {
         setModalAction('edit');
         setSelectedLossId(lossId);
-
         const selectedLoss = losses.find((loss) => loss.lossID === lossId);
-
-        if(selectedLoss){
-
+        if (selectedLoss){
             setNewLoss({
                 AmountLoss: selectedLoss.amountLoss || 0,
                 Responsible: selectedLoss.responsible || '',
                 Reason: selectedLoss.reason || '',
                 LossDate: selectedLoss.lossDate || formattedDate,
             });
-
         }
-
         setShowModal(true);
     };
 
     const handleShowDetailModal = (lossId) => {
-
-        console.log('Loss ID:', lossId);
-
         setModalAction('detail');
-
         setSelectedLossId(lossId);
-
         const selectedLoss = losses.find((loss) => loss.lossID === lossId);
-
         if (selectedLoss){
-
             setNewLoss({
                 AmountLoss: selectedLoss.amountLoss || 0,
                 Responsible: selectedLoss.responsible || '',
                 Reason: selectedLoss.reason || '',
                 LossDate: selectedLoss.lossDate || formattedDate,
             });
-
         }
-
         setShowModal(true);
     };
 
     const handleCloseModal= () => {
-        
         setShowModal(false);
-
         setNewLoss({
             AmountLoss: 0,
             Responsible: '',
             Reason: '',
             LossDate: formattedDate,
         });
-
         setSelectedLossId('');
     };
 
@@ -223,18 +185,19 @@ const Losses = ({ autopartId }) => {
 
     return (
         <div className="losses-container">
-
             <br />
             <h2>Modulo Pérdidas</h2>
             <br />
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
-                <FontAwesomeIcon icon={faPlus} /> Nueva Pérdida
-            </Button>
+            <div className="button-container">
+                <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
+                    <FontAwesomeIcon icon={faPlus} /> Nueva Pérdida
+                </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
-                Volver a Autopartes
-            </Button>
+                <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
+                    Volver a Autopartes
+                </Button>
+            </div>
 
             <hr />
 
@@ -250,30 +213,30 @@ const Losses = ({ autopartId }) => {
                 </thead>
 
                 <tbody>
-                    
-                {currentLosses.map((loss) => (
-                    <tr key={loss.lossID}>
-                        <td>{loss.amountLoss}</td>
-                        <td>{loss.responsible}</td>
-                        <td>{loss.reason}</td>
-                        <td>{loss.lossDate}</td>
-                        <td>
-                            <Button variant="info" onClick={() => handleShowEditModal(loss.lossID)}>
-                                <FontAwesomeIcon icon={faEdit} /> Actualizar
-                            </Button>
-                            <Button variant="danger" onClick={() => handleDeleteLoss(loss.lossID)}>
-                                <FontAwesomeIcon icon={faTrash} /> Eliminar
-                            </Button>
-                            <Button variant="primary" onClick={() => handleShowDetailModal(loss.lossID)}>
-                                <FontAwesomeIcon icon={faEye} /> Ver Detalle
-                            </Button>
-                        </td>
-                    </tr>
-                ))}
+                    {currentLosses.map((loss) => (
+                        <tr key={loss.lossID}>
+                            <td>{loss.amountLoss}</td>
+                            <td>{loss.responsible}</td>
+                            <td>{loss.reason}</td>
+                            <td>{loss.lossDate}</td>
+                            <td>
+                                <div className="button-container">
+                                    <Button variant="info" onClick={() => handleShowEditModal(loss.lossID)} style={{ marginRight: '10px' }}>
+                                        <FontAwesomeIcon icon={faEdit} /> Actualizar
+                                    </Button>
+                                    <Button variant="danger" onClick={() => handleDeleteLoss(loss.lossID)} style={{ marginRight: '10px' }}>
+                                        <FontAwesomeIcon icon={faTrash} /> Eliminar
+                                    </Button>
+                                    <Button variant="primary" onClick={() => handleShowDetailModal(loss.lossID)} style={{ marginRight: '10px' }}>
+                                        <FontAwesomeIcon icon={faEye} /> Ver Detalle
+                                    </Button>
+                                </div>
+                            </td>
+                        </tr>
+                    ))}
                 </tbody>
-
             </Table>
-            
+
             <Pagination>
                 {Array.from({ length: Math.ceil(losses.length / itemsPerPage) }, (_, index) => (
                     <Pagination.Item key={index + 1} active={index + 1 === currentPage} onClick={() => paginate(index + 1)}>
@@ -281,9 +244,8 @@ const Losses = ({ autopartId }) => {
                     </Pagination.Item>
                 ))}
             </Pagination>
-            
-            <Modal show={showModal} onHide={handleCloseModal}>
 
+            <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
                     <Modal.Title>
                         {modalAction === 'create'
@@ -297,34 +259,33 @@ const Losses = ({ autopartId }) => {
                 <Modal.Body>
                     {modalAction !== 'detail' && (
                         <Form>
-
                             <Form.Group controlId="formLossAmountLoss">
                                 <Form.Label><b>Cantidad Pérdida</b></Form.Label>
                                 <Form.Control
-                                type="text"
-                                placeholder="Ingrese la cantidad pérdida..."
-                                value={newLoss.AmountLoss}
-                                onChange={(e) => setNewLoss({ ...newLoss, AmountLoss: e.target.value })}
+                                    type="text"
+                                    placeholder="Ingrese la cantidad pérdida..."
+                                    value={newLoss.AmountLoss}
+                                    onChange={(e) => setNewLoss({ ...newLoss, AmountLoss: e.target.value })}
                                 />
                             </Form.Group>
 
                             <Form.Group controlId="formLossResponsible">
                                 <Form.Label><b>Responsable</b></Form.Label>
                                 <Form.Control
-                                type="text"
-                                placeholder="Ingrese el responsable..."
-                                value={newLoss.Responsible}
-                                onChange={(e) => setNewLoss({ ...newLoss, Responsible: e.target.value })}
+                                    type="text"
+                                    placeholder="Ingrese el responsable..."
+                                    value={newLoss.Responsible}
+                                    onChange={(e) => setNewLoss({ ...newLoss, Responsible: e.target.value })}
                                 />
                             </Form.Group>
 
                             <Form.Group controlId="formLossReason">
                                 <Form.Label><b>Razón</b></Form.Label>
                                 <Form.Control
-                                type="text"
-                                placeholder="Ingrese la razón..."
-                                value={newLoss.Reason}
-                                onChange={(e) => setNewLoss({ ...newLoss, Reason: e.target.value })}
+                                    type="text"
+                                    placeholder="Ingrese la razón..."
+                                    value={newLoss.Reason}
+                                    onChange={(e) => setNewLoss({ ...newLoss, Reason: e.target.value })}
                                 />
                             </Form.Group>
 
@@ -336,10 +297,9 @@ const Losses = ({ autopartId }) => {
                                     onChange={(e) => setNewLoss({ ...newLoss, LossDate: e.target.value })}
                                 />
                             </Form.Group>
-
                         </Form>
                     )}
-                    
+
                     {modalAction === 'detail' && (
                         <div>
                             {/* Muestra la información detallada de la pérdida */}
@@ -369,7 +329,6 @@ const Losses = ({ autopartId }) => {
                         </Button>
                     )}
                 </Modal.Footer>
-
             </Modal>
         </div>
     );

@@ -1,40 +1,44 @@
-
-/* Estilos para las tablas */
-.table {
-    border: 1px solid#d62121;; /* Borde rojo */
-}
-
-.table th, .table td {
-  border: 1px solid #d62121; /* Borde rojo */
-}
-
-/* Estilos para los botones */
-.autoparts-container Button {
-  margin-right: 10px; /* Margen derecho para separar los botones */
-}
-
-.modal-content {
-  background-color: #d62121; /* Fondo rojo */
-  color: white; /* Texto blanco para mejor contraste */
-}
-
-/* Estilos para los botones dentro del modal */
-.modal-content Button {
-  margin-right: 10px; /* Margen derecho para separar los botones */
-}
-
-/* Estilos para separar los textos de los cuadros de texto dentro del modal */
-.modal-content .form-group label {
-  margin-bottom: 5px; /* Margen inferior para separar los textos */
-}
+/* Agrega estos estilos en tu archivo Crud.css */
 
 .action-button {
-  margin-right: 10px; /* Margen derecho para separar los botones */
-  margin-bottom: 10px; /* Margen inferior para separar los botones */
+  margin-right: 10px; /* Espacio entre los botones de acción */
 }
 
-/* Animación hover para los botones de acción */
-.action-button:hover {
-  background-color: #007b00; /* Cambio de color al pasar el mouse sobre el botón */
-  border-color: #007b00;
+.crud-buttons {
+  margin-top: 10px; /* Espacio entre los botones "Nueva Categoría" y "Volver" */
 }
+
+/* Colores de los botones de acción */
+.action-button button {
+  margin-right: 5px; /* Espacio entre los botones de acción CRUD */
+}
+
+.action-button button.btn-primary {
+  background-color: #007bff; /* Color azul */
+  border-color: #007bff;
+}
+
+.action-button button.btn-primary:hover {
+  background-color: #0056b3; /* Color azul oscuro al pasar el mouse */
+  border-color: #0056b3;
+}
+
+.action-button button.btn-danger {
+  background-color: #dc3545; /* Color rojo */
+  border-color: #dc3545;
+}
+
+.action-button button.btn-danger:hover {
+  background-color: #c82333; /* Color rojo oscuro al pasar el mouse */
+  border-color: #c82333;
+}
+
+.button-container {
+  margin-bottom: 10px; /* Ajusta el margen inferior según necesites */
+}
+
+.button-container .btn {
+  margin-right: 10px; /* Espacio entre botones */
+}
+
+

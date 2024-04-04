@@ -205,11 +205,11 @@ const ProviderPhones = ({ providerId })  => {
             <h2>Teléfonos del Proveedor</h2>
             <br /> 
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nuevo Telefono
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
             <hr />
@@ -228,13 +228,13 @@ const ProviderPhones = ({ providerId })  => {
                             <td>{providerPhone.phoneType}</td>
                             <td>{providerPhone.phoneNumber}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(providerPhone.providerPhoneID)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(providerPhone.providerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faEdit}/> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={()=> handleDeleteProviderPhone(providerPhone.providerPhoneID)}>
+                                <Button variant='danger' onClick={()=> handleDeleteProviderPhone(providerPhone.providerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faTrash}/> Eliminar
                                 </Button>
-                                <Button variant='primary' onClick={()=> handleShowDetailModal(providerPhone.providerPhoneID)}>
+                                <Button variant='primary' onClick={()=> handleShowDetailModal(providerPhone.providerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalles
                                 </Button>
                                     

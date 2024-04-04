@@ -223,13 +223,16 @@ const Movements = ({ rawMaterialId }) => {
             <h2>Modulo Movimientos</h2>
             <br />
 
-            <Button variant='primary' onClick={handleShowCreateModal}>
-                <FontAwesomeIcon icon={faPlus} /> Nuevo Movimiento
-            </Button>
+            <div className="button-container">
+                <Button variant='primary' onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
+                    <FontAwesomeIcon icon={faPlus} /> Nuevo Movimiento
+                </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
-                Volver a Materiales
-            </Button>
+                <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
+                    Volver a Materiales
+                </Button>
+            </div>
+
             <hr />
 
             <Table striped bordered hover>
@@ -250,15 +253,15 @@ const Movements = ({ rawMaterialId }) => {
                             <td>{movement.movementType}</td>
                             <td>{movement.movementDate}</td>
                             <td>
-                                <Button variant='info' onClick={() => handleShowEditModal(movement.movementID)}>
+                                <Button variant='info' onClick={() => handleShowEditModal(movement.movementID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEdit} /> Actualizar
                                 </Button>
 
-                                <Button variant='danger' onClick={() => handleDeleteMovement(movement.movementID)}>
+                                <Button variant='danger' onClick={() => handleDeleteMovement(movement.movementID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash} /> Eliminar
                                 </Button>
 
-                                <Button variant='primary' onClick={() => handleShowDetailModal(movement.movementID)}>
+                                <Button variant='primary' onClick={() => handleShowDetailModal(movement.movementID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye} /> Ver Detalle
                                 </Button>
                             </td>
@@ -364,3 +367,4 @@ const Movements = ({ rawMaterialId }) => {
 };
 
 export default Movements;
+

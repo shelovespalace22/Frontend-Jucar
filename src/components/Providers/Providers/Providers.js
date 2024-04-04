@@ -279,11 +279,11 @@ const Providers = () => {
             <h2>Modulo Provedores</h2>
             <br/>
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nuevo Proveedor
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
 
@@ -309,19 +309,19 @@ const Providers = () => {
                             <td>{provider.emailAddress}</td>
                             <td>{provider.productType}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(provider.providerID)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faEdit}/> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={()=> handleDeleteProvider(provider.providerID)}>
+                                <Button variant='danger' onClick={()=> handleDeleteProvider(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faTrash}/> Eliminar 
                                 </Button>
-                                <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerID)}>
+                                <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalle
                                 </Button>
-                                <Button variant='success' onClick={() => handleShowPhones(provider.providerID)}>
+                                <Button variant='success' onClick={() => handleShowPhones(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faPhone} />
                                 </Button>
-                                <Button variant='danger' onClick={() => handleShowAddresses(provider.providerID)}>
+                                <Button variant='danger' onClick={() => handleShowAddresses(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faLocationDot} />
                                 </Button>
                             </td>

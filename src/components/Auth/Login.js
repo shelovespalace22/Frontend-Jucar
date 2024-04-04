@@ -71,7 +71,7 @@ const Login = () => {
               value={userData.UserName}
               onChange={handleInputChange}
               required
-              style={{ borderColor: 'rgba(255, 0, 0, 0.5)', backgroundColor: 'rgba(255, 0, 0, 0.1)' ,marginTop:20}}
+              style={{ borderColor: '#ccc', backgroundColor: '#fff', marginTop: 20 }}
             />
           </Form.Group>
 
@@ -83,12 +83,12 @@ const Login = () => {
               value={userData.Password}
               onChange={handleInputChange}
               required
-              style={{ borderColor: 'rgba(255, 0, 0, 0.5)', backgroundColor: 'rgba(255, 0, 0, 0.1)', marginTop:20 }}
+              style={{ borderColor: '#ccc', backgroundColor: '#fff', marginTop: 20 }}
             />
           </Form.Group>
 
           <Button variant="primary" type="submit" className="card-button">
-          <FontAwesomeIcon icon={faSignInAlt} className="card-icon" />
+            <FontAwesomeIcon icon={faSignInAlt} className="card-icon" />
             Acceder
           </Button>
 
@@ -107,7 +107,6 @@ const Login = () => {
             padding: 20px;
             margin-bottom: 20px;
             width: 50%;
-           
           }
 
           .card-button {
@@ -116,17 +115,17 @@ const Login = () => {
             background-color: #5eaf38
           }
 
-          .label-password{
+          .label-password {
             margin-top: 2%
           }
 
-          .mt-5 container-box{
-            display: flex; justify-content: center;
+          .mt-5.container-box {
+           
+            justify-content: center;
           }
 
-          .card-icon{
+          .card-icon {
             margin-right: 4%
-
           }
         `}
       </style>
@@ -135,4 +134,3 @@ const Login = () => {
 };
 
 export default Login;
-

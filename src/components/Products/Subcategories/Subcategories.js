@@ -177,13 +177,13 @@ const Subcategories = ({ categoryId }) => {
 
       <br/>
 
-      <Button variant="primary" onClick={handleShowCreateModal}>
+      <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Subcategoría
       </Button>
-
-      <Button variant="danger" onClick={handleGoBack}>
+      <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
         Volver
       </Button>
+
 
       <hr/>
 
@@ -199,15 +199,15 @@ const Subcategories = ({ categoryId }) => {
             <tr key={subcategory.subcategoryId}>
               <td>{subcategory.name}</td>
               <td>
-                <Button variant="info" onClick={() => handleShowEditModal(subcategory.subcategoryId)}>
-                  <FontAwesomeIcon icon={faEdit} /> Actualizar
-                </Button>
-                <Button variant="danger" onClick={() => handleDeleteSubcategory(subcategory.subcategoryId)}>
-                  <FontAwesomeIcon icon={faTrash} /> Eliminar
-                </Button>
-                <Button variant="success" onClick={() => handleShowAutoparts(subcategory.subcategoryId)}>
-                  <FontAwesomeIcon icon={faScrewdriverWrench} /> Ver Autopartes
-                </Button>
+              <Button variant="info" onClick={() => handleShowEditModal(subcategory.subcategoryId)} style={{ marginRight: '10px' }}>
+                <FontAwesomeIcon icon={faEdit} /> Actualizar
+              </Button>
+              <Button variant="danger" onClick={() => handleDeleteSubcategory(subcategory.subcategoryId)} style={{ marginRight: '10px' }}>
+                <FontAwesomeIcon icon={faTrash} /> Eliminar
+              </Button>
+              <Button variant="success" onClick={() => handleShowAutoparts(subcategory.subcategoryId)} style={{ marginRight: '10px' }}>
+                <FontAwesomeIcon icon={faScrewdriverWrench} /> Ver Autopartes
+              </Button>
               </td>
             </tr>
           ))}

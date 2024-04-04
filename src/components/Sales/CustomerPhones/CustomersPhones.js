@@ -213,11 +213,11 @@ const CustomersPhones = ( {customerId} )=>{
             <h2>Telefonos del Cliente</h2>
             <br/>
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nuevo Teléfono
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}> 
                 Volver
             </Button>
 
@@ -238,13 +238,13 @@ const CustomersPhones = ( {customerId} )=>{
                             <td>{customerPhone.phoneType}</td>
                             <td>{customerPhone.phoneNumber}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(customerPhone.customerPhoneID)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(customerPhone.customerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEdit}/> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={()=>handleDeleteCustomerPhone(customerPhone.customerPhoneID)}>
+                                <Button variant='danger' onClick={()=>handleDeleteCustomerPhone(customerPhone.customerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash}/> Eliminar
                                 </Button>
-                                <Button variant='primary' onClick={()=> handleShowDetailModal (customerPhone.customerPhoneID)}>
+                                <Button variant='primary' onClick={()=> handleShowDetailModal (customerPhone.customerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalles
                                 </Button>
                             </td>

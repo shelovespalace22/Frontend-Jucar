@@ -219,10 +219,10 @@ return(
         <br>
         <h2>Contribuciones</h2>
         </br>
-        <Button variant="primary" onClick={handleShowCreateModal}>
+        <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Contribucion
         </Button>
-        <Button variant="danger" onClick={handleGoBack}>
+        <Button variant="danger" onClick={handleGoBack}style={{ marginRight: '10px' }}>
             Volver
         </Button>
 
@@ -242,13 +242,13 @@ return(
                         <td>{contribution.amountPaid}</td>
                         <td>{contribution.contributionDate}</td>
                         <td>
-                        <Button variant="info" onClick={() => handleShowEditModal(contribution.contributionID)}>
+                        <Button variant="info" onClick={() => handleShowEditModal(contribution.contributionID)} style={{ marginRight: '10px' }}>
                         <FontAwesomeIcon icon={faEdit} /> Actualizar
                         </Button>
-                        <Button variant="danger" onClick={() => handleDeleteContribution(contribution.contributionID)}>
+                        <Button variant="danger" onClick={() => handleDeleteContribution(contribution.contributionID)} style={{ marginRight: '10px' }}>
                         <FontAwesomeIcon icon={faTrash} /> Eliminar
                         </Button>
-                        <Button variant="primary" onClick={() => handleShowDetailModal(contribution.contributionID)}>
+                        <Button variant="primary" onClick={() => handleShowDetailModal(contribution.contributionID)} style={{ marginRight: '10px' }}>
                         <FontAwesomeIcon icon={faEye} /> Ver Detalle
                         </Button>
                         </td>

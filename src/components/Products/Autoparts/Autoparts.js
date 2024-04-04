@@ -6,7 +6,7 @@ import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icon
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
 import Swal from 'sweetalert2';
-import '.././styles/Crud.css'
+
 
 
 const Autoparts = ({ subcategoryId }) => {
@@ -258,11 +258,11 @@ const Autoparts = ({ subcategoryId }) => {
       <h2>Modulo Autopartes</h2>
       <br />
 
-      <Button variant="primary" onClick={handleShowCreateModal}>
+      <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
       </Button>
       
-      <Button variant="danger" onClick={handleGoBack}>
+      <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
         Volver
       </Button>
 
@@ -286,18 +286,18 @@ const Autoparts = ({ subcategoryId }) => {
               <td>{autopart.inventory}</td>
               <td>{autopart.value}</td>
               <td>
-                <Button variant="info" onClick={() => handleShowEditModal(autopart.autopartID)}>
+                <Button variant="info" onClick={() => handleShowEditModal(autopart.autopartID)} style={{ marginRight: '10px' }}>
                   <FontAwesomeIcon icon={faEdit} /> Actualizar
                 </Button>
-                <Button variant="danger" onClick={() => handleDeleteAutopart(autopart.autopartID)}>
+                <Button variant="danger" onClick={() => handleDeleteAutopart(autopart.autopartID)} style={{ marginRight: '10px' }}> 
                   <FontAwesomeIcon icon={faTrash} /> Eliminar
                 </Button>
-                <Button variant="primary" onClick={() => handleShowDetailModal(autopart.autopartID)}>
+                <Button variant="primary" onClick={() => handleShowDetailModal(autopart.autopartID)} style={{ marginRight: '10px' }}>
                   <FontAwesomeIcon icon={faEye} /> Ver Detalle
                 </Button>
 
                 {/* Agrega el botón debajo de este comentario */}
-                <Button variant="secondary" onClick={() => handleShowLosses(autopart.autopartID)}>
+                <Button variant="secondary" onClick={() => handleShowLosses(autopart.autopartID)} style={{ marginRight: '10px' }}>
                   Ver Pérdidas
                 </Button>
               </td>

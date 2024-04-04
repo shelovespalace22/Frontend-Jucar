@@ -441,13 +441,13 @@ const Orders = ({ customerId }) => {
                                     </Form.Group>
                                 </Col>
                                 <Col md={2}>
-                                    <Button variant="danger" onClick={() => removeOrderDetail(index)}>
+                                    <Button variant="danger" onClick={() => removeOrderDetail(index)} style={{ marginRight: '10px' }}>
                                         <FontAwesomeIcon icon={faMinus} />
                                     </Button>
                                 </Col>
                             </Row>
                         ))}
-                        <Button variant="primary" onClick={addOrderDetail} className="mb-3">
+                        <Button variant="primary" onClick={addOrderDetail} style={{ marginRight: '10px' }}>
                             <FontAwesomeIcon icon={faPlus} /> Agregar Detalle
                         </Button>
 
@@ -538,13 +538,13 @@ const Orders = ({ customerId }) => {
                                     <td>{order.shippingStatus}</td>
                                     <td>{order.observation}</td>
                                     <td>
-                                        <Button variant="info" onClick={() => handleShowDetailModal(order.orderID)} className="me-2">
+                                        <Button variant="info" onClick={() => handleShowDetailModal(order.orderID)} style={{ marginRight: '10px' }}>
                                             <FontAwesomeIcon icon={faEye} />
                                         </Button>
-                                        <Button variant="warning" onClick={() => handleShowEditModal(order.orderID)} className="me-2">
+                                        <Button variant="warning" onClick={() => handleShowEditModal(order.orderID)} style={{ marginRight: '10px' }}>
                                             <FontAwesomeIcon icon={faEdit} />
                                         </Button>
-                                        <Button variant="danger" onClick={() => handleDeleteOrder(order.orderID)}>
+                                        <Button variant="danger" onClick={() => handleDeleteOrder(order.orderID)}style={{ marginRight: '10px' }}>
                                             <FontAwesomeIcon icon={faTrash} />
                                         </Button>
                                     </td>

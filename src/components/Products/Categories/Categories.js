@@ -1,6 +1,5 @@
-// Categories.js
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom/index';
 import { Table, Button, Form, Pagination, Modal } from 'react-bootstrap';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -141,16 +140,17 @@ const Categories = () => {
 
   return (
     <div className="categories-container">
-      <br/>
-      <h2>Modulo Categorías</h2>
       <br />
-      <Button variant="primary" onClick={() => setShowCreateModal(true)}>
-        <FontAwesomeIcon icon={faPlus} /> Nueva Categoría
-      </Button>
-      <Button variant="danger" onClick={handleGoBack}>
-        <FontAwesomeIcon icon={faArrowLeft} /> Volver
-      </Button>
-      <hr/>
+      <h2>Modulo Categorías</h2>
+      <div className="crud-buttons">
+        <Button variant="primary" onClick={() => setShowCreateModal(true)} style={{ marginRight: '10px' }}>
+          <FontAwesomeIcon icon={faPlus} /> Nueva Categoría
+        </Button>
+        <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}> 
+          <FontAwesomeIcon icon={faArrowLeft} /> Volver
+        </Button>
+      </div>
+      <hr />
       <Table striped bordered hover>
         <thead>
           <tr>
@@ -163,30 +163,29 @@ const Categories = () => {
             <tr key={category.categoryId}>
               <td>{category.name}</td>
               <td>
-                <Button
-                  variant="primary"
-                  onClick={() => {
-                    setUpdateCategoryId(category.categoryId);
-                    setShowUpdateModal(true);
-                  }}
-                  className="action-button"
-                >
-                  <FontAwesomeIcon icon={faEdit} /> Actualizar
-                </Button>{' '}
-                <Button
-                  variant="primary"
-                  onClick={() => handleDeleteCategory(category.categoryId)}
-                  className="action-button"
-                >
-                  <FontAwesomeIcon icon={faTrash} /> Eliminar
-                </Button>
-                <Button
-                  variant="primary"
-                  onClick={() => handleShowSubcategories(category.categoryId)}
-                  className="action-button"
-                >
-                  <FontAwesomeIcon icon={faList} /> Ver Subcategorías
-                </Button>
+                <div className="action-button">
+                  <Button
+                    variant="primary"
+                    onClick={() => {
+                      setUpdateCategoryId(category.categoryId);
+                      setShowUpdateModal(true);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faEdit} /> Actualizar
+                  </Button>
+                  <Button
+                    variant="danger"
+                    onClick={() => handleDeleteCategory(category.categoryId)}
+                  >
+                    <FontAwesomeIcon icon={faTrash} /> Eliminar
+                  </Button>
+                  <Button
+                    variant="info"
+                    onClick={() => handleShowSubcategories(category.categoryId)}
+                  >
+                    <FontAwesomeIcon icon={faList} /> Ver Subcategorías
+                  </Button>
+                </div>
               </td>
             </tr>
           ))}

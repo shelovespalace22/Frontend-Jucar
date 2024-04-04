@@ -274,11 +274,11 @@ const ProviderAddresses = ({ providerId }) => {
             <h2>Direcciones de Proveedor</h2>
             <br/> 
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Direccion
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
 
@@ -300,15 +300,15 @@ const ProviderAddresses = ({ providerId }) => {
                             <td>{providerAddress.addressType}</td>
                             <td>{providerAddress.neighborhoodName}</td>
                             <td>
-                                <Button variant='info' onClick={() => handleShowEditModal(providerAddress.providerAddressID)}>
+                                <Button variant='info' onClick={() => handleShowEditModal(providerAddress.providerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon ={faEdit}/> Actualizar    
                                 </Button>
 
-                                <Button variant = "danger" onClick={() => handleDeleteproviderAddress(providerAddress.providerAddressID)}>
+                                <Button variant = "danger" onClick={() => handleDeleteproviderAddress(providerAddress.providerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash}/> Eliminar
                                 </Button>
 
-                                <Button variant='primary' onClick={() => handleShowDetailModal(providerAddress.providerAddressID)}>
+                                <Button variant='primary' onClick={() => handleShowDetailModal(providerAddress.providerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalle 
                                 </Button>
                             </td>     

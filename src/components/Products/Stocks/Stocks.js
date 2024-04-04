@@ -129,10 +129,10 @@ const Stocks = ({ rawMaterialId }) => {
                                 <strong>Inventario Máximo</strong> {stock.maximumInventory}
                             </Card.Text>
                             <br />
-                            <Button variant="primary" onClick={() => handleShowEditModal(stock.stockID)}>
+                            <Button variant="primary" onClick={() => handleShowEditModal(stock.stockID)} style={{ marginRight: '10px' }}>
                                 Editar Stock
                             </Button>
-                            <Button variant="danger" onClick={handleGoBack}>
+                            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                                 Volver a Materiales
                             </Button>
                         </Card.Body>

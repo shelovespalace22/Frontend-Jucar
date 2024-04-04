@@ -27,7 +27,7 @@ import Movements from './components/Products/Movements/Movements';
 import Stocks from './components/Products/Stocks/Stocks';
 
 import Providers from './components/Providers/Providers/Providers';
-import ProviderAddresses from './components/Providers/ProviderAddresses/ProviderAddresses';
+import ProviderAddresses from './components/Providers/ProviderAddresses/ProviderAddresses'; 
 import ProviderPhones from './components/Providers/ProviderPhones/ProviderPhones';
 
 import Customers from './components/Sales/Customers/Customers';
@@ -121,7 +121,7 @@ const Routes = () => {
                 <CustomersPhones customerId={state?.customerId} />
             </PrivateRoute>
 
-            <PrivateRoute path="/customer-adresses" exact>
+            <PrivateRoute path="/customer-addresses" exact>
                 <CustomerAddresses customerId={state?.customerId} />
             </PrivateRoute>
             

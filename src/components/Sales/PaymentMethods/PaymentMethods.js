@@ -205,10 +205,10 @@ const PaymentMethods = () => {
         <br>
         <h2>Metodos de pago</h2>
         </br>
-        <Button variant="primary" onClick={handleShowCreateModal}>
+        <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
           <FontAwesomeIcon icon={faPlus} /> Nuevo metodo de pago
         </Button>
-        <Button variant="danger" onClick={handleGoBack}>
+        <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
           Volver
         </Button>
         <hr/>
@@ -223,13 +223,13 @@ const PaymentMethods = () => {
                     <tr key ={method.methodID}>
                         <td>{method.PaymentMethodName}</td>
                         <td>
-                         <Button variant="info" onClick={() => handleShowEditModal(method.methodID)}>
+                         <Button variant="info" onClick={() => handleShowEditModal(method.methodID)} style={{ marginRight: '10px' }}>
                             <FontAwesomeIcon icon={faEdit} /> Actualizar
                         </Button>
-                        <Button variant="danger" onClick={() => handleDeleteMethod(method.methodID)}>
+                        <Button variant="danger" onClick={() => handleDeleteMethod(method.methodID)} style={{ marginRight: '10px' }}>
                             <FontAwesomeIcon icon={faTrash} /> Eliminar
                         </Button>
-                        <Button variant="primary" onClick={() => handleShowDetailModal(method.methodID)}>
+                        <Button variant="primary" onClick={() => handleShowDetailModal(method.methodID)} style={{ marginRight: '10px' }}>
                             <FontAwesomeIcon icon={faEye} /> Ver Detalle
                         </Button>
                         </td>

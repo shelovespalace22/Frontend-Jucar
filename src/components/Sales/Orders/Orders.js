@@ -558,11 +558,11 @@ const Orders = ({ customerId }) => {
                                             <FontAwesomeIcon icon={faTrash} />
                                         </Button>
 
-                                        <Button variant="success" onClick={() => handleShowDetails(order.orderID)} className="me-2">
+                                        <Button variant="success" onClick={() => handleShowDetails(order.orderID)} style={{ margin: '10px 0', marginRight: '10px' }}>
                                             <FontAwesomeIcon icon={faLink} />
                                         </Button>
 
-                                        <Button variant="success" onClick={() => handleShowContributions(order.orderID)} className="me-2">
+                                        <Button variant="success" onClick={() => handleShowContributions(order.orderID)} style={{ margin: '10px 0', marginRight: '10px' }}>
                                             <FontAwesomeIcon icon={faDollarSign} />
                                         </Button>
                                     </td>

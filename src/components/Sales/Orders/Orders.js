@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Container, Row, Col, Form, Button, Card, Table, Modal, Pagination, InputGroup, FormControl } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faPlus, faEdit, faTrash, faEye, faMinus, faL } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faEdit, faTrash, faEye, faMinus, faLink, faDollarSign } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
@@ -33,7 +33,7 @@ const Orders = ({ customerId }) => {
     const [modalAction, setModalAction] = useState('edit');
     const [selectedOrderId, setSelectedOrderId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
-    const [itemsPerPage] = useState(10);
+    const [itemsPerPage] = useState(3);
     const indexOfLastItem = currentPage * itemsPerPage;
     const indexOfFirstItem = indexOfLastItem - itemsPerPage;
     const currentOrders = orders.slice(indexOfFirstItem, indexOfLastItem);
@@ -351,6 +351,14 @@ const Orders = ({ customerId }) => {
         history.goBack();
     };
 
+    const handleShowDetails = (orderId) => {
+        history.push('/order-details', { orderId });
+    };
+
+    const handleShowContributions = (orderId) => {
+        history.push('/order-contributions', { orderId });
+    };
+
     return (
         <Container fluid>
             <Row>
@@ -503,6 +511,8 @@ const Orders = ({ customerId }) => {
                             <FontAwesomeIcon icon={faPlus} /> Agregar Contribución
                         </Button>
                         <br/>
+                        <br/>
+                        <br/>
                         <Button variant="success" onClick={handleCreateOrder}>
                             Guardar Pedido
                         </Button>
@@ -546,6 +556,14 @@ const Orders = ({ customerId }) => {
                                         </Button>
                                         <Button variant="danger" onClick={() => handleDeleteOrder(order.orderID)}style={{ marginRight: '10px' }}>
                                             <FontAwesomeIcon icon={faTrash} />
+                                        </Button>
+
+                                        <Button variant="success" onClick={() => handleShowDetails(order.orderID)} className="me-2">
+                                            <FontAwesomeIcon icon={faLink} />
+                                        </Button>
+
+                                        <Button variant="success" onClick={() => handleShowContributions(order.orderID)} className="me-2">
+                                            <FontAwesomeIcon icon={faDollarSign} />
                                         </Button>
                                     </td>
                                 </tr>

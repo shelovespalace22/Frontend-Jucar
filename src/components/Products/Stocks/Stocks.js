@@ -98,9 +98,8 @@ const Stocks = ({ rawMaterialId }) => {
             'error'
           );
         }
-      };
+    };
       
-
     const handleGoBack = () => {
         history.goBack();
     };

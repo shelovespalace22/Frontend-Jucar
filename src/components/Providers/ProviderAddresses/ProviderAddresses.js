@@ -96,45 +96,45 @@ const ProviderAddresses = ({ providerId }) => {
             'error'
           );
         }
-      };
+    };
       
-      const handleUpdateProviderAddress = async () => {
-        try {
-          await axios.put(
-            `https://localhost:7028/api/providers/${providerId}/addresses/${selectedProviderAddressId}`,
-            newProviderAddress
-          );
-          
-          const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/addresses`);
-      
-          const updatedproviderAddresses = response.data;
-      
-          setProviderAddresses(updatedproviderAddresses);
-      
-          setNewProviderAddress({
-            Address: '',
-            AddressType: '',
-            NeighborhoodId: '',
-            NeighborhoodName: '',
-          });
-      
-          handleCloseModal();
-      
-          Swal.fire(
-            '¡Éxito!',
-            '¡La dirección del proveedor ha sido actualizada exitosamente.',
-            'success'
-          );
-        } catch (error) {
-          console.error('Error updating Address:', error);
-      
-          Swal.fire(
-            'Error',
-            'Hubo un problema al actualizar la dirección del proveedor.',
-            'error'
-          );
-        }
-      };
+    const handleUpdateProviderAddress = async () => {
+    try {
+        await axios.put(
+        `https://localhost:7028/api/providers/${providerId}/addresses/${selectedProviderAddressId}`,
+        newProviderAddress
+        );
+        
+        const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/addresses`);
+    
+        const updatedproviderAddresses = response.data;
+    
+        setProviderAddresses(updatedproviderAddresses);
+    
+        setNewProviderAddress({
+        Address: '',
+        AddressType: '',
+        NeighborhoodId: '',
+        NeighborhoodName: '',
+        });
+    
+        handleCloseModal();
+    
+        Swal.fire(
+        '¡Éxito!',
+        '¡La dirección del proveedor ha sido actualizada exitosamente.',
+        'success'
+        );
+    } catch (error) {
+        console.error('Error updating Address:', error);
+    
+        Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la dirección del proveedor.',
+        'error'
+        );
+    }
+    };
       
     const handleDeleteproviderAddress = async (providerAddressId) => {
         
@@ -174,9 +174,8 @@ const ProviderAddresses = ({ providerId }) => {
             }
           }
         });
-      };
+    };
       
-
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);

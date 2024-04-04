@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ProviderAddresses = ({ providerId }) => {
     const [providerAddresses, setProviderAddresses] = useState ([]);
@@ -58,71 +59,123 @@ const ProviderAddresses = ({ providerId }) => {
 
     const handleCreateProviderAddress = async () => {
         try {
-            const response = await axios.post(
-                `https://localhost:7028/api/providers/${providerId}/addresses`,
-                JSON.stringify(newProviderAddress),
-                {
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                }
-            );
-    
-            setProviderAddresses([response.data, ...providerAddresses]);
-    
-            setNewProviderAddress({
-                Address: '',
-                AddressType: '',
-                NeighborhoodId: '',
-                NeighborhoodName: '',
-            });
-    
-            handleCloseModal();
+          const response = await axios.post(
+            `https://localhost:7028/api/providers/${providerId}/addresses`,
+            JSON.stringify(newProviderAddress),
+            {
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            }
+          );
+      
+          setProviderAddresses([response.data, ...providerAddresses]);
+      
+          setNewProviderAddress({
+            Address: '',
+            AddressType: '',
+            NeighborhoodId: '',
+            NeighborhoodName: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡La dirección del proveedor ha sido creada exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error creating Address:', error);
+          console.error('Error creating Address:', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear la dirección del proveedor.',
+            'error'
+          );
         }
     };
-
-    const handleUpdateProviderAddress = async () =>{
-        try{
-            await axios.put(
-                `https://localhost:7028/api/providers/${providerId}/addresses/${selectedProviderAddressId}`,
-                newProviderAddress
-            );
-            
-            const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/addresses`);
-
-            const updatedproviderAddresses = response.data;
-
-            setProviderAddresses(updatedproviderAddresses);
-
-            setNewProviderAddress({
-                Address: '',
-                AddressType: '',
-                NeighborhoodId: '',
-                NeighborhoodName: '',
-            });
-
-            handleCloseModal();
-
-        }catch (error) {
-            console.error('Error updating Address:', error);
-        }
+      
+    const handleUpdateProviderAddress = async () => {
+    try {
+        await axios.put(
+        `https://localhost:7028/api/providers/${providerId}/addresses/${selectedProviderAddressId}`,
+        newProviderAddress
+        );
+        
+        const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/addresses`);
+    
+        const updatedproviderAddresses = response.data;
+    
+        setProviderAddresses(updatedproviderAddresses);
+    
+        setNewProviderAddress({
+        Address: '',
+        AddressType: '',
+        NeighborhoodId: '',
+        NeighborhoodName: '',
+        });
+    
+        handleCloseModal();
+    
+        Swal.fire(
+        '¡Éxito!',
+        '¡La dirección del proveedor ha sido actualizada exitosamente.',
+        'success'
+        );
+    } catch (error) {
+        console.error('Error updating Address:', error);
+    
+        Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la dirección del proveedor.',
+        'error'
+        );
+    }
     };
-
+      
     const handleDeleteproviderAddress = async (providerAddressId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}/addresses/${providerAddressId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updatedproviderAddresses = providerAddresses.filter((providerAddress)=> providerAddress.providerAddressID !== providerAddressId);
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}/addresses/${providerAddressId}`);
 
-            setProviderAddresses(updatedproviderAddresses);
-
-        }catch (error){
-            console.error('Error deleting Address', error);
-        }
+              const updatedProviderAddresses = providerAddresses.filter((providerAddress) => providerAddress.providerAddressID !== providerAddressId);
+              
+              setProviderAddresses(updatedProviderAddresses);
+            
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu dirección del proveedor ha sido eliminada.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting Address:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar la dirección del proveedor.',
+                'error'
+              );
+            }
+          }
+        });
     };
-
+      
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);
@@ -221,11 +274,11 @@ const ProviderAddresses = ({ providerId }) => {
             <h2>Direcciones de Proveedor</h2>
             <br/> 
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nueva Direccion
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
 
@@ -247,15 +300,15 @@ const ProviderAddresses = ({ providerId }) => {
                             <td>{providerAddress.addressType}</td>
                             <td>{providerAddress.neighborhoodName}</td>
                             <td>
-                                <Button variant='info' onClick={() => handleShowEditModal(providerAddress.providerAddressID)}>
+                                <Button variant='info' onClick={() => handleShowEditModal(providerAddress.providerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon ={faEdit}/> Actualizar    
                                 </Button>
 
-                                <Button variant = "danger" onClick={() => handleDeleteproviderAddress(providerAddress.providerAddressID)}>
+                                <Button variant = "danger" onClick={() => handleDeleteproviderAddress(providerAddress.providerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash}/> Eliminar
                                 </Button>
 
-                                <Button variant='primary' onClick={() => handleShowDetailModal(providerAddress.providerAddressID)}>
+                                <Button variant='primary' onClick={() => handleShowDetailModal(providerAddress.providerAddressID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalle 
                                 </Button>
                             </td>     

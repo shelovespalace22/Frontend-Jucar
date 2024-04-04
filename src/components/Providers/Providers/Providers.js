@@ -5,9 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye, faPhone, faLocationDot } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
-
-
-
+import Swal from 'sweetalert2';
 
 const Providers = () => {
     const [providers, setProviders] = useState ([]);
@@ -27,7 +25,6 @@ const Providers = () => {
             PhoneNumber:''
         }]
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
     const [selectedProviderId, setSelectedProviderId] = useState('');
@@ -51,82 +48,133 @@ const Providers = () => {
     }, [])
 
     const handleCreateProvider = async () => {
-        try{
-            const response = await axios.post ('https://localhost:7028/api/providers', newProvider);
-            
-            setProviders ([response.data, ...providers]);
-
-            setNewProvider({
-                IdentifierType: '',
-                IdentifierNumber: '',
-                Name: '',
-                EmailAddress: '',
-                ProductType: '',
-                ProviderAddresses: [{
-                    Address:'',
-                    AddressType: '',
-                    NeighborhoodId: ''
-                }],
-                ProviderPhone:[{
-                    PhoneType:'',
-                    PhoneNumber:''
-                }]
-            });
-            handleCloseModal();
-
-        }catch (error){
-            console.error('Error creating a provider')
+        try {
+          const response = await axios.post('https://localhost:7028/api/providers', newProvider);
+          
+          setProviders([response.data, ...providers]);
+      
+          setNewProvider({
+            IdentifierType: '',
+            IdentifierNumber: '',
+            Name: '',
+            EmailAddress: '',
+            ProductType: '',
+            ProviderAddresses: [{
+              Address:'',
+              AddressType: '',
+              NeighborhoodId: ''
+            }],
+            ProviderPhone:[{
+              PhoneType:'',
+              PhoneNumber:''
+            }]
+          });
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El proveedor ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating a provider', error);
+      
+          
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el proveedor.',
+            'error'
+          );
         }
     };
-
+      
     const handleUpdateProvider = async () => {
-        try{
-            await axios.put(
-            `https://localhost:7028/api/providers/${selectedProviderId}`,
-            newProvider
-            );
-
-            const response = await axios.get(`https://localhost:7028/api/providers`);
-
-            const updatedProviders = response.data;
-
-            setProviders(updatedProviders);
-
-            setNewProvider({
-                IdentifierType: '',
-                IdentifierNumber: '',
-                Name: '',
-                EmailAddress: '',
-                ProductType: '',
-                ProviderAddresses: [{
-                    Address:'',
-                    AddressType: '',
-                    NeighborhoodId: ''
-                }],
-                ProviderPhone:[{
-                    PhoneType:'',
-                    PhoneNumber:''
-                }]
-            });
-
-            handleCloseModal();
+    try {
+        await axios.put(
+        `https://localhost:7028/api/providers/${selectedProviderId}`,
+        newProvider
+        );
+    
+        const response = await axios.get(`https://localhost:7028/api/providers`);
+    
+        const updatedProviders = response.data;
+    
+        setProviders(updatedProviders);
+    
+        setNewProvider({
+        IdentifierType: '',
+        IdentifierNumber: '',
+        Name: '',
+        EmailAddress: '',
+        ProductType: '',
+        ProviderAddresses: [{
+            Address:'',
+            AddressType: '',
+            NeighborhoodId: ''
+        }],
+        ProviderPhone:[{
+            PhoneType:'',
+            PhoneNumber:''
+        }]
+        });
+    
+        handleCloseModal();
+    
         
-        }catch (error){
-            console.error('Error updating autopart:', error);
-        }
+        Swal.fire(
+        '¡Éxito!',
+        '¡El proveedor ha sido actualizado exitosamente.',
+        'success'
+        );
+    } catch (error) {
+        console.error('Error updating provider:', error);
+    
+        Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar el proveedor.',
+        'error'
+        );
+    }
     };
-
+      
     const handleDeleteProvider = async (providerId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}`);
 
-            const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
-            setProviders(updatedProviders);
-        }catch(error){
-            console.error ('error deleting provider')
-        }
+              const updatedProviders = providers.filter((provider) => provider.providerID !== providerId);
+
+              setProviders(updatedProviders);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu proveedor ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting provider:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el proveedor.',
+                'error'
+              );
+            }
+          }
+        });
     };
-
+      
     const handleShowCreateModal = () => {
         setModalAction('create');
         setShowModal(true);
@@ -139,6 +187,7 @@ const Providers = () => {
         const selectedProvider = providers.find((provider)=> provider.providerID === providerId);
 
         if(selectedProvider){
+            console.log(selectedProvider);
             setNewProvider({
                 IdentifierType: selectedProvider.identifierType || '',
                 IdentifierNumber:selectedProvider.identifierNumber || '',
@@ -230,11 +279,11 @@ const Providers = () => {
             <h2>Modulo Provedores</h2>
             <br/>
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nuevo Proveedor
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
 
@@ -260,19 +309,19 @@ const Providers = () => {
                             <td>{provider.emailAddress}</td>
                             <td>{provider.productType}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(provider.providerID)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faEdit}/> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={()=> handleDeleteProvider(provider.providerID)}>
+                                <Button variant='danger' onClick={()=> handleDeleteProvider(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faTrash}/> Eliminar 
                                 </Button>
-                                <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerID)}>
+                                <Button variant='primary' onClick={()=>handleShowDetailModal(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalle
                                 </Button>
-                                <Button variant='success' onClick={() => handleShowPhones(provider.providerID)}>
+                                <Button variant='success' onClick={() => handleShowPhones(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faPhone} />
                                 </Button>
-                                <Button variant='danger' onClick={() => handleShowAddresses(provider.providerID)}>
+                                <Button variant='danger' onClick={() => handleShowAddresses(provider.providerID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faLocationDot} />
                                 </Button>
                             </td>

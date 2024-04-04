@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const ProviderPhones = ({ providerId })  => {
     const [providerPhones, setProviderPhones] = useState ([]);
@@ -38,54 +39,113 @@ const ProviderPhones = ({ providerId })  => {
     }, [providerId]);
 
     const handleCreateProviderPhone = async () => {
-        try { 
-            const response = await axios.post(`https://localhost:7028/api/providers/${providerId}/phones`, newProviderPhone);
-
-            setProviderPhones([response.data, ...providerPhones]);
-
-            setNewProviderPhone({
-                PhoneType: '',
-                PhoneNumber: '',
-            });
-
-            handleCloseModal();
-
-        } catch (error){
-            console.error('Error creating phone', error);
+        try {
+          const response = await axios.post(`https://localhost:7028/api/providers/${providerId}/phones`, newProviderPhone);
+      
+          setProviderPhones([response.data, ...providerPhones]);
+      
+          setNewProviderPhone({
+            PhoneType: '',
+            PhoneNumber: '',
+          });
+      
+          handleCloseModal();
+      
+          
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del proveedor ha sido creado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error creating phone', error);
+      
+         
+          Swal.fire(
+            'Error',
+            'Hubo un problema al crear el teléfono del proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
-    const handleUpdateProviderPhone = async () => {
-        try{
-            await axios.put(`https://localhost:7028/api/providers/${providerId}/phones/${selectedProviderPhoneId}`, newProviderPhone);
-
-            const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/phones`);
-
-            const updateproviderPhones = response.data;
-
-            setProviderPhones(updateproviderPhones);
-
-            setNewProviderPhone({
-                PhoneType:'',
-                PhoneNumber:'',
-            })
-
-            handleCloseModal();
-        } catch (error){
-            console.error ('Error updating phone', error);
+      const handleUpdateProviderPhone = async () => {
+        try {
+          await axios.put(
+            `https://localhost:7028/api/providers/${providerId}/phones/${selectedProviderPhoneId}`,
+            newProviderPhone
+          );
+      
+          const response = await axios.get(`https://localhost:7028/api/providers/${providerId}/phones`);
+      
+          const updateproviderPhones = response.data;
+      
+          setProviderPhones(updateproviderPhones);
+      
+          setNewProviderPhone({
+            PhoneType:'',
+            PhoneNumber:'',
+          });
+      
+          handleCloseModal();
+      
+          Swal.fire(
+            '¡Éxito!',
+            '¡El teléfono del proveedor ha sido actualizado exitosamente.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error updating phone', error);
+      
+          Swal.fire(
+            'Error',
+            'Hubo un problema al actualizar el teléfono del proveedor.',
+            'error'
+          );
         }
-    };
+      };
+      
 
     const handleDeleteProviderPhone = async (providerPhoneId) => {
-        try{
-            await axios.delete(`https://localhost:7028/api/providers/${providerId}/phones/${providerPhoneId}`);
+        
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
 
-            const updateproviderPhones = providerPhones.filter((providerPhone)=> providerPhone.providerPhoneID !== providerPhoneId);
-            setProviderPhones(updateproviderPhones);
-        }catch(error){
-            console.error('error deleting phone', error);
-        }
-    };
+          if (result.isConfirmed) {
+            try {
+              
+              await axios.delete(`https://localhost:7028/api/providers/${providerId}/phones/${providerPhoneId}`);
+
+              const updatedProviderPhones = providerPhones.filter((providerPhone) => providerPhone.providerPhoneID !== providerPhoneId);
+              
+              setProviderPhones(updatedProviderPhones);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu teléfono del proveedor ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting phone:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el teléfono del proveedor.',
+                'error'
+              );
+            }
+          }
+        });
+      };
+      
 
     const handleShowCreateModal = () => {
         setModalAction('create');
@@ -145,11 +205,11 @@ const ProviderPhones = ({ providerId })  => {
             <h2>Teléfonos del Proveedor</h2>
             <br /> 
 
-            <Button variant="primary" onClick={handleShowCreateModal}>
+            <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
                 <FontAwesomeIcon icon={faPlus} /> Nuevo Telefono
             </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
+            <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
                 Volver
             </Button>
             <hr />
@@ -168,13 +228,13 @@ const ProviderPhones = ({ providerId })  => {
                             <td>{providerPhone.phoneType}</td>
                             <td>{providerPhone.phoneNumber}</td>
                             <td>
-                                <Button variant='info' onClick={()=> handleShowEditModal(providerPhone.providerPhoneID)}>
+                                <Button variant='info' onClick={()=> handleShowEditModal(providerPhone.providerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faEdit}/> Actualizar
                                 </Button>
-                                <Button variant='danger' onClick={()=> handleDeleteProviderPhone(providerPhone.providerPhoneID)}>
+                                <Button variant='danger' onClick={()=> handleDeleteProviderPhone(providerPhone.providerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon = {faTrash}/> Eliminar
                                 </Button>
-                                <Button variant='primary' onClick={()=> handleShowDetailModal(providerPhone.providerPhoneID)}>
+                                <Button variant='primary' onClick={()=> handleShowDetailModal(providerPhone.providerPhoneID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye}/> Ver Detalles
                                 </Button>
                                     

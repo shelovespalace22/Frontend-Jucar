@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Container, Card, Form, Button, Alert } from 'react-bootstrap';
 import axios from 'axios';
 import { Redirect } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
 
 const Login = () => {
 
@@ -59,39 +61,74 @@ const Login = () => {
 
   return (
     <Container className="mt-5 container-box">
-      <Card className="card">
+      <Card className="card" style={{ minHeight: '400px', marginLeft: '300px', marginTop: '70px', borderLeft: '2px' }}>
         <Form onSubmit={handleLogin}>
           <Form.Group controlId="formUserName">
-            <Form.Label>Nombre de Usuario</Form.Label>
+            <Form.Label><strong>Nombre de Usuario</strong></Form.Label>
             <Form.Control
               type="text"
               name="UserName"
               value={userData.UserName}
               onChange={handleInputChange}
               required
+              style={{ borderColor: '#ccc', backgroundColor: '#fff', marginTop: 20 }}
             />
           </Form.Group>
 
           <Form.Group controlId="formPassword">
-            <Form.Label>Contraseña</Form.Label>
+            <Form.Label className='label-password'><strong>Contraseña</strong></Form.Label>
             <Form.Control
               type="password"
               name="Password"
               value={userData.Password}
               onChange={handleInputChange}
               required
+              style={{ borderColor: '#ccc', backgroundColor: '#fff', marginTop: 20 }}
             />
           </Form.Group>
 
           <Button variant="primary" type="submit" className="card-button">
+            <FontAwesomeIcon icon={faSignInAlt} className="card-icon" />
             Acceder
           </Button>
-
-          {/* <Link to="/refresh-token" className="ml-2">Refrescar Token</Link> */}
 
           {loginError && <Alert variant="danger" className="mt-3">{loginError}</Alert>}
         </Form>
       </Card>
+
+      {/* Estilos en línea */}
+      <style>
+        {`
+          .card {
+            color:  #fff;
+            background-color:  #d62121;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            width: 50%;
+          }
+
+          .card-button {
+            margin-top:6%;
+            margin-left:40%;
+            background-color: #5eaf38
+          }
+
+          .label-password {
+            margin-top: 2%
+          }
+
+          .mt-5.container-box {
+           
+            justify-content: center;
+          }
+
+          .card-icon {
+            margin-right: 4%
+          }
+        `}
+      </style>
     </Container>
   );
 };

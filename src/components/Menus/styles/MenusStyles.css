@@ -1,23 +1,35 @@
+.custom-card-link:hover .custom-card {
+    
+    transform: translateY(-5px); /* Efecto hover para elevar la carta */
+    transition: transform 0.2s ease; /* Añade una transición suave */
+    
+       
+}
 .custom-card {
-    background-color: rgb(224, 17, 17); /* Cambia el color de fondo a blanco */
-    color: black;
-    margin: 10px;
-    padding: 20px;
-    text-align: center;
-    border: 2px solid red; /* Agrega un borde de 2px de ancho y color rojo */
+    border: none; /* Quita el borde de las cartas */
+    box-shadow: 2px 2px 5px #888888; /* Añade sombra en los bordes */
+    margin-bottom: 20px; /* Añade espacio entre las cartas */
 }
 
-.custom-button {
-    display: block;
-    margin: 0 auto;
+.custom-card-link {
+    text-decoration: none; /* Quita la decoración de los enlaces */
 }
+/* Estilos para el componente de inicio del menú */
 
-.card-container {
+.inicio-menu-container {
     display: flex;
-    flex-wrap: wrap;
-    justify-content: space-around;
-}
-.iii{
-    text-decoration: none; /* Quita el subrayado de los enlaces */
-    color: black;
-}
+    justify-content: space-between;
+    align-items: center;
+  }
+  
+  .carousel-container {
+    width: 50%; /* Ajusta el ancho del carrusel según sea necesario */
+  }
+  
+  .texto-container {
+    width: 45%; /* Ajusta el ancho del contenedor de texto según sea necesario */
+  }
+  
+  /* Añade estilos adicionales según lo necesites */
+  
+

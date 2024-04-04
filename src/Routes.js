@@ -27,7 +27,7 @@ import Movements from './components/Products/Movements/Movements';
 import Stocks from './components/Products/Stocks/Stocks';
 
 import Providers from './components/Providers/Providers/Providers';
-import ProviderAddresses from './components/Providers/ProviderAddresses/ProviderAddresses';
+import ProviderAddresses from './components/Providers/ProviderAddresses/ProviderAddresses'; 
 import ProviderPhones from './components/Providers/ProviderPhones/ProviderPhones';
 
 import Customers from './components/Sales/Customers/Customers';
@@ -37,6 +37,8 @@ import Orders from './components/Sales/Orders/Orders';
 import OrderDetails from './components/Sales/OrderDetails/OrderDetails';
 import PaymentMethods from './components/Sales/PaymentMethods/PaymentMethods';
 import Contributions from './components/Sales/Contributions/Contributions';
+import PrivateRoute from './components/Auth/PrivateRoute';
+import { Redirect } from 'react-router-dom/cjs/react-router-dom.min';
 
 
 
@@ -46,7 +48,7 @@ const Routes = () => {
     const { state } = location;
     
     return (
-        <Switch>
+    <Switch>
 
             {/* Autenticación   */}
 
@@ -59,83 +61,85 @@ const Routes = () => {
             {/* Menús */}
 
             <Route path="/menu-inicial" component={MenuInicio} />
-            <Route path="/menu-productos" component={MenuProducts} />
-            <Route path="/menu-proveedores" component={MenuProviders} />
-            <Route path="/menu-ventas" component={MenuSales} />
+            <PrivateRoute path="/menu-productos" component={MenuProducts} />
+            <PrivateRoute path="/menu-proveedores" component={MenuProviders} />
+            <PrivateRoute path="/menu-ventas" component={MenuSales} />
 
             {/* Modulos */}
 
-            <Route path="/modulo-subcategories" component={ModuloSubcategories} />
-            <Route path="/modulo-autoparts" component={ModuloAutoparts} />
-            <Route path="/modulo-providers" component={ModuloProveedores} />
-            <Route path="/modulo-customers" component={ModuloCustomers} />
-            <Route path="/modulo-orders" component={ModuloOrders} />
+            <PrivateRoute path="/modulo-subcategories" component={ModuloSubcategories} />
+            <PrivateRoute path="/modulo-autoparts" component={ModuloAutoparts} />
+            <PrivateRoute path="/modulo-providers" component={ModuloProveedores} />
+            <PrivateRoute path="/modulo-customers" component={ModuloCustomers} />
+            <PrivateRoute path="/modulo-orders" component={ModuloOrders} />
 
 
             {/* CRUDS: Products */}
 
-            <Route path="/categories" component={Categories} />
+            <PrivateRoute path="/categories" component={Categories} />
 
-            <Route path="/category-subcategories" exact>
+            <PrivateRoute path="/category-subcategories" exact>
                 <Subcategories categoryId={state?.categoryId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/subcategory-autoparts" exact>
+            <PrivateRoute path="/subcategory-autoparts" exact>
                 <Autoparts subcategoryId={state?.subcategoryId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/rawMaterials" component={RawMaterials} />
+            <PrivateRoute path="/rawMaterials" component={RawMaterials} />
 
-            <Route path="/autopart-losses" exact>
+            <PrivateRoute path="/autopart-losses" exact>
                 <Losses autopartId={state?.autopartId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/rawMaterial-movements" exact>
+            <PrivateRoute path="/rawMaterial-movements" exact>
                 <Movements rawMaterialId={state?.rawMaterialId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/rawMaterial-stocks" exact>
+            <PrivateRoute path="/rawMaterial-stocks" exact>
                 <Stocks rawMaterialId={state?.rawMaterialId} />
-            </Route>
+            </PrivateRoute>
 
 
             {/* CRUDS: Providers */}
 
-            <Route path="/providers" component={Providers} />
+            <PrivateRoute path="/providers" component={Providers} />
 
-            <Route path="/provider-addresses" exact>
+            <PrivateRoute path="/provider-addresses" exact>
                 <ProviderAddresses providerId={state?.providerId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/provider-phones" exact>
+            <PrivateRoute path="/provider-phones" exact>
                 <ProviderPhones providerId={state?.providerId}/>
-            </Route>
+            </PrivateRoute>
 
             {/* CRUDS: Sales */}
             
-            <Route path="/customers" component={Customers} />
+            <PrivateRoute path="/customers" component={Customers} />
 
-            <Route path="/customer-phones" exact>
+            <PrivateRoute path="/customer-phones" exact>
                 <CustomersPhones customerId={state?.customerId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/customer-adresses" exact>
+            <PrivateRoute path="/customer-addresses" exact>
                 <CustomerAddresses customerId={state?.customerId} />
-            </Route>
+            </PrivateRoute>
             
-            <Route path="/customer-orders" exact>
+            <PrivateRoute path="/customer-orders" exact>
                 <Orders customerId={state?.customerId} />
-            </Route>
+            </PrivateRoute>
 
-            <Route path="/order-details" exact>
+            <PrivateRoute path="/order-details" exact>
                 <OrderDetails orderId={state?.orderId} />
-            </Route>
+            </PrivateRoute>
             
-            <Route path="/paymentMethods" component={PaymentMethods} />
+            <PrivateRoute path="/paymentMethods" component={PaymentMethods} />
 
-            <Route path="/order-contributions" exact>
+            <PrivateRoute path="/order-contributions" exact>
                 <Contributions orderId={state?.orderId} />
-            </Route>
+            </PrivateRoute>
+
+            <Redirect to= "/menu-inicial"/>
             
         </Switch>
 )};

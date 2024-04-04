@@ -5,6 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
+
+
 
 const Autoparts = ({ subcategoryId }) => {
 
@@ -46,6 +49,8 @@ const Autoparts = ({ subcategoryId }) => {
       try {
         const response = await axios.get('https://localhost:7028/api/rawMaterials');
         setRawMaterials(response.data);
+
+        console.log(rawMaterials);
       } catch (error) {
         console.error('Error fetching raw materials:', error);
       }
@@ -54,13 +59,10 @@ const Autoparts = ({ subcategoryId }) => {
     fetchRawMaterials();
   }, []);
   
-
   const handleCreateAutopart = async () => {
     try {
       console.log("Creating autopart with data: ", newAutopart);
-
-      // const response = await axios.post(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`, newAutopart);
-
+  
       const response = await axios.post(
         `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`,
         JSON.stringify(newAutopart),
@@ -70,9 +72,9 @@ const Autoparts = ({ subcategoryId }) => {
           }
         }
       );
-
+  
       setAutoparts([response.data, ...autoparts]);
-
+  
       setNewAutopart({
         Name: '',
         Description: '',
@@ -81,24 +83,37 @@ const Autoparts = ({ subcategoryId }) => {
         RawMaterialId: '',
       });
       handleCloseModal();
+  
+      Swal.fire(
+        '¡Éxito!',
+        '¡La autoparte ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error creating autopart:', error);
+  
+   
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la autoparte.',
+        'error'
+      );
     }
   };
-
+  
   const handleUpdateAutopart = async () => {
     try {
       await axios.put(
         `https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${selectedAutopartId}`,
         newAutopart
       );
-
+  
       const response = await axios.get(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts`);
-        
+  
       const updatedAutoparts = response.data;
-
+  
       setAutoparts(updatedAutoparts);
-
+  
       setNewAutopart({
         Name: '',
         Description: '',
@@ -106,25 +121,65 @@ const Autoparts = ({ subcategoryId }) => {
         Value: 0,
         RawMaterialId: '',
       });
-
+  
       handleCloseModal();
-      
+  
+     
+      Swal.fire(
+        '¡Éxito!',
+        '¡La autoparte ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error updating autopart:', error);
+  
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la autoparte.',
+        'error'
+      );
     }
   };
-
+  
   const handleDeleteAutopart = async (autopartId) => {
-    try {
-      await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
+    
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
 
-      const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
+          // Elimina el elemento si el usuario confirma
+          await axios.delete(`https://localhost:7028/api/subcategories/${subcategoryId}/autoparts/${autopartId}`);
 
-      setAutoparts(updatedAutoparts);
+          const updatedAutoparts = autoparts.filter((autopart) => autopart.autopartID !== autopartId);
 
-    } catch (error) {
-      console.error('Error deleting autopart:', error);
-    }
+          setAutoparts(updatedAutoparts);
+
+          // Muestra una alerta de éxito
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu autoparte ha sido eliminada.',
+            'success'
+          );
+        } catch (error) {
+          console.error('Error deleting autopart:', error);
+          
+          // Muestra una alerta de error si ocurre un problema
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la autoparte.',
+            'error'
+          );
+        }
+      }
+    });
   };
 
   const handleShowCreateModal = () => {
@@ -187,7 +242,6 @@ const Autoparts = ({ subcategoryId }) => {
   };
 
   const handleShowLosses = (autopartId) => {
-    // Redirige a la ruta "/autopart-losses" con el parámetro "autopartId"
     history.push('/autopart-losses', { autopartId });
   };
 
@@ -204,11 +258,11 @@ const Autoparts = ({ subcategoryId }) => {
       <h2>Modulo Autopartes</h2>
       <br />
 
-      <Button variant="primary" onClick={handleShowCreateModal}>
+      <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Autoparte
       </Button>
       
-      <Button variant="danger" onClick={handleGoBack}>
+      <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
         Volver
       </Button>
 
@@ -232,18 +286,18 @@ const Autoparts = ({ subcategoryId }) => {
               <td>{autopart.inventory}</td>
               <td>{autopart.value}</td>
               <td>
-                <Button variant="info" onClick={() => handleShowEditModal(autopart.autopartID)}>
+                <Button variant="info" onClick={() => handleShowEditModal(autopart.autopartID)} style={{ marginRight: '10px' }}>
                   <FontAwesomeIcon icon={faEdit} /> Actualizar
                 </Button>
-                <Button variant="danger" onClick={() => handleDeleteAutopart(autopart.autopartID)}>
+                <Button variant="danger" onClick={() => handleDeleteAutopart(autopart.autopartID)} style={{ marginRight: '10px' }}> 
                   <FontAwesomeIcon icon={faTrash} /> Eliminar
                 </Button>
-                <Button variant="primary" onClick={() => handleShowDetailModal(autopart.autopartID)}>
+                <Button variant="primary" onClick={() => handleShowDetailModal(autopart.autopartID)} style={{ marginRight: '10px' }}>
                   <FontAwesomeIcon icon={faEye} /> Ver Detalle
                 </Button>
 
                 {/* Agrega el botón debajo de este comentario */}
-                <Button variant="secondary" onClick={() => handleShowLosses(autopart.autopartID)}>
+                <Button variant="secondary" onClick={() => handleShowLosses(autopart.autopartID)} style={{ marginRight: '10px' }}>
                   Ver Pérdidas
                 </Button>
               </td>
@@ -268,7 +322,7 @@ const Autoparts = ({ subcategoryId }) => {
               ? 'Nueva Autoparte'
               : modalAction === 'edit'
               ? 'Actualizar Autoparte'
-              : 'Detalle de Autoparte'}
+              : 'Detalles de Autoparte'}
           </Modal.Title>
         </Modal.Header>
 
@@ -276,7 +330,7 @@ const Autoparts = ({ subcategoryId }) => {
           {modalAction !== 'detail' && (
             <Form>
               <Form.Group controlId="formAutopartName">
-                <Form.Label>Nombre</Form.Label>
+                <Form.Label><b>Nombre</b></Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ingrese el nombre..."
@@ -285,7 +339,7 @@ const Autoparts = ({ subcategoryId }) => {
                 />
               </Form.Group>
               <Form.Group controlId="formAutopartDescription">
-                <Form.Label>Descripción</Form.Label>
+                <Form.Label><b>Descripción</b></Form.Label>
                 <Form.Control
                   type="text"
                   placeholder="Ingrese la descripción..."
@@ -294,7 +348,7 @@ const Autoparts = ({ subcategoryId }) => {
                 />
               </Form.Group>
               <Form.Group controlId="formAutopartInventory">
-                <Form.Label>Inventario</Form.Label>
+                <Form.Label><b>Inventario</b></Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Ingrese el inventario..."
@@ -303,7 +357,7 @@ const Autoparts = ({ subcategoryId }) => {
                 />
               </Form.Group>
               <Form.Group controlId="formAutopartValue">
-                <Form.Label>Valor</Form.Label>
+                <Form.Label><b>Valor</b></Form.Label>
                 <Form.Control
                   type="number"
                   placeholder="Ingrese el valor..."
@@ -313,20 +367,22 @@ const Autoparts = ({ subcategoryId }) => {
               </Form.Group>
 
               <Form.Group controlId="formAutopartRawMaterialId">
-                <Form.Label>Materia Prima</Form.Label>
+                <Form.Label><b>Materia Prima</b></Form.Label>
                 <Form.Control
                   as="select"
                   value={newAutopart.RawMaterialId}
                   onChange={(e) => setNewAutopart({ ...newAutopart, RawMaterialId: e.target.value })}
                 >
                   <option value="">Seleccione una materia prima</option>
+
                   {rawMaterials.map((rawMaterial) => (
-                    <option key={rawMaterial.rawMaterialID} value={rawMaterial.rawMaterialID}>
+                    <option key={rawMaterial.rawMaterialId} value={rawMaterial.rawMaterialId}>
                       {rawMaterial.name}
                     </option>
                   ))}
                 </Form.Control>
               </Form.Group>
+
             </Form>
           )}
           {modalAction === 'detail' && (
@@ -334,13 +390,12 @@ const Autoparts = ({ subcategoryId }) => {
               {/* Muestra la información detallada de la autoparte */}
               {selectedAutopartId && (
                 <div>
-                  <h4>Detalles de la Autoparte</h4>
-                  <p>ID: {selectedAutopartId}</p>
-                  <p>Nombre: {newAutopart.Name}</p>
-                  <p>Descripción: {newAutopart.Description}</p>
-                  <p>Inventario: {newAutopart.Inventory}</p>
-                  <p>Valor: {newAutopart.Value}</p>
-                  <p>ID de Materia Prima: {newAutopart.RawMaterialId}</p>
+                  <p><b>ID:</b> {selectedAutopartId}</p>
+                  <p><b>Nombre:</b> {newAutopart.Name}</p>
+                  <p><b>Descripción:</b> {newAutopart.Description}</p>
+                  <p><b>Inventario:</b> {newAutopart.Inventory}</p>
+                  <p><b>Valor:</b> {newAutopart.Value}</p>
+                  <p><b>ID de Materia Prima:</b> {newAutopart.RawMaterialId}</p>
                 </div>
               )}
             </div>

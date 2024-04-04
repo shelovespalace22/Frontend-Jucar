@@ -5,25 +5,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faEye } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Movements = ({ rawMaterialId }) => {
 
     const [movements, setMovements] = useState([]);
-
     const currentDate = new Date();
     const formattedDate = currentDate.toISOString().split('T')[0];
-
     const [newMovement, setNewMovement] = useState({
         Quantity: 0,
         MovementType: '',
         MovementDate: formattedDate,
     });
-
     const [showModal, setShowModal] = useState(false);
     const [modalAction, setModalAction] = useState('create');
     const [selectedMovementId, setSelectedMovementId] = useState('');
     const [currentPage, setCurrentPage] = useState(1);
     const [itemsPerPage] = useState(10);
+    const indexOfLastItem = currentPage * itemsPerPage;
+    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+    const currentMovements = movements.slice(indexOfFirstItem, indexOfLastItem);
     const history = useHistory();
 
     useEffect(() => {
@@ -42,75 +43,111 @@ const Movements = ({ rawMaterialId }) => {
 
     }, [rawMaterialId]);
 
-    const indexOfLastItem = currentPage * itemsPerPage;
-    const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-    const currentMovements = movements.slice(indexOfFirstItem, indexOfLastItem);
-
     const handleCreateMovement = async () => {
-        
         try {
-            const response = await axios.post(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`, newMovement);
-
-            setMovements([response.data, ...movements]);
-
-            setNewMovement({
-                Quantity: 0,
-                MovementType: '',
-                MovementDate: formattedDate,
-            });
-
-            handleCloseModal();
-
-        } catch (error) {
-
-            console.error('Error creating movement:', error);
-
-        }
-
-    };
-
-    const handleUpdateMovement = async () => {
-
-      try {
-        
-        await axios.put(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`, newMovement);
-
-        const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`);
-
-        const updatedMovements = response.data;
-
-        setMovements(updatedMovements);
-
-        setNewMovement({
+          const response = await axios.post(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`, newMovement);
+      
+          setMovements([response.data, ...movements]);
+          setNewMovement({
             Quantity: 0,
             MovementType: '',
             MovementDate: formattedDate,
-        });
-
-        handleCloseModal();
-
-      } catch (error) {
-        
-        console.error('Error updating movements:', error);
-
-      } 
-
-    };
-
-    const handleDeleteMovement = async (movementId) => {
-        try {
-
-            await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
-
-            const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
-
-            setMovements(updatedMovements);
-
+          });
+          handleCloseModal();
+      
+         
+          Swal.fire(
+            '¡Éxito!',
+            '¡El movimiento ha sido registrado exitosamente.',
+            'success'
+          );
         } catch (error) {
-            console.error('Error deleting movements:', error);
+          console.error('Error creating movement:', error);
+      
+
+          Swal.fire(
+            'Error',
+            'Hubo un problema al registrar el movimiento.',
+            'error'
+          );
         }
     };
+      
+    const handleUpdateMovement = async () => {
+    try {
+        await axios.put(
+        `https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${selectedMovementId}`,
+        newMovement
+        );
+    
+        const response = await axios.get(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements`);
+        const updatedMovements = response.data;
+    
+        setMovements(updatedMovements);
+        setNewMovement({
+        Quantity: 0,
+        MovementType: '',
+        MovementDate: formattedDate,
+        });
+        handleCloseModal();
+    
+        
+        Swal.fire(
+        '¡Éxito!',
+        '¡El movimiento ha sido actualizado exitosamente.',
+        'success'
+        );
+    } catch (error) {
+        console.error('Error updating movements:', error);
+    
+        
+        Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar el movimiento.',
+        'error'
+        );
+    }
+    };
+      
+    const handleDeleteMovement = async (movementId) => {
+      
+        Swal.fire({
+          title: '¿Estás seguro?',
+          text: '¡No podrás revertir esto!',
+          icon: 'warning',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Sí, eliminarlo!'
+        }).then(async (result) => {
+            
+          if (result.isConfirmed) {
+            try {
+             
+              await axios.delete(`https://localhost:7028/api/rawMaterials/${rawMaterialId}/movements/${movementId}`);
 
+              const updatedMovements = movements.filter((movement) => movement.movementID !== movementId);
+
+              setMovements(updatedMovements);
+              
+              Swal.fire(
+                '¡Eliminado!',
+                '¡Tu movimiento ha sido eliminado.',
+                'success'
+              );
+            } catch (error) {
+              console.error('Error deleting movements:', error);
+              
+              Swal.fire(
+                'Error',
+                'Hubo un problema al eliminar el movimiento.',
+                'error'
+              );
+            }
+          }
+        });
+    };
+      
     const handleShowCreateModal = () => {
         
         setModalAction('create')
@@ -186,13 +223,16 @@ const Movements = ({ rawMaterialId }) => {
             <h2>Modulo Movimientos</h2>
             <br />
 
-            <Button variant='primary' onClick={handleShowCreateModal}>
-                <FontAwesomeIcon icon={faPlus} /> Nuevo Movimiento
-            </Button>
+            <div className="button-container">
+                <Button variant='primary' onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
+                    <FontAwesomeIcon icon={faPlus} /> Nuevo Movimiento
+                </Button>
 
-            <Button variant="danger" onClick={handleGoBack}>
-                Volver a Materiales
-            </Button>
+                <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
+                    Volver a Materiales
+                </Button>
+            </div>
+
             <hr />
 
             <Table striped bordered hover>
@@ -213,15 +253,15 @@ const Movements = ({ rawMaterialId }) => {
                             <td>{movement.movementType}</td>
                             <td>{movement.movementDate}</td>
                             <td>
-                                <Button variant='info' onClick={() => handleShowEditModal(movement.movementID)}>
+                                <Button variant='info' onClick={() => handleShowEditModal(movement.movementID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEdit} /> Actualizar
                                 </Button>
 
-                                <Button variant='danger' onClick={() => handleDeleteMovement(movement.movementID)}>
+                                <Button variant='danger' onClick={() => handleDeleteMovement(movement.movementID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faTrash} /> Eliminar
                                 </Button>
 
-                                <Button variant='primary' onClick={() => handleShowDetailModal(movement.movementID)}>
+                                <Button variant='primary' onClick={() => handleShowDetailModal(movement.movementID)} style={{ marginRight: '10px' }}>
                                     <FontAwesomeIcon icon={faEye} /> Ver Detalle
                                 </Button>
                             </td>
@@ -247,7 +287,7 @@ const Movements = ({ rawMaterialId }) => {
                             ? 'Nuevo Movimiento'
                             : modalAction === 'edit'
                             ? 'Actualizar Movimiento'
-                            : 'Detalle de Movimiento'
+                            : 'Detalles de Movimiento'
                         }
                     </Modal.Title>
                 </Modal.Header>
@@ -258,7 +298,7 @@ const Movements = ({ rawMaterialId }) => {
                         <Form>
 
                             <Form.Group controlId='formMovementQuantity'>
-                                <Form.Label>Cantidad</Form.Label>
+                                <Form.Label><b>Cantidad</b></Form.Label>
                                 <Form.Control 
                                     type='text'
                                     placeholder='Ingrese la cantidad...'
@@ -268,7 +308,7 @@ const Movements = ({ rawMaterialId }) => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label>Tipo Movimiento</Form.Label>
+                                <Form.Label><b>Tipo Movimiento</b></Form.Label>
                                 <Form.Control 
                                     type='text'
                                     placeholder='Ingrese el tipo de movimiento...'
@@ -278,7 +318,7 @@ const Movements = ({ rawMaterialId }) => {
                             </Form.Group>
 
                             <Form.Group>
-                                <Form.Label>Fecha Movimiento</Form.Label>
+                                <Form.Label><b>Fecha Movimiento</b></Form.Label>
                                 <Form.Control 
                                     type='date'
                                     value={newMovement.MovementDate}
@@ -294,11 +334,10 @@ const Movements = ({ rawMaterialId }) => {
                         <div>
                             {selectedMovementId && (
                                 <div>
-                                    <h4>Detalles del registro</h4>
-                                    <p>Id: {selectedMovementId}</p>
-                                    <p>Cantidad: {newMovement.Quantity}</p>
-                                    <p>Tipo Movimiento: {newMovement.MovementType}</p>
-                                    <p>Fecha Movimiento: {newMovement.MovementDate}</p>
+                                    <p><b>Id:</b> {selectedMovementId}</p>
+                                    <p><b>Cantidad:</b> {newMovement.Quantity}</p>
+                                    <p><b>Tipo Movimiento:</b> {newMovement.MovementType}</p>
+                                    <p><b>Fecha Movimiento:</b> {newMovement.MovementDate}</p>
                                 </div>
                             )}
                         </div>
@@ -328,3 +367,4 @@ const Movements = ({ rawMaterialId }) => {
 };
 
 export default Movements;
+

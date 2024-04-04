@@ -5,6 +5,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faPlus, faEdit, faTrash, faScrewdriverWrench } from '@fortawesome/free-solid-svg-icons';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { useHistory } from 'react-router-dom';
+import Swal from 'sweetalert2';
 
 const Subcategories = ({ categoryId }) => {
   const [subcategories, setSubcategories] = useState([]);
@@ -35,45 +36,105 @@ const Subcategories = ({ categoryId }) => {
   const handleCreateSubcategory = async () => {
     try {
       const response = await axios.post(`https://localhost:7028/api/categories/${categoryId}/subcategories`, {
-        name: newSubcategoryName,
-      });
 
-      setSubcategories([ response.data, ...subcategories]);
+        name: newSubcategoryName,
+
+      });
+  
+      setSubcategories([response.data, ...subcategories]);
       setNewSubcategoryName('');
       handleCloseModal();
+  
+      
+      Swal.fire(
+        '¡Éxito!',
+        '¡La subcategoría ha sido creada exitosamente.',
+        'success'
+      );
     } catch (error) {
+      
       console.error('Error creating subcategory:', error);
+  
+      // Muestra una alerta de error
+      Swal.fire(
+        'Error',
+        'Hubo un problema al crear la subcategoría.',
+        'error'
+      );
     }
   };
+  
 
   const handleUpdateSubcategory = async () => {
     try {
       await axios.put(`https://localhost:7028/api/categories/${categoryId}/subcategories/${selectedSubcategoryId}`, {
         name: newSubcategoryName,
       });
-
+  
       const updatedSubcategories = subcategories.map((subcategory) =>
         subcategory.subcategoryId === selectedSubcategoryId ? { ...subcategory, name: newSubcategoryName } : subcategory
       );
-
+  
       setSubcategories(updatedSubcategories);
       setNewSubcategoryName('');
       handleCloseModal();
+  
+      
+      Swal.fire(
+        '¡Éxito!',
+        '¡La subcategoría ha sido actualizada exitosamente.',
+        'success'
+      );
     } catch (error) {
       console.error('Error updating subcategory:', error);
+  
+      
+      Swal.fire(
+        'Error',
+        'Hubo un problema al actualizar la subcategoría.',
+        'error'
+      );
     }
   };
+  
 
-  const handleDeleteSubcategory = async (subcategoryId) => {
-    try {
-      await axios.delete(`https://localhost:7028/api/categories/${categoryId}/subcategories/${subcategoryId}`);
+  const handleDeleteSubcategory = async (subcategoryId) => {  
+    Swal.fire({
+      title: '¿Estás seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Sí, eliminarlo!'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
 
-      const updatedSubcategories = subcategories.filter((subcategory) => subcategory.subcategoryId !== subcategoryId);
-      setSubcategories(updatedSubcategories);
-    } catch (error) {
-      console.error('Error deleting subcategory:', error);
-    }
+          await axios.delete(`https://localhost:7028/api/categories/${categoryId}/subcategories/${subcategoryId}`);
+
+          const updatedSubcategories = subcategories.filter((subcategory) => subcategory.subcategoryId !== subcategoryId);
+          
+          setSubcategories(updatedSubcategories);
+          
+          Swal.fire(
+            '¡Eliminado!',
+            '¡Tu subcategoría ha sido eliminada.',
+            'success'
+          );
+
+        } catch (error) {
+          console.error('Error deleting subcategory:', error);
+          Swal.fire(
+            'Error',
+            'Hubo un problema al eliminar la subcategoría.',
+            'error'
+          );
+        }
+      }
+    });
   };
+  
 
   const handleShowCreateModal = () => {
     setModalAction('create');
@@ -101,7 +162,6 @@ const Subcategories = ({ categoryId }) => {
     history.push('/subcategory-autoparts', { subcategoryId })
   };
 
-  // Cambia la página actual
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
   const handleGoBack = () => {
@@ -117,13 +177,13 @@ const Subcategories = ({ categoryId }) => {
 
       <br/>
 
-      <Button variant="primary" onClick={handleShowCreateModal}>
+      <Button variant="primary" onClick={handleShowCreateModal} style={{ marginRight: '10px' }}>
         <FontAwesomeIcon icon={faPlus} /> Nueva Subcategoría
       </Button>
-
-      <Button variant="danger" onClick={handleGoBack}>
+      <Button variant="danger" onClick={handleGoBack} style={{ marginRight: '10px' }}>
         Volver
       </Button>
+
 
       <hr/>
 
@@ -139,15 +199,15 @@ const Subcategories = ({ categoryId }) => {
             <tr key={subcategory.subcategoryId}>
               <td>{subcategory.name}</td>
               <td>
-                <Button variant="info" onClick={() => handleShowEditModal(subcategory.subcategoryId)}>
-                  <FontAwesomeIcon icon={faEdit} /> Actualizar
-                </Button>
-                <Button variant="danger" onClick={() => handleDeleteSubcategory(subcategory.subcategoryId)}>
-                  <FontAwesomeIcon icon={faTrash} /> Eliminar
-                </Button>
-                <Button variant="success" onClick={() => handleShowAutoparts(subcategory.subcategoryId)}>
-                  <FontAwesomeIcon icon={faScrewdriverWrench} /> Ver Autopartes
-                </Button>
+              <Button variant="info" onClick={() => handleShowEditModal(subcategory.subcategoryId)} style={{ marginRight: '10px' }}>
+                <FontAwesomeIcon icon={faEdit} /> Actualizar
+              </Button>
+              <Button variant="danger" onClick={() => handleDeleteSubcategory(subcategory.subcategoryId)} style={{ marginRight: '10px' }}>
+                <FontAwesomeIcon icon={faTrash} /> Eliminar
+              </Button>
+              <Button variant="success" onClick={() => handleShowAutoparts(subcategory.subcategoryId)} style={{ marginRight: '10px' }}>
+                <FontAwesomeIcon icon={faScrewdriverWrench} /> Ver Autopartes
+              </Button>
               </td>
             </tr>
           ))}
@@ -168,6 +228,7 @@ const Subcategories = ({ categoryId }) => {
         </Modal.Header>
         <Modal.Body>
           <Form.Group controlId="formSubcategoryName">
+            <Form.Label><b>Nombre</b></Form.Label>
             <Form.Control
               type="text"
               placeholder="Ingrese el nombre..."
@@ -185,6 +246,7 @@ const Subcategories = ({ categoryId }) => {
           </Button>
         </Modal.Footer>
       </Modal>
+      
     </div>
   );
 };
